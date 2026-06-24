@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Festival Biarritz Amérique Latine</title>
+<title>FBAL — Festival Biarritz Amérique Latine</title>
 <meta name="description" content="Programmation officielle du Festival Biarritz Amérique Latine 2026">
 <meta name="theme-color" content="#152A56">
 <link rel="manifest" href="manifest.json">
@@ -63,8 +63,8 @@
   .lang-toggle button.active{ background:#fff; color:var(--navy); }
   .bell{ width:18px; height:18px; color:#fff; opacity:0.85; }
 
-  .hero-strip{ height:42px; position:relative; z-index:1; }
-  .hero-strip svg{ display:block; width:100%; height:100%; }
+  .hero-strip{ height:64px; position:relative; z-index:1; overflow:hidden; }
+  .hero-strip img{ display:block; width:100%; height:100%; object-fit:cover; }
 
   .dates-bar{
     display:flex; gap:8px; padding:12px 18px 14px; overflow-x:auto; -webkit-overflow-scrolling:touch;
@@ -134,7 +134,7 @@
   .section-label{ font-size:12.5px; color:var(--text-secondary); font-weight:600; margin:18px 0 8px; text-transform:uppercase; letter-spacing:0.3px; }
   .section-label:first-child{ margin-top:0; }
 
-  .link-row{ display:flex; gap:10px; margin-bottom:6px; }
+  .link-row{ display:flex; gap:10px; margin-bottom:10px; }
   .social-btn{
     flex:1; border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px 0; text-align:center;
     text-decoration:none; color:var(--text); font-size:11px; font-weight:500;
@@ -154,6 +154,36 @@
   }
 
   iframe.spotify-embed{ border-radius:var(--radius-lg); width:100%; height:152px; border:none; }
+
+  .card.clickable{ cursor:pointer; }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(10,16,32,0.55); display:none;
+    align-items:flex-end; justify-content:center; z-index:50;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-sheet{
+    background:var(--bg); width:100%; max-width:480px; border-radius:20px 20px 0 0;
+    max-height:88vh; overflow-y:auto; padding-bottom:env(safe-area-inset-bottom);
+  }
+  .modal-media{ position:relative; width:100%; height:180px; overflow:hidden; border-radius:20px 20px 0 0; display:flex; align-items:center; justify-content:center; }
+  .modal-media .play-overlay{ width:46px; height:46px; border-radius:50%; background:rgba(255,255,255,0.92); display:flex; align-items:center; justify-content:center; }
+  .modal-close{
+    position:absolute; top:12px; right:12px; width:30px; height:30px; border-radius:50%;
+    background:rgba(21,42,86,0.55); display:flex; align-items:center; justify-content:center;
+    border:none; cursor:pointer; z-index:2;
+  }
+  .modal-close svg{ width:16px; height:16px; color:#fff; }
+  .modal-body{ padding:16px 18px 22px; }
+  .modal-title{ font-size:18px; font-weight:700; margin-bottom:6px; }
+  .modal-meta{ font-size:12.5px; color:var(--text-secondary); display:flex; align-items:center; gap:5px; margin-bottom:10px; flex-wrap:wrap; }
+  .modal-desc{ font-size:13.5px; line-height:1.55; color:var(--text); margin-top:12px; }
+  .modal-video-wrap{ margin-top:14px; border-radius:var(--radius-lg); overflow:hidden; }
+  .modal-video-wrap iframe{ width:100%; height:200px; border:none; display:block; }
+  .video-pending{
+    margin-top:14px; border:1px dashed var(--border); border-radius:var(--radius-lg); padding:18px;
+    text-align:center; font-size:12.5px; color:var(--text-tertiary);
+  }
 </style>
 </head>
 <body>
@@ -161,7 +191,7 @@
 
   <header>
     <div class="header-top">
-      <div class="brand" id="brandLabel">Festival BAL<small id="brandSub">cinémas & cultures · 35e édition</small></div>
+      <div class="brand" id="brandLabel">FBAL<small id="brandSub">cinémas & cultures · 35e édition</small></div>
       <div class="header-actions">
         <div class="lang-toggle">
           <button id="btnFr" class="active">FR</button>
@@ -171,24 +201,7 @@
       </div>
     </div>
     <div class="hero-strip">
-      <svg viewBox="0 0 480 56" preserveAspectRatio="xMidYMax slice">
-        <rect width="480" height="56" fill="#152A56"/>
-        <circle cx="44" cy="42" r="9" fill="#F2C2A0"/>
-        <rect x="35" y="48" width="18" height="26" rx="5" fill="#E2483D"/>
-        <rect x="100" y="20" width="34" height="30" rx="8" fill="#4FA34A"/>
-        <circle cx="117" cy="32" r="7" fill="#F2C2A0"/>
-        <rect x="160" y="30" width="7" height="32" fill="#F4C430" transform="rotate(15 163 32)"/>
-        <path d="M166 14 L196 6 L196 24 Z" fill="#378ADD"/>
-        <path d="M166 14 L196 24 L166 32 Z" fill="#E2483D"/>
-        <circle cx="240" cy="30" r="8" fill="#7A4A2A"/>
-        <rect x="233" y="38" width="14" height="22" rx="5" fill="#FFFFFF"/>
-        <circle cx="300" cy="34" r="7" fill="#F2C2A0"/>
-        <rect x="293" y="41" width="14" height="22" rx="5" fill="#E2483D"/>
-        <circle cx="360" cy="32" r="7" fill="#7A4A2A"/>
-        <rect x="353" y="39" width="14" height="22" rx="5" fill="#4FA34A"/>
-        <rect x="420" y="34" width="8" height="22" fill="#F2C2A0" transform="rotate(-20 424 36)"/>
-        <path d="M428 18 L460 26 L428 34 Z" fill="#F4C430"/>
-      </svg>
+      <img src="assets/header-strip.jpg" alt="Affiche du festival" />
     </div>
     <div class="dates-bar" id="datesBar"></div>
   </header>
@@ -219,30 +232,37 @@
     <section class="view" id="view-infos">
       <div class="section-label" id="lblSocial">Suivez le festival</div>
       <div class="link-row">
-        <a class="social-btn" href="https://instagram.com/" target="_blank" rel="noopener">
+        <a class="social-btn" href="https://www.instagram.com/fbal.biarritz/" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="#993556" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
           Instagram
         </a>
-        <a class="social-btn" href="https://letterboxd.com/" target="_blank" rel="noopener">
+        <a class="social-btn" href="https://www.facebook.com/festival.biarritz.amerique.latine" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0C447C" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          Facebook
+        </a>
+      </div>
+      <div class="link-row">
+        <a class="social-btn" href="https://letterboxd.com/festbiarritz/" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="#0C447C" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="2.2"/><circle cx="16" cy="12" r="2.2"/></svg>
           Letterboxd
         </a>
-        <a class="social-btn" href="https://youtube.com/" target="_blank" rel="noopener">
+        <a class="social-btn" href="https://www.youtube.com/@festivalbiarritzameriquelatine" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="#A32D2D" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="#A32D2D" stroke="none"/></svg>
           YouTube
         </a>
       </div>
 
       <div class="section-label" id="lblHashtag">Hashtag du festival</div>
-      <div class="info-card">
+      <a class="info-card" href="https://www.instagram.com/explore/tags/fbal/" target="_blank" rel="noopener">
         <div class="info-icon" style="background:var(--yellow-light);">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </div>
         <div style="flex:1;">
-          <div class="info-title">#FBAL35</div>
+          <div class="info-title">#fbal</div>
           <div class="info-sub" id="hashtagSub">Partagez vos photos avec ce tag</div>
         </div>
-      </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
 
       <div class="section-label" id="lblPlaylist">Playlist 2026</div>
       <iframe class="spotify-embed" src="https://open.spotify.com/embed/playlist/0zkYzpI86jA9wcD6oYQAOQ?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
@@ -264,6 +284,23 @@
     </section>
 
   </main>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-sheet">
+    <div class="modal-media" id="modalMedia">
+      <button class="modal-close" id="modalClose" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="tags" id="modalTags"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div id="modalVideoArea"></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -325,17 +362,24 @@ const catIcons = {
 
 // id is unique key, fr/es title, type for cine items, dur minutes, day index (0-6), cat
 const events = [
-  {id:"e1", day:0, cat:"cine", time:"18:00", dur:95, type:"avant", fr:"Ouverture du festival", es:"Apertura del festival", place:"Gare du Midi"},
-  {id:"e2", day:0, cat:"musica", time:"21:00", dur:90, type:null, fr:"Septeto Santiaguero", es:"Septeto Santiaguero", place:"Gare du Midi", payant:true},
+  {id:"e1", day:0, cat:"cine", time:"18:00", dur:95, type:"avant", fr:"Ouverture du festival", es:"Apertura del festival", place:"Gare du Midi",
+    descFr:"Film d'ouverture de cette 35e édition, présenté en avant-première en présence de l'équipe du film.", descEs:"Película de apertura de esta 35.ª edición, presentada en avant-première con la presencia del equipo de la película.", video:null},
+  {id:"e2", day:0, cat:"musica", time:"21:00", dur:90, type:null, fr:"Septeto Santiaguero", es:"Septeto Santiaguero", place:"Gare du Midi", payant:true,
+    descFr:"Concert événement de cette édition : le son cubain du Septeto Santiaguero, groupe emblématique de Santiago de Cuba.", descEs:"Concierto estelar de esta edición: el son cubano del Septeto Santiaguero, grupo emblemático de Santiago de Cuba.", video:null},
   {id:"e3", day:1, cat:"debate", time:"17:00", dur:60, type:null, fr:"Table ronde : mémoire et migration", es:"Mesa literaria: memoria y migración", place:"Médiathèque"},
-  {id:"e4", day:1, cat:"cine", time:"20:00", dur:104, type:"hors", fr:"Sélection hors compétition", es:"Selección fuera de competencia", place:"Cinéma municipal"},
+  {id:"e4", day:1, cat:"cine", time:"20:00", dur:104, type:"hors", fr:"Sélection hors compétition", es:"Selección fuera de competencia", place:"Cinéma municipal",
+    descFr:"Une sélection de films hors compétition qui explore les cinémas d'Amérique latine contemporains.", descEs:"Una selección de películas fuera de competencia que explora los cines latinoamericanos contemporáneos.", video:null},
   {id:"e5", day:2, cat:"taller", time:"11:00", dur:60, type:null, fr:"Atelier de tissage andin", es:"Taller de tejido andino", place:"Village"},
   {id:"e6", day:2, cat:"baile", time:"19:00", dur:60, type:null, fr:"Cours de salsa cubaine", es:"Curso de salsa cubana", place:"Carpa village"},
   {id:"e7", day:3, cat:"uni", time:"14:00", dur:90, type:null, fr:"Rencontre universitaire : cinéma et territoire", es:"Encuentro universitario: cine y territorio", place:"Université"},
-  {id:"e8", day:3, cat:"cine", time:"16:00", dur:18, type:"compet_court", fr:"Sélection courts métrages 1", es:"Selección cortometrajes 1", place:"Cinéma municipal"},
-  {id:"e9", day:4, cat:"cine", time:"19:30", dur:97, type:"compet_fiction", fr:"Compétition fiction — séance 4", es:"Competencia ficción — sesión 4", place:"Gare du Midi"},
-  {id:"e10", day:5, cat:"cine", time:"19:00", dur:88, type:"focus", fr:"Focus : cinéma bolivien", es:"Focus: cine boliviano", place:"Cinéma municipal"},
-  {id:"e11", day:6, cat:"cine", time:"17:00", dur:120, type:"compet_long", fr:"Clôture et palmarès", es:"Clausura y palmarès", place:"Gare du Midi"}
+  {id:"e8", day:3, cat:"cine", time:"16:00", dur:18, type:"compet_court", fr:"Sélection courts métrages 1", es:"Selección cortometrajes 1", place:"Cinéma municipal",
+    descFr:"Premier bloc de courts métrages en compétition, toutes nationalités d'Amérique latine confondues.", descEs:"Primer bloque de cortometrajes en competencia, con todas las nacionalidades de América Latina.", video:null},
+  {id:"e9", day:4, cat:"cine", time:"19:30", dur:97, type:"compet_fiction", fr:"Compétition fiction — séance 4", es:"Competencia ficción — sesión 4", place:"Gare du Midi",
+    descFr:"Quatrième séance de la compétition fiction, suivie d'une rencontre avec l'équipe du film.", descEs:"Cuarta sesión de la competencia de ficción, seguida de un encuentro con el equipo de la película.", video:null},
+  {id:"e10", day:5, cat:"cine", time:"19:00", dur:88, type:"focus", fr:"Focus : cinéma bolivien", es:"Focus: cine boliviano", place:"Cinéma municipal",
+    descFr:"Un focus dédié au cinéma bolivien contemporain, avec un film présenté en présence de sa réalisatrice.", descEs:"Un focus dedicado al cine boliviano contemporáneo, con una película presentada junto a su directora.", video:null},
+  {id:"e11", day:6, cat:"cine", time:"17:00", dur:120, type:"compet_long", fr:"Clôture et palmarès", es:"Clausura y palmarès", place:"Gare du Midi",
+    descFr:"Cérémonie de clôture et annonce du palmarès, suivie de la projection du film lauréat.", descEs:"Ceremonia de clausura y anuncio del palmarès, seguida de la proyección de la película ganadora.", video:null}
 ];
 
 const stands = [
@@ -377,19 +421,71 @@ function eventCardHtml(e){
   const isFav = favs.includes(e.id);
   const endTime = addMin(e.time, e.dur);
   const typeLabel = e.type ? t().typeLabels[e.type] : null;
-  return `<div class="card">
+  const hasDetail = !!e.descFr;
+  return `<div class="card ${hasDetail?'clickable':''}" ${hasDetail?`onclick="openModal('${e.id}')"`:''}>
     <div class="card-time">${e.time}<span class="end">${t().fin} ${endTime}</span></div>
     <div class="card-body">
       <div class="card-title">${title}</div>
       <div class="card-meta">${e.place}<span class="dot">·</span>${e.dur} min</div>
       <div class="tags">
         ${typeLabel ? `<span class="tag ${e.type.startsWith('compet')?'compet':e.type}">${typeLabel}</span>` : ''}
-        ${e.payant ? `<span class="tag payant">${t().payant}</span>` : (e.cat!=='cine' ? `<span class="tag gratuit">${t().gratuit}</span>` : (e.type==='hors' ? '' : ''))}
+        ${e.payant ? `<span class="tag payant">${t().payant}</span>` : (e.cat!=='cine' ? `<span class="tag gratuit">${t().gratuit}</span>` : '')}
       </div>
     </div>
-    <button class="fav-btn" onclick="toggleFav('${e.id}')" aria-label="favori">${heartIcon(isFav)}</button>
+    <button class="fav-btn" onclick="event.stopPropagation(); toggleFav('${e.id}')" aria-label="favori">${heartIcon(isFav)}</button>
   </div>`;
 }
+
+const catColors = {
+  cine:["#152A56","#378ADD"], musica:["#993556","#E2483D"], debate:["#3C3489","#7F77DD"],
+  taller:["#854F0B","#F4C430"], baile:["#3B6D11","#4FA34A"], uni:["#0C447C","#378ADD"]
+};
+
+function openModal(id){
+  const e = events.find(ev=>ev.id===id);
+  if(!e) return;
+  const title = lang==="fr" ? e.fr : e.es;
+  const desc = lang==="fr" ? e.descFr : e.descEs;
+  const typeLabel = e.type ? t().typeLabels[e.type] : null;
+  const endTime = addMin(e.time, e.dur);
+
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalMeta").textContent = `${e.place} · ${e.time}–${endTime} · ${e.dur} min`;
+  document.getElementById("modalDesc").textContent = desc || "";
+
+  const tagsEl = document.getElementById("modalTags");
+  tagsEl.innerHTML = `
+    ${typeLabel ? `<span class="tag ${e.type.startsWith('compet')?'compet':e.type}">${typeLabel}</span>` : ''}
+    ${e.payant ? `<span class="tag payant">${t().payant}</span>` : (e.cat!=='cine' ? `<span class="tag gratuit">${t().gratuit}</span>` : '')}
+  `;
+
+  const colors = catColors[e.cat] || ["#152A56","#378ADD"];
+  const mediaEl = document.getElementById("modalMedia");
+  mediaEl.style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`;
+  mediaEl.innerHTML = `
+    <button class="modal-close" id="modalClose" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="play-overlay"><svg width="18" height="18" viewBox="0 0 24 24" fill="#152A56"><path d="M8 5v14l11-7z"/></svg></div>
+  `;
+  document.getElementById("modalClose").onclick = closeModal;
+
+  const videoArea = document.getElementById("modalVideoArea");
+  if(e.video){
+    videoArea.innerHTML = `<div class="modal-video-wrap"><iframe src="https://www.youtube.com/embed/${e.video}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" loading="lazy"></iframe></div>`;
+  } else {
+    videoArea.innerHTML = `<div class="video-pending">${lang==="fr" ? "Photo et vidéo à venir" : "Foto y video próximamente"}</div>`;
+  }
+
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function closeModal(){
+  document.getElementById("modalOverlay").classList.remove("open");
+}
+document.getElementById("modalOverlay").addEventListener("click", (ev)=>{
+  if(ev.target.id === "modalOverlay") closeModal();
+});
 
 function renderHeader(){
   document.getElementById("brandSub").textContent = t().sub;
