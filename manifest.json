@@ -1,0 +1,26 @@
+{
+  "name": "Festival Biarritz Amérique Latine",
+  "short_name": "Festival BAL",
+  "description": "Programmation officielle du Festival Biarritz Amérique Latine",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#152A56",
+  "theme_color": "#152A56",
+  "orientation": "portrait",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

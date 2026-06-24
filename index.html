@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Festival Biarritz Amérique Latine</title>
+<meta name="description" content="Programmation officielle du Festival Biarritz Amérique Latine 2026">
+<meta name="theme-color" content="#152A56">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+  :root{
+    --navy:#152A56;
+    --navy-light:#1E3A6E;
+    --coral:#E2483D;
+    --coral-light:#FAEEDA;
+    --yellow:#F4C430;
+    --yellow-light:#FAEEDA;
+    --sky:#378ADD;
+    --sky-light:#E6F1FB;
+    --green:#4FA34A;
+    --green-light:#EAF3DE;
+    --purple-light:#EEEDFE;
+    --purple-text:#3C3489;
+    --pink-light:#FBEAE8;
+    --pink-text:#993556;
+    --amber-text:#854F0B;
+    --bg:#FFFFFF;
+    --bg-secondary:#F7F7F5;
+    --border:rgba(21,42,86,0.12);
+    --text:#152A56;
+    --text-secondary:#5A6478;
+    --text-tertiary:#9098A8;
+    --radius-md:10px;
+    --radius-lg:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:var(--bg-secondary);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .app{ max-width:480px; margin:0 auto; background:var(--bg); min-height:100vh; display:flex; flex-direction:column; }
+
+  header{
+    background:var(--navy);
+    padding-top:env(safe-area-inset-top);
+    position:relative;
+    overflow:hidden;
+  }
+  .header-top{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px 10px; position:relative; z-index:2;
+  }
+  .brand{ color:#fff; font-weight:700; font-size:17px; letter-spacing:-0.2px; }
+  .brand small{ display:block; font-size:10px; font-weight:400; color:rgba(255,255,255,0.65); letter-spacing:0.3px; text-transform:uppercase; margin-top:1px;}
+  .header-actions{ display:flex; align-items:center; gap:10px; }
+  .lang-toggle{ display:flex; border:1px solid rgba(255,255,255,0.4); border-radius:8px; overflow:hidden; font-size:11px; font-weight:600;}
+  .lang-toggle button{ background:none; border:none; color:#fff; padding:5px 10px; cursor:pointer; font-size:11px; font-weight:600; font-family:inherit;}
+  .lang-toggle button.active{ background:#fff; color:var(--navy); }
+  .bell{ width:18px; height:18px; color:#fff; opacity:0.85; }
+
+  .hero-strip{ height:42px; position:relative; z-index:1; }
+  .hero-strip svg{ display:block; width:100%; height:100%; }
+
+  .dates-bar{
+    display:flex; gap:8px; padding:12px 18px 14px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    border-bottom:1px solid var(--border);
+  }
+  .dates-bar::-webkit-scrollbar{ display:none; }
+  .day-chip{
+    flex-shrink:0; padding:7px 13px; border-radius:var(--radius-md); font-size:13px; font-weight:500;
+    border:1px solid var(--border); cursor:pointer; background:var(--bg); color:var(--text); white-space:nowrap;
+  }
+  .day-chip.active{ background:var(--navy); color:#fff; border-color:var(--navy); }
+
+  nav.tabs{
+    display:flex; border-bottom:1px solid var(--border); padding:0 18px; gap:6px;
+    overflow-x:auto; -webkit-overflow-scrolling:touch;
+  }
+  nav.tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    background:none; border:none; padding:12px 4px; font-size:14px; font-weight:500; color:var(--text-tertiary);
+    cursor:pointer; border-bottom:2px solid transparent; font-family:inherit; white-space:nowrap;
+  }
+  .tab-btn.active{ color:var(--navy); border-bottom-color:var(--coral); }
+
+  main{ flex:1; padding:14px 18px 28px; }
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  .cat-row{ display:flex; gap:6px; overflow-x:auto; padding-bottom:12px; -webkit-overflow-scrolling:touch; }
+  .cat-row::-webkit-scrollbar{ display:none; }
+  .cat-chip{
+    flex-shrink:0; display:flex; align-items:center; gap:5px; padding:6px 11px; border-radius:var(--radius-md);
+    font-size:12px; font-weight:500; border:1px solid var(--border); cursor:pointer; background:var(--bg); color:var(--text); white-space:nowrap;
+  }
+  .cat-chip.active{ background:var(--sky-light); color:#0C447C; border-color:transparent; }
+
+  .card{
+    border:1px solid var(--border); border-radius:var(--radius-lg); padding:13px 14px; margin-bottom:9px;
+    display:flex; gap:11px; align-items:flex-start; background:var(--bg);
+  }
+  .card-time{ font-size:13px; font-weight:600; color:var(--text-secondary); min-width:44px; line-height:1.45; }
+  .card-time .end{ display:block; font-size:11px; font-weight:400; color:var(--text-tertiary); }
+  .card-body{ flex:1; min-width:0; }
+  .card-title{ font-size:14.5px; font-weight:600; margin-bottom:3px; line-height:1.35; }
+  .card-meta{ font-size:12px; color:var(--text-secondary); display:flex; align-items:center; gap:4px; margin-bottom:7px; flex-wrap:wrap; }
+  .dot{ opacity:0.5; }
+  .tags{ display:flex; gap:6px; flex-wrap:wrap; }
+  .tag{ font-size:11px; font-weight:500; padding:3px 9px; border-radius:8px; }
+  .tag.compet{ background:var(--yellow-light); color:var(--amber-text); }
+  .tag.hors{ background:var(--green-light); color:#3B6D11; }
+  .tag.avant{ background:var(--pink-light); color:var(--pink-text); }
+  .tag.focus{ background:var(--purple-light); color:var(--purple-text); }
+  .tag.payant{ background:var(--sky-light); color:#0C447C; }
+  .tag.gratuit{ background:var(--green-light); color:#3B6D11; }
+  .fav-btn{ background:none; border:none; cursor:pointer; padding:2px; flex-shrink:0; }
+  .fav-btn svg{ width:19px; height:19px; }
+
+  .empty{ text-align:center; padding:40px 0; color:var(--text-secondary); font-size:13.5px; }
+
+  .stand-card{ border:1px solid var(--border); border-radius:var(--radius-lg); padding:12px 14px; margin-bottom:9px; display:flex; gap:12px; align-items:center; background:var(--bg); }
+  .stand-icon{ width:38px; height:38px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; }
+  .stand-icon.food{ background:var(--yellow-light); color:var(--amber-text); }
+  .stand-icon.craft{ background:var(--purple-light); color:var(--purple-text); }
+  .stand-name{ font-size:14px; font-weight:600; margin-bottom:2px; }
+  .stand-desc{ font-size:12px; color:var(--text-secondary); margin-bottom:4px; }
+  .stand-zone{ font-size:11px; color:var(--text-tertiary); }
+
+  .section-label{ font-size:12.5px; color:var(--text-secondary); font-weight:600; margin:18px 0 8px; text-transform:uppercase; letter-spacing:0.3px; }
+  .section-label:first-child{ margin-top:0; }
+
+  .link-row{ display:flex; gap:10px; margin-bottom:6px; }
+  .social-btn{
+    flex:1; border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px 0; text-align:center;
+    text-decoration:none; color:var(--text); font-size:11px; font-weight:500;
+  }
+  .social-btn svg{ width:21px; height:21px; display:block; margin:0 auto 5px; }
+
+  .info-card{ border:1px solid var(--border); border-radius:var(--radius-lg); padding:12px 13px; display:flex; align-items:center; gap:12px; margin-bottom:10px; text-decoration:none; color:var(--text); }
+  .info-icon{ width:40px; height:40px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .info-title{ font-size:13.5px; font-weight:600; }
+  .info-sub{ font-size:11.5px; color:var(--text-secondary); }
+  .badge-soon{ font-size:10px; padding:3px 8px; border-radius:8px; background:var(--bg-secondary); color:var(--text-secondary); flex-shrink:0; }
+  .chevron{ width:15px; height:15px; color:var(--text-tertiary); flex-shrink:0; }
+
+  .ticket-btn{
+    display:block; width:100%; background:var(--coral); color:#fff; text-align:center; padding:13px 0;
+    border-radius:var(--radius-md); font-weight:600; font-size:14px; text-decoration:none; margin-top:6px;
+  }
+
+  iframe.spotify-embed{ border-radius:var(--radius-lg); width:100%; height:152px; border:none; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="header-top">
+      <div class="brand" id="brandLabel">Festival BAL<small id="brandSub">cinémas & cultures · 35e édition</small></div>
+      <div class="header-actions">
+        <div class="lang-toggle">
+          <button id="btnFr" class="active">FR</button>
+          <button id="btnEs">ES</button>
+        </div>
+        <svg class="bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </div>
+    </div>
+    <div class="hero-strip">
+      <svg viewBox="0 0 480 56" preserveAspectRatio="xMidYMax slice">
+        <rect width="480" height="56" fill="#152A56"/>
+        <circle cx="44" cy="42" r="9" fill="#F2C2A0"/>
+        <rect x="35" y="48" width="18" height="26" rx="5" fill="#E2483D"/>
+        <rect x="100" y="20" width="34" height="30" rx="8" fill="#4FA34A"/>
+        <circle cx="117" cy="32" r="7" fill="#F2C2A0"/>
+        <rect x="160" y="30" width="7" height="32" fill="#F4C430" transform="rotate(15 163 32)"/>
+        <path d="M166 14 L196 6 L196 24 Z" fill="#378ADD"/>
+        <path d="M166 14 L196 24 L166 32 Z" fill="#E2483D"/>
+        <circle cx="240" cy="30" r="8" fill="#7A4A2A"/>
+        <rect x="233" y="38" width="14" height="22" rx="5" fill="#FFFFFF"/>
+        <circle cx="300" cy="34" r="7" fill="#F2C2A0"/>
+        <rect x="293" y="41" width="14" height="22" rx="5" fill="#E2483D"/>
+        <circle cx="360" cy="32" r="7" fill="#7A4A2A"/>
+        <rect x="353" y="39" width="14" height="22" rx="5" fill="#4FA34A"/>
+        <rect x="420" y="34" width="8" height="22" fill="#F2C2A0" transform="rotate(-20 424 36)"/>
+        <path d="M428 18 L460 26 L428 34 Z" fill="#F4C430"/>
+      </svg>
+    </div>
+    <div class="dates-bar" id="datesBar"></div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-view="programme" id="tabProgramme">Programme</button>
+    <button class="tab-btn" data-view="favoris" id="tabFavoris">Favoris</button>
+    <button class="tab-btn" data-view="stands" id="tabStands">Stands</button>
+    <button class="tab-btn" data-view="infos" id="tabInfos">Infos</button>
+  </nav>
+
+  <main>
+
+    <section class="view active" id="view-programme">
+      <div class="cat-row" id="catRow"></div>
+      <div id="programmeList"></div>
+    </section>
+
+    <section class="view" id="view-favoris">
+      <div id="favorisList"></div>
+    </section>
+
+    <section class="view" id="view-stands">
+      <div class="cat-row" id="standCatRow"></div>
+      <div id="standsList"></div>
+    </section>
+
+    <section class="view" id="view-infos">
+      <div class="section-label" id="lblSocial">Suivez le festival</div>
+      <div class="link-row">
+        <a class="social-btn" href="https://instagram.com/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#993556" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+          Instagram
+        </a>
+        <a class="social-btn" href="https://letterboxd.com/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0C447C" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="2.2"/><circle cx="16" cy="12" r="2.2"/></svg>
+          Letterboxd
+        </a>
+        <a class="social-btn" href="https://youtube.com/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#A32D2D" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="#A32D2D" stroke="none"/></svg>
+          YouTube
+        </a>
+      </div>
+
+      <div class="section-label" id="lblHashtag">Hashtag du festival</div>
+      <div class="info-card">
+        <div class="info-icon" style="background:var(--yellow-light);">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div class="info-title">#FBAL35</div>
+          <div class="info-sub" id="hashtagSub">Partagez vos photos avec ce tag</div>
+        </div>
+      </div>
+
+      <div class="section-label" id="lblPlaylist">Playlist 2026</div>
+      <iframe class="spotify-embed" src="https://open.spotify.com/embed/playlist/0zkYzpI86jA9wcD6oYQAOQ?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+      <div class="section-label" id="lblGoodies">Boutique du festival</div>
+      <div class="info-card">
+        <div class="info-icon" style="background:var(--sky-light);">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0C447C" stroke-width="2"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div class="info-title" id="goodiesTitle">Tote bag, gourde, affiche...</div>
+          <div class="info-sub" id="goodiesSub">Disponible sur BilletWeb</div>
+        </div>
+        <span class="badge-soon" id="goodiesSoon">Bientôt</span>
+      </div>
+
+      <div class="section-label" id="lblBillet">Billetterie</div>
+      <a class="ticket-btn" id="ticketBtn" href="https://www.billetweb.fr/" target="_blank" rel="noopener">Acheter mes billets</a>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const i18n = {
+  fr: {
+    sub: "cinémas & cultures · 35e édition",
+    tabs: {programme:"Programme", favoris:"Favoris", stands:"Stands", infos:"Infos"},
+    cats: {all:"Tout", cine:"Cinéma", musica:"Concerts", debate:"Débats", taller:"Ateliers", baile:"Danse", uni:"Universitaire"},
+    standCats: {all:"Tout", food:"Gastronomie", craft:"Artisanat"},
+    typeLabels: {compet_long:"Compét. — long métrage", compet_court:"Compét. — court métrage", compet_fiction:"Compét. — fiction", hors:"Hors compétition", avant:"Avant-première", focus:"Focus"},
+    payant:"Payant", gratuit:"Gratuit", fin:"fin",
+    emptyProg:"Aucune activité pour ce filtre", emptyFav:"Pas encore de favoris — touchez le cœur d'une activité pour l'ajouter ici",
+    social:"Suivez le festival", hashtag:"Hashtag du festival", hashtagSub:"Partagez vos photos avec ce tag",
+    playlist:"Playlist 2026", goodies:"Boutique du festival", goodiesSub:"Disponible sur BilletWeb",
+    billet:"Billetterie", ticketBtn:"Acheter mes billets", soon:"Bientôt"
+  },
+  es: {
+    sub: "cines & culturas · 35.ª edición",
+    tabs: {programme:"Programa", favoris:"Favoritos", stands:"Stands", infos:"Info"},
+    cats: {all:"Todo", cine:"Cine", musica:"Conciertos", debate:"Debates", taller:"Talleres", baile:"Baile", uni:"Universitario"},
+    standCats: {all:"Todo", food:"Gastronomía", craft:"Artesanía"},
+    typeLabels: {compet_long:"Competencia — largometraje", compet_court:"Competencia — cortometraje", compet_fiction:"Competencia — ficción", hors:"Fuera de competencia", avant:"Avant-première", focus:"Focus"},
+    payant:"De pago", gratuit:"Gratis", fin:"fin",
+    emptyProg:"Sin actividades para este filtro", emptyFav:"Aún no tienes favoritos — toca el corazón de una actividad para agregarla aquí",
+    social:"Sigue al festival", hashtag:"Hashtag del festival", hashtagSub:"Comparte tus fotos con este tag",
+    playlist:"Playlist 2026", goodies:"Tienda del festival", goodiesSub:"Disponible en BilletWeb",
+    billet:"Boletería", ticketBtn:"Comprar mis boletos", soon:"Pronto"
+  }
+};
+
+let lang = "fr";
+let curDay = 0;
+let curCat = "all";
+let curStandCat = "all";
+let favs = JSON.parse(localStorage.getItem("bal_favs") || "[]");
+
+const days = [
+  {label:"26 sep", date:"2026-09-26"},
+  {label:"27 sep", date:"2026-09-27"},
+  {label:"28 sep", date:"2026-09-28"},
+  {label:"29 sep", date:"2026-09-29"},
+  {label:"30 sep", date:"2026-09-30"},
+  {label:"1 oct", date:"2026-10-01"},
+  {label:"2 oct", date:"2026-10-02"}
+];
+
+const cats = ["all","cine","musica","debate","taller","baile","uni"];
+const standCatsList = ["all","food","craft"];
+
+const catIcons = {
+  all:"M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
+  cine:"M4 7h16v10H4z M7 7v10 M17 7v10",
+  musica:"M9 18V5l12-2v13 M9 18a3 3 0 1 1 0-6 M21 16a3 3 0 1 1 0-6",
+  debate:"M21 11.5a8.38 8.38 0 0 1-9 8.34A8.5 8.5 0 1 1 21 11.5z",
+  taller:"M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z",
+  baile:"M12 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4z M9 21l1-7-3-2 2-5h6l2 5-3 2 1 7",
+  uni:"M12 3l9 5-9 5-9-5z M3 13l9 5 9-5"
+};
+
+// id is unique key, fr/es title, type for cine items, dur minutes, day index (0-6), cat
+const events = [
+  {id:"e1", day:0, cat:"cine", time:"18:00", dur:95, type:"avant", fr:"Ouverture du festival", es:"Apertura del festival", place:"Gare du Midi"},
+  {id:"e2", day:0, cat:"musica", time:"21:00", dur:90, type:null, fr:"Septeto Santiaguero", es:"Septeto Santiaguero", place:"Gare du Midi", payant:true},
+  {id:"e3", day:1, cat:"debate", time:"17:00", dur:60, type:null, fr:"Table ronde : mémoire et migration", es:"Mesa literaria: memoria y migración", place:"Médiathèque"},
+  {id:"e4", day:1, cat:"cine", time:"20:00", dur:104, type:"hors", fr:"Sélection hors compétition", es:"Selección fuera de competencia", place:"Cinéma municipal"},
+  {id:"e5", day:2, cat:"taller", time:"11:00", dur:60, type:null, fr:"Atelier de tissage andin", es:"Taller de tejido andino", place:"Village"},
+  {id:"e6", day:2, cat:"baile", time:"19:00", dur:60, type:null, fr:"Cours de salsa cubaine", es:"Curso de salsa cubana", place:"Carpa village"},
+  {id:"e7", day:3, cat:"uni", time:"14:00", dur:90, type:null, fr:"Rencontre universitaire : cinéma et territoire", es:"Encuentro universitario: cine y territorio", place:"Université"},
+  {id:"e8", day:3, cat:"cine", time:"16:00", dur:18, type:"compet_court", fr:"Sélection courts métrages 1", es:"Selección cortometrajes 1", place:"Cinéma municipal"},
+  {id:"e9", day:4, cat:"cine", time:"19:30", dur:97, type:"compet_fiction", fr:"Compétition fiction — séance 4", es:"Competencia ficción — sesión 4", place:"Gare du Midi"},
+  {id:"e10", day:5, cat:"cine", time:"19:00", dur:88, type:"focus", fr:"Focus : cinéma bolivien", es:"Focus: cine boliviano", place:"Cinéma municipal"},
+  {id:"e11", day:6, cat:"cine", time:"17:00", dur:120, type:"compet_long", fr:"Clôture et palmarès", es:"Clausura y palmarès", place:"Gare du Midi"}
+];
+
+const stands = [
+  {cat:"food", fr:"Empanadas Doña Lola", es:"Empanadas Doña Lola", descFr:"Empanadas argentines, sucré et salé", descEs:"Empanadas argentinas, dulces y saladas", zoneFr:"Village A · stand 3", zoneEs:"Village A · puesto 3", icon:"food"},
+  {cat:"food", fr:"Arepas El Sol", es:"Arepas El Sol", descFr:"Arepas vénézuéliennes", descEs:"Arepas venezolanas", zoneFr:"Village A · stand 5", zoneEs:"Village A · puesto 5", icon:"food"},
+  {cat:"food", fr:"Mezcal & co", es:"Mezcal & co", descFr:"Cocktails et bières latino-américaines", descEs:"Cócteles y cervezas latinoamericanas", zoneFr:"Village B · bar central", zoneEs:"Village B · bar central", icon:"food"},
+  {cat:"food", fr:"Tacos al pastor", es:"Tacos al pastor", descFr:"Cuisine mexicaine de rue", descEs:"Comida mexicana de calle", zoneFr:"Village A · stand 7", zoneEs:"Village A · puesto 7", icon:"food"},
+  {cat:"craft", fr:"Manos andinas", es:"Manos andinas", descFr:"Tissages et textiles andins faits main", descEs:"Tejidos y textiles andinos hechos a mano", zoneFr:"Village B · stand 2", zoneEs:"Village B · puesto 2", icon:"craft"},
+  {cat:"craft", fr:"Bijoux Wayuu", es:"Joyas Wayuu", descFr:"Bijoux artisanaux colombiens", descEs:"Joyería artesanal colombiana", zoneFr:"Village B · stand 4", zoneEs:"Village B · puesto 4", icon:"craft"},
+  {cat:"craft", fr:"Cuir & cuero", es:"Cuir & cuero", descFr:"Maroquinerie artisanale", descEs:"Marroquinería artesanal", zoneFr:"Village A · stand 9", zoneEs:"Village A · puesto 9", icon:"craft"}
+];
+
+function t(){ return i18n[lang]; }
+
+function addMin(time, mins){
+  const [h,m] = time.split(":").map(Number);
+  const total = h*60+m+mins;
+  const hh = Math.floor((total%1440)/60).toString().padStart(2,"0");
+  const mm = (total%60).toString().padStart(2,"0");
+  return hh+":"+mm;
+}
+
+function heartIcon(filled){
+  return filled
+    ? '<svg viewBox="0 0 24 24" fill="#D4537E" stroke="#D4537E" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.5C14.3 5.2 15.8 4 18 4c4 0 5.5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="#9098A8" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.5C14.3 5.2 15.8 4 18 4c4 0 5.5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg>';
+}
+
+function toggleFav(id){
+  const idx = favs.indexOf(id);
+  if(idx>-1) favs.splice(idx,1); else favs.push(id);
+  localStorage.setItem("bal_favs", JSON.stringify(favs));
+  renderProgramme();
+  renderFavoris();
+}
+
+function eventCardHtml(e){
+  const title = lang==="fr" ? e.fr : e.es;
+  const isFav = favs.includes(e.id);
+  const endTime = addMin(e.time, e.dur);
+  const typeLabel = e.type ? t().typeLabels[e.type] : null;
+  return `<div class="card">
+    <div class="card-time">${e.time}<span class="end">${t().fin} ${endTime}</span></div>
+    <div class="card-body">
+      <div class="card-title">${title}</div>
+      <div class="card-meta">${e.place}<span class="dot">·</span>${e.dur} min</div>
+      <div class="tags">
+        ${typeLabel ? `<span class="tag ${e.type.startsWith('compet')?'compet':e.type}">${typeLabel}</span>` : ''}
+        ${e.payant ? `<span class="tag payant">${t().payant}</span>` : (e.cat!=='cine' ? `<span class="tag gratuit">${t().gratuit}</span>` : (e.type==='hors' ? '' : ''))}
+      </div>
+    </div>
+    <button class="fav-btn" onclick="toggleFav('${e.id}')" aria-label="favori">${heartIcon(isFav)}</button>
+  </div>`;
+}
+
+function renderHeader(){
+  document.getElementById("brandSub").textContent = t().sub;
+  document.getElementById("tabProgramme").textContent = t().tabs.programme;
+  document.getElementById("tabFavoris").textContent = t().tabs.favoris;
+  document.getElementById("tabStands").textContent = t().tabs.stands;
+  document.getElementById("tabInfos").textContent = t().tabs.infos;
+  document.getElementById("lblSocial").textContent = t().social;
+  document.getElementById("lblHashtag").textContent = t().hashtag;
+  document.getElementById("hashtagSub").textContent = t().hashtagSub;
+  document.getElementById("lblPlaylist").textContent = t().playlist;
+  document.getElementById("lblGoodies").textContent = t().goodies;
+  document.getElementById("goodiesSub").textContent = t().goodiesSub;
+  document.getElementById("goodiesSoon").textContent = t().soon;
+  document.getElementById("lblBillet").textContent = t().billet;
+  document.getElementById("ticketBtn").textContent = t().ticketBtn;
+}
+
+function renderDays(){
+  const el = document.getElementById("datesBar");
+  el.innerHTML = days.map((d,i)=>`<div class="day-chip ${i===curDay?'active':''}" data-i="${i}">${d.label}</div>`).join("");
+  el.querySelectorAll(".day-chip").forEach(n=>n.onclick=()=>{ curDay=+n.dataset.i; renderDays(); renderProgramme(); });
+}
+
+function renderCats(){
+  const el = document.getElementById("catRow");
+  el.innerHTML = cats.map(c=>`<div class="cat-chip ${c===curCat?'active':''}" data-c="${c}">${t().cats[c]}</div>`).join("");
+  el.querySelectorAll(".cat-chip").forEach(n=>n.onclick=()=>{ curCat=n.dataset.c; renderCats(); renderProgramme(); });
+}
+
+function renderProgramme(){
+  renderCats();
+  const list = document.getElementById("programmeList");
+  const filtered = events.filter(e=>e.day===curDay && (curCat==="all"||e.cat===curCat));
+  list.innerHTML = filtered.length ? filtered.map(eventCardHtml).join("") : `<div class="empty">${t().emptyProg}</div>`;
+}
+
+function renderFavoris(){
+  const list = document.getElementById("favorisList");
+  const filtered = events.filter(e=>favs.includes(e.id)).sort((a,b)=> a.day-b.day || a.time.localeCompare(b.time));
+  list.innerHTML = filtered.length ? filtered.map(eventCardHtml).join("") : `<div class="empty">${t().emptyFav}</div>`;
+}
+
+function standCardHtml(s){
+  const name = lang==="fr" ? s.fr : s.es;
+  const desc = lang==="fr" ? s.descFr : s.descEs;
+  const zone = lang==="fr" ? s.zoneFr : s.zoneEs;
+  const iconPath = s.icon==="food"
+    ? '<path d="M5 4v9a3 3 0 1 0 6 0V4M8 4v6M11 4v6"/><path d="M17 4v16M17 4c3 0 4 2 4 5s-1 5-4 5"/>'
+    : '<path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6z"/>';
+  return `<div class="stand-card">
+    <div class="stand-icon ${s.icon}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${iconPath}</svg></div>
+    <div style="flex:1;">
+      <div class="stand-name">${name}</div>
+      <div class="stand-desc">${desc}</div>
+      <div class="stand-zone">${zone}</div>
+    </div>
+  </div>`;
+}
+
+function renderStandCats(){
+  const el = document.getElementById("standCatRow");
+  el.innerHTML = standCatsList.map(c=>`<div class="cat-chip ${c===curStandCat?'active':''}" data-c="${c}">${t().standCats[c]}</div>`).join("");
+  el.querySelectorAll(".cat-chip").forEach(n=>n.onclick=()=>{ curStandCat=n.dataset.c; renderStandCats(); renderStands(); });
+}
+
+function renderStands(){
+  renderStandCats();
+  const list = document.getElementById("standsList");
+  const filtered = stands.filter(s=>curStandCat==="all"||s.cat===curStandCat);
+  list.innerHTML = filtered.map(standCardHtml).join("");
+}
+
+function setLang(l){
+  lang = l;
+  document.getElementById("btnFr").classList.toggle("active", l==="fr");
+  document.getElementById("btnEs").classList.toggle("active", l==="es");
+  document.documentElement.lang = l;
+  renderHeader();
+  renderProgramme();
+  renderFavoris();
+  renderStands();
+}
+
+document.getElementById("btnFr").onclick = ()=>setLang("fr");
+document.getElementById("btnEs").onclick = ()=>setLang("es");
+
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("view-"+btn.dataset.view).classList.add("active");
+  };
+});
+
+renderHeader();
+renderDays();
+renderProgramme();
+renderFavoris();
+renderStands();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("sw.js").catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
