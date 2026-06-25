@@ -1,23 +1,44 @@
 # FBAL — App de programación
 
-## Qué es esto
-Mini-app web (PWA) con la programación del festival, favoritos, stands, redes sociales y la ficha de detalle (foto/descripción/video) de cada película o concierto.
+## Qué hay en esta versión
+- Splash inicial con el cartel del festival (aparece y desaparece solo)
+- Página de Inicio (Accueil): aftermovie 2025, redes sociales, sitio web, playlist, botón para ir al programa
+- Programa con filtros por día/categoría, duración y hora de salida calculada
+- Ficha de detalle (foto/descripción/video) en cada película o concierto, con botón de billetería
+- Favoritos (itinerario personal)
+- Stands con ficha de detalle y link a redes sociales
+- Sección Infos: hashtag, goodies, billetería
 
 ## Archivos
 - index.html → toda la app
-- manifest.json → permite "instalar" la app en el celular
+- manifest.json → instalación en el celular
 - sw.js → funcionamiento offline
-- icons/ → íconos de la app (ya con un recorte del cartel real)
-- assets/header-strip.jpg → la franja del cartel real que aparece en el header
+- icons/ → íconos de la app (personajes reales del cartel)
+- assets/header-strip.jpg → franja de personajes en el header
+- assets/affiche-full.jpg → cartel completo usado en el splash de apertura
 
-## Cómo cambiar la imagen del header por otra parte del cartel (o el cartel final)
-1. Sustituye el archivo assets/header-strip.jpg por la nueva imagen, manteniendo el mismo nombre (o cambia el nombre y ajústalo en index.html, en la etiqueta `<img src="assets/header-strip.jpg">`)
-2. Lo ideal es una imagen apaisada (mucho más ancha que alta), sin texto importante en los bordes, porque se recorta automáticamente
+## Cómo cambiar el link de billetería
+Busca `billetweb.fr/festival-biarritz-amerique-latine-2026` en index.html — aparece en 2 lugares (pestaña Infos y el botón dentro de cada ficha de película/concierto). Cámbialo en ambos si llega a cambiar.
 
-## Cómo agregar foto y video real a cada película/concierto
-Busca `const events = [...]` en index.html. Cada actividad de cine/música que ya tiene `descFr`/`descEs` muestra una ficha al tocarla. Para agregar el video:
-- Si es de YouTube: copia el ID del video (en la URL, lo que va después de `watch?v=`) y ponlo en el campo `video:"ESE_ID"` de esa actividad
-- Mientras no haya video, la ficha muestra "Foto y video à venir" automáticamente
+## Cómo agregar video/foto a una película o concierto
+En `const events = [...]`, cada actividad tiene un campo `video`. Pon ahí el ID de YouTube (lo que va después de `watch?v=` en la URL). Mientras no haya video, se muestra "Foto y video à venir" automáticamente.
+
+## Cómo agregar redes sociales a un stand
+En `const stands = [...]`, cada stand tiene un campo `social`. Pon ahí el link de Instagram (o lo que sea) de ese stand. Mientras esté en `null`, el botón dice "Redes próximamente" y no es clicable.
+
+## Cómo cambiar el aftermovie
+Busca `9ZaVxVQamcM` en index.html (es el ID del video de YouTube) y sustitúyelo por el ID del video que quieras usar.
+
+## Ideas para seguir personalizando (cuando haya tiempo)
+- Mapa visual del village con los stands ubicados espacialmente
+- Notificaciones push reales (cambios de horario, recordatorios)
+- Compartir una actividad o el itinerario de favoritos por WhatsApp/redes
+- Modo oscuro / claro
+- Detectar automáticamente el idioma del teléfono al abrir la app
+- Botón "agregar a mi calendario" en cada favorito
+- Contador de cuenta atrás para el inicio del festival
+- Sección de equipo/jurado (Prix des Biarrots) con fotos y bios
+- Encuesta rápida de satisfacción al final del festival
 
 ## Cómo publicar cambios
-Cada vez que edites y subas los archivos a GitHub (botón "Edit" o "Upload files" en el repositorio), Vercel vuelve a publicar la app automáticamente en 30-60 segundos. No hay que hacer nada más.
+Sube los archivos modificados a GitHub (botón "Add file" → "Upload files", reemplaza lo que ya existe). Vercel vuelve a publicar la app sola en 30-60 segundos.

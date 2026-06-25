@@ -184,9 +184,36 @@
     margin-top:14px; border:1px dashed var(--border); border-radius:var(--radius-lg); padding:18px;
     text-align:center; font-size:12.5px; color:var(--text-tertiary);
   }
+
+  .modal-ticket-btn{
+    display:block; width:100%; background:var(--coral); color:#fff; text-align:center; padding:13px 0;
+    border-radius:var(--radius-md); font-weight:600; font-size:14px; text-decoration:none; margin-top:16px;
+  }
+
+  .splash{
+    position:fixed; inset:0; background:var(--navy); z-index:200;
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity 0.5s ease; padding:24px;
+  }
+  .splash img{ width:100%; max-width:340px; border-radius:14px; box-shadow:0 24px 60px rgba(0,0,0,0.45); }
+  .splash.hide{ opacity:0; pointer-events:none; }
+
+  .cta-btn{
+    display:block; width:100%; background:var(--navy); color:#fff; text-align:center; padding:14px 0;
+    border-radius:var(--radius-md); font-weight:600; font-size:14.5px; border:none; cursor:pointer;
+    margin-top:20px; font-family:inherit;
+  }
+
+  .home-video-wrap{ border-radius:var(--radius-lg); overflow:hidden; margin-bottom:18px; }
+  .home-video-wrap iframe{ width:100%; height:210px; border:none; display:block; }
+
+  .website-card{ background:var(--sky-light); }
 </style>
 </head>
 <body>
+<div class="splash" id="splash">
+  <img src="assets/affiche-full.jpg" alt="Affiche FBAL 2026">
+</div>
 <div class="app">
 
   <header>
@@ -207,7 +234,8 @@
   </header>
 
   <nav class="tabs">
-    <button class="tab-btn active" data-view="programme" id="tabProgramme">Programme</button>
+    <button class="tab-btn active" data-view="accueil" id="tabAccueil">Accueil</button>
+    <button class="tab-btn" data-view="programme" id="tabProgramme">Programme</button>
     <button class="tab-btn" data-view="favoris" id="tabFavoris">Favoris</button>
     <button class="tab-btn" data-view="stands" id="tabStands">Stands</button>
     <button class="tab-btn" data-view="infos" id="tabInfos">Infos</button>
@@ -215,21 +243,12 @@
 
   <main>
 
-    <section class="view active" id="view-programme">
-      <div class="cat-row" id="catRow"></div>
-      <div id="programmeList"></div>
-    </section>
+    <section class="view active" id="view-accueil">
+      <div class="section-label" id="lblAftermovie">Aftermovie 2025</div>
+      <div class="home-video-wrap">
+        <iframe src="https://www.youtube.com/embed/9ZaVxVQamcM" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" loading="lazy"></iframe>
+      </div>
 
-    <section class="view" id="view-favoris">
-      <div id="favorisList"></div>
-    </section>
-
-    <section class="view" id="view-stands">
-      <div class="cat-row" id="standCatRow"></div>
-      <div id="standsList"></div>
-    </section>
-
-    <section class="view" id="view-infos">
       <div class="section-label" id="lblSocial">Suivez le festival</div>
       <div class="link-row">
         <a class="social-btn" href="https://www.instagram.com/fbal.biarritz/" target="_blank" rel="noopener">
@@ -251,7 +270,38 @@
           YouTube
         </a>
       </div>
+      <a class="info-card website-card" href="https://www.festivaldebiarritz.com/" target="_blank" rel="noopener">
+        <div class="info-icon" style="background:#fff;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0C447C" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div class="info-title" id="websiteTitle">Site officiel du festival</div>
+          <div class="info-sub">festivaldebiarritz.com</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
 
+      <div class="section-label" id="lblPlaylist">Playlist 2026</div>
+      <iframe class="spotify-embed" src="https://open.spotify.com/embed/playlist/0zkYzpI86jA9wcD6oYQAOQ?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+      <button class="cta-btn" id="ctaProgramme">Voir le programme</button>
+    </section>
+
+    <section class="view" id="view-programme">
+      <div class="cat-row" id="catRow"></div>
+      <div id="programmeList"></div>
+    </section>
+
+    <section class="view" id="view-favoris">
+      <div id="favorisList"></div>
+    </section>
+
+    <section class="view" id="view-stands">
+      <div class="cat-row" id="standCatRow"></div>
+      <div id="standsList"></div>
+    </section>
+
+    <section class="view" id="view-infos">
       <div class="section-label" id="lblHashtag">Hashtag du festival</div>
       <a class="info-card" href="https://www.instagram.com/explore/tags/fbal/" target="_blank" rel="noopener">
         <div class="info-icon" style="background:var(--yellow-light);">
@@ -263,9 +313,6 @@
         </div>
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
       </a>
-
-      <div class="section-label" id="lblPlaylist">Playlist 2026</div>
-      <iframe class="spotify-embed" src="https://open.spotify.com/embed/playlist/0zkYzpI86jA9wcD6oYQAOQ?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
       <div class="section-label" id="lblGoodies">Boutique du festival</div>
       <div class="info-card">
@@ -280,7 +327,7 @@
       </div>
 
       <div class="section-label" id="lblBillet">Billetterie</div>
-      <a class="ticket-btn" id="ticketBtn" href="https://www.billetweb.fr/" target="_blank" rel="noopener">Acheter mes billets</a>
+      <a class="ticket-btn" id="ticketBtn" href="https://www.billetweb.fr/festival-biarritz-amerique-latine-2026" target="_blank" rel="noopener">Acheter mes billets</a>
     </section>
 
   </main>
@@ -299,6 +346,23 @@
       <div class="tags" id="modalTags"></div>
       <div class="modal-desc" id="modalDesc"></div>
       <div id="modalVideoArea"></div>
+      <a class="modal-ticket-btn" id="modalTicketBtn" href="https://www.billetweb.fr/festival-biarritz-amerique-latine-2026" target="_blank" rel="noopener">Billetterie</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="standModalOverlay">
+  <div class="modal-sheet">
+    <div class="modal-media" id="standModalMedia">
+      <button class="modal-close" id="standModalClose" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-title" id="standModalTitle"></div>
+      <div class="modal-meta" id="standModalMeta"></div>
+      <div class="modal-desc" id="standModalDesc"></div>
+      <a class="modal-ticket-btn" id="standModalSocial" target="_blank" rel="noopener" style="background:var(--sky);">Voir sur Instagram</a>
     </div>
   </div>
 </div>
@@ -307,7 +371,9 @@
 const i18n = {
   fr: {
     sub: "cinémas & cultures · 35e édition",
-    tabs: {programme:"Programme", favoris:"Favoris", stands:"Stands", infos:"Infos"},
+    tabs: {accueil:"Accueil", programme:"Programme", favoris:"Favoris", stands:"Stands", infos:"Infos"},
+    aftermovie:"Aftermovie 2025", website:"Site officiel du festival", ctaProgramme:"Voir le programme",
+    standSocial:"Voir sur Instagram", standSocialPending:"Réseaux à venir",
     cats: {all:"Tout", cine:"Cinéma", musica:"Concerts", debate:"Débats", taller:"Ateliers", baile:"Danse", uni:"Universitaire"},
     standCats: {all:"Tout", food:"Gastronomie", craft:"Artisanat"},
     typeLabels: {compet_long:"Compét. — long métrage", compet_court:"Compét. — court métrage", compet_fiction:"Compét. — fiction", hors:"Hors compétition", avant:"Avant-première", focus:"Focus"},
@@ -319,7 +385,9 @@ const i18n = {
   },
   es: {
     sub: "cines & culturas · 35.ª edición",
-    tabs: {programme:"Programa", favoris:"Favoritos", stands:"Stands", infos:"Info"},
+    tabs: {accueil:"Inicio", programme:"Programa", favoris:"Favoritos", stands:"Stands", infos:"Info"},
+    aftermovie:"Aftermovie 2025", website:"Sitio oficial del festival", ctaProgramme:"Ver el programa",
+    standSocial:"Ver en Instagram", standSocialPending:"Redes próximamente",
     cats: {all:"Todo", cine:"Cine", musica:"Conciertos", debate:"Debates", taller:"Talleres", baile:"Baile", uni:"Universitario"},
     standCats: {all:"Todo", food:"Gastronomía", craft:"Artesanía"},
     typeLabels: {compet_long:"Competencia — largometraje", compet_court:"Competencia — cortometraje", compet_fiction:"Competencia — ficción", hors:"Fuera de competencia", avant:"Avant-première", focus:"Focus"},
@@ -364,8 +432,8 @@ const catIcons = {
 const events = [
   {id:"e1", day:0, cat:"cine", time:"18:00", dur:95, type:"avant", fr:"Ouverture du festival", es:"Apertura del festival", place:"Gare du Midi",
     descFr:"Film d'ouverture de cette 35e édition, présenté en avant-première en présence de l'équipe du film.", descEs:"Película de apertura de esta 35.ª edición, presentada en avant-première con la presencia del equipo de la película.", video:null},
-  {id:"e2", day:0, cat:"musica", time:"21:00", dur:90, type:null, fr:"Septeto Santiaguero", es:"Septeto Santiaguero", place:"Gare du Midi", payant:true,
-    descFr:"Concert événement de cette édition : le son cubain du Septeto Santiaguero, groupe emblématique de Santiago de Cuba.", descEs:"Concierto estelar de esta edición: el son cubano del Septeto Santiaguero, grupo emblemático de Santiago de Cuba.", video:null},
+  {id:"e2", day:4, cat:"musica", time:"21:00", dur:90, type:null, fr:"Septeto Santiaguero", es:"Septeto Santiaguero", place:"Gare du Midi", payant:true,
+    descFr:"Concert événement de cette édition : le son cubain du Septeto Santiaguero, groupe emblématique de Santiago de Cuba.", descEs:"Concierto estelar de esta edición: el son cubano del Septeto Santiaguero, grupo emblemático de Santiago de Cuba.", video:"5WGUDQ_8Ynk"},
   {id:"e3", day:1, cat:"debate", time:"17:00", dur:60, type:null, fr:"Table ronde : mémoire et migration", es:"Mesa literaria: memoria y migración", place:"Médiathèque"},
   {id:"e4", day:1, cat:"cine", time:"20:00", dur:104, type:"hors", fr:"Sélection hors compétition", es:"Selección fuera de competencia", place:"Cinéma municipal",
     descFr:"Une sélection de films hors compétition qui explore les cinémas d'Amérique latine contemporains.", descEs:"Una selección de películas fuera de competencia que explora los cines latinoamericanos contemporáneos.", video:null},
@@ -383,13 +451,13 @@ const events = [
 ];
 
 const stands = [
-  {cat:"food", fr:"Empanadas Doña Lola", es:"Empanadas Doña Lola", descFr:"Empanadas argentines, sucré et salé", descEs:"Empanadas argentinas, dulces y saladas", zoneFr:"Village A · stand 3", zoneEs:"Village A · puesto 3", icon:"food"},
-  {cat:"food", fr:"Arepas El Sol", es:"Arepas El Sol", descFr:"Arepas vénézuéliennes", descEs:"Arepas venezolanas", zoneFr:"Village A · stand 5", zoneEs:"Village A · puesto 5", icon:"food"},
-  {cat:"food", fr:"Mezcal & co", es:"Mezcal & co", descFr:"Cocktails et bières latino-américaines", descEs:"Cócteles y cervezas latinoamericanas", zoneFr:"Village B · bar central", zoneEs:"Village B · bar central", icon:"food"},
-  {cat:"food", fr:"Tacos al pastor", es:"Tacos al pastor", descFr:"Cuisine mexicaine de rue", descEs:"Comida mexicana de calle", zoneFr:"Village A · stand 7", zoneEs:"Village A · puesto 7", icon:"food"},
-  {cat:"craft", fr:"Manos andinas", es:"Manos andinas", descFr:"Tissages et textiles andins faits main", descEs:"Tejidos y textiles andinos hechos a mano", zoneFr:"Village B · stand 2", zoneEs:"Village B · puesto 2", icon:"craft"},
-  {cat:"craft", fr:"Bijoux Wayuu", es:"Joyas Wayuu", descFr:"Bijoux artisanaux colombiens", descEs:"Joyería artesanal colombiana", zoneFr:"Village B · stand 4", zoneEs:"Village B · puesto 4", icon:"craft"},
-  {cat:"craft", fr:"Cuir & cuero", es:"Cuir & cuero", descFr:"Maroquinerie artisanale", descEs:"Marroquinería artesanal", zoneFr:"Village A · stand 9", zoneEs:"Village A · puesto 9", icon:"craft"}
+  {id:"s1", cat:"food", fr:"Empanadas Doña Lola", es:"Empanadas Doña Lola", descFr:"Empanadas argentines, sucré et salé", descEs:"Empanadas argentinas, dulces y saladas", zoneFr:"Village A · stand 3", zoneEs:"Village A · puesto 3", icon:"food", social:null},
+  {id:"s2", cat:"food", fr:"Arepas El Sol", es:"Arepas El Sol", descFr:"Arepas vénézuéliennes", descEs:"Arepas venezolanas", zoneFr:"Village A · stand 5", zoneEs:"Village A · puesto 5", icon:"food", social:null},
+  {id:"s3", cat:"food", fr:"Mezcal & co", es:"Mezcal & co", descFr:"Cocktails et bières latino-américaines", descEs:"Cócteles y cervezas latinoamericanas", zoneFr:"Village B · bar central", zoneEs:"Village B · bar central", icon:"food", social:null},
+  {id:"s4", cat:"food", fr:"Tacos al pastor", es:"Tacos al pastor", descFr:"Cuisine mexicaine de rue", descEs:"Comida mexicana de calle", zoneFr:"Village A · stand 7", zoneEs:"Village A · puesto 7", icon:"food", social:null},
+  {id:"s5", cat:"craft", fr:"Manos andinas", es:"Manos andinas", descFr:"Tissages et textiles andins faits main", descEs:"Tejidos y textiles andinos hechos a mano", zoneFr:"Village B · stand 2", zoneEs:"Village B · puesto 2", icon:"craft", social:null},
+  {id:"s6", cat:"craft", fr:"Bijoux Wayuu", es:"Joyas Wayuu", descFr:"Bijoux artisanaux colombiens", descEs:"Joyería artesanal colombiana", zoneFr:"Village B · stand 4", zoneEs:"Village B · puesto 4", icon:"craft", social:null},
+  {id:"s7", cat:"craft", fr:"Cuir & cuero", es:"Cuir & cuero", descFr:"Maroquinerie artisanale", descEs:"Marroquinería artesanal", zoneFr:"Village A · stand 9", zoneEs:"Village A · puesto 9", icon:"craft", social:null}
 ];
 
 function t(){ return i18n[lang]; }
@@ -477,6 +545,8 @@ function openModal(id){
     videoArea.innerHTML = `<div class="video-pending">${lang==="fr" ? "Photo et vidéo à venir" : "Foto y video próximamente"}</div>`;
   }
 
+  document.getElementById("modalTicketBtn").textContent = t().ticketBtn;
+
   document.getElementById("modalOverlay").classList.add("open");
 }
 
@@ -487,13 +557,63 @@ document.getElementById("modalOverlay").addEventListener("click", (ev)=>{
   if(ev.target.id === "modalOverlay") closeModal();
 });
 
+const standColors = { food:["#854F0B","#F4C430"], craft:["#3C3489","#7F77DD"] };
+
+function openStandModal(id){
+  const s = stands.find(st=>st.id===id);
+  if(!s) return;
+  const name = lang==="fr" ? s.fr : s.es;
+  const desc = lang==="fr" ? s.descFr : s.descEs;
+  const zone = lang==="fr" ? s.zoneFr : s.zoneEs;
+
+  document.getElementById("standModalTitle").textContent = name;
+  document.getElementById("standModalMeta").textContent = zone;
+  document.getElementById("standModalDesc").textContent = desc;
+
+  const colors = standColors[s.cat] || ["#152A56","#378ADD"];
+  const mediaEl = document.getElementById("standModalMedia");
+  mediaEl.style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`;
+  mediaEl.innerHTML = `
+    <button class="modal-close" id="standModalClose" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  `;
+  document.getElementById("standModalClose").onclick = closeStandModal;
+
+  const socialBtn = document.getElementById("standModalSocial");
+  if(s.social){
+    socialBtn.href = s.social;
+    socialBtn.textContent = t().standSocial;
+    socialBtn.style.opacity = 1;
+    socialBtn.style.pointerEvents = "auto";
+  } else {
+    socialBtn.removeAttribute("href");
+    socialBtn.textContent = t().standSocialPending;
+    socialBtn.style.opacity = 0.5;
+    socialBtn.style.pointerEvents = "none";
+  }
+
+  document.getElementById("standModalOverlay").classList.add("open");
+}
+
+function closeStandModal(){
+  document.getElementById("standModalOverlay").classList.remove("open");
+}
+document.getElementById("standModalOverlay").addEventListener("click", (ev)=>{
+  if(ev.target.id === "standModalOverlay") closeStandModal();
+});
+
 function renderHeader(){
   document.getElementById("brandSub").textContent = t().sub;
+  document.getElementById("tabAccueil").textContent = t().tabs.accueil;
   document.getElementById("tabProgramme").textContent = t().tabs.programme;
   document.getElementById("tabFavoris").textContent = t().tabs.favoris;
   document.getElementById("tabStands").textContent = t().tabs.stands;
   document.getElementById("tabInfos").textContent = t().tabs.infos;
+  document.getElementById("lblAftermovie").textContent = t().aftermovie;
   document.getElementById("lblSocial").textContent = t().social;
+  document.getElementById("websiteTitle").textContent = t().website;
+  document.getElementById("ctaProgramme").textContent = t().ctaProgramme;
   document.getElementById("lblHashtag").textContent = t().hashtag;
   document.getElementById("hashtagSub").textContent = t().hashtagSub;
   document.getElementById("lblPlaylist").textContent = t().playlist;
@@ -536,7 +656,7 @@ function standCardHtml(s){
   const iconPath = s.icon==="food"
     ? '<path d="M5 4v9a3 3 0 1 0 6 0V4M8 4v6M11 4v6"/><path d="M17 4v16M17 4c3 0 4 2 4 5s-1 5-4 5"/>'
     : '<path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6z"/>';
-  return `<div class="stand-card">
+  return `<div class="stand-card" style="cursor:pointer;" onclick="openStandModal('${s.id}')">
     <div class="stand-icon ${s.icon}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${iconPath}</svg></div>
     <div style="flex:1;">
       <div class="stand-name">${name}</div>
@@ -573,14 +693,18 @@ function setLang(l){
 document.getElementById("btnFr").onclick = ()=>setLang("fr");
 document.getElementById("btnEs").onclick = ()=>setLang("es");
 
+function switchTab(view){
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  const btn = document.querySelector(`.tab-btn[data-view="${view}"]`);
+  if(btn) btn.classList.add("active");
+  document.getElementById("view-"+view).classList.add("active");
+}
+
 document.querySelectorAll(".tab-btn").forEach(btn=>{
-  btn.onclick = ()=>{
-    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
-    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById("view-"+btn.dataset.view).classList.add("active");
-  };
+  btn.onclick = ()=> switchTab(btn.dataset.view);
 });
+document.getElementById("ctaProgramme").onclick = ()=> switchTab("programme");
 
 renderHeader();
 renderDays();
@@ -593,6 +717,16 @@ if("serviceWorker" in navigator){
     navigator.serviceWorker.register("sw.js").catch(()=>{});
   });
 }
+
+window.addEventListener("load", ()=>{
+  setTimeout(()=>{
+    const splash = document.getElementById("splash");
+    if(splash){
+      splash.classList.add("hide");
+      setTimeout(()=> splash.remove(), 700);
+    }
+  }, 1700);
+});
 </script>
 </body>
 </html>
