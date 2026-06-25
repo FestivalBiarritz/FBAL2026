@@ -67,8 +67,8 @@
   .hero-strip img{ display:block; width:100%; height:100%; object-fit:cover; }
 
   .dates-bar{
-    display:flex; gap:8px; padding:12px 18px 14px; overflow-x:auto; -webkit-overflow-scrolling:touch;
-    border-bottom:1px solid var(--border);
+    display:flex; gap:8px; padding:0 0 14px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    border-bottom:1px solid var(--border); margin-bottom:12px;
   }
   .dates-bar::-webkit-scrollbar{ display:none; }
   .day-chip{
@@ -166,8 +166,7 @@
     background:var(--bg); width:100%; max-width:480px; border-radius:20px 20px 0 0;
     max-height:88vh; overflow-y:auto; padding-bottom:env(safe-area-inset-bottom);
   }
-  .modal-media{ position:relative; width:100%; height:180px; overflow:hidden; border-radius:20px 20px 0 0; display:flex; align-items:center; justify-content:center; }
-  .modal-media .play-overlay{ width:46px; height:46px; border-radius:50%; background:rgba(255,255,255,0.92); display:flex; align-items:center; justify-content:center; }
+  .modal-media{ position:relative; width:100%; height:210px; overflow:hidden; border-radius:20px 20px 0 0; display:flex; align-items:center; justify-content:center; }
   .modal-close{
     position:absolute; top:12px; right:12px; width:30px; height:30px; border-radius:50%;
     background:rgba(21,42,86,0.55); display:flex; align-items:center; justify-content:center;
@@ -178,12 +177,6 @@
   .modal-title{ font-size:18px; font-weight:700; margin-bottom:6px; }
   .modal-meta{ font-size:12.5px; color:var(--text-secondary); display:flex; align-items:center; gap:5px; margin-bottom:10px; flex-wrap:wrap; }
   .modal-desc{ font-size:13.5px; line-height:1.55; color:var(--text); margin-top:12px; }
-  .modal-video-wrap{ margin-top:14px; border-radius:var(--radius-lg); overflow:hidden; }
-  .modal-video-wrap iframe{ width:100%; height:200px; border:none; display:block; }
-  .video-pending{
-    margin-top:14px; border:1px dashed var(--border); border-radius:var(--radius-lg); padding:18px;
-    text-align:center; font-size:12.5px; color:var(--text-tertiary);
-  }
 
   .modal-ticket-btn{
     display:block; width:100%; background:var(--coral); color:#fff; text-align:center; padding:13px 0;
@@ -193,9 +186,9 @@
   .splash{
     position:fixed; inset:0; background:var(--navy); z-index:200;
     display:flex; align-items:center; justify-content:center;
-    transition:opacity 0.5s ease; padding:24px;
+    transition:opacity 0.35s ease;
   }
-  .splash img{ width:100%; max-width:340px; border-radius:14px; box-shadow:0 24px 60px rgba(0,0,0,0.45); }
+  .splash img{ width:100%; height:100%; object-fit:cover; }
   .splash.hide{ opacity:0; pointer-events:none; }
 
   .cta-btn{
@@ -230,7 +223,6 @@
     <div class="hero-strip">
       <img src="assets/header-strip.jpg" alt="Affiche du festival" />
     </div>
-    <div class="dates-bar" id="datesBar"></div>
   </header>
 
   <nav class="tabs">
@@ -288,6 +280,7 @@
     </section>
 
     <section class="view" id="view-programme">
+      <div class="dates-bar" id="datesBar"></div>
       <div class="cat-row" id="catRow"></div>
       <div id="programmeList"></div>
     </section>
@@ -345,7 +338,6 @@
       <div class="modal-meta" id="modalMeta"></div>
       <div class="tags" id="modalTags"></div>
       <div class="modal-desc" id="modalDesc"></div>
-      <div id="modalVideoArea"></div>
       <a class="modal-ticket-btn" id="modalTicketBtn" href="https://www.billetweb.fr/festival-biarritz-amerique-latine-2026" target="_blank" rel="noopener">Billetterie</a>
     </div>
   </div>
@@ -529,21 +521,24 @@ function openModal(id){
 
   const colors = catColors[e.cat] || ["#152A56","#378ADD"];
   const mediaEl = document.getElementById("modalMedia");
-  mediaEl.style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`;
-  mediaEl.innerHTML = `
+  const closeBtnHtml = `
     <button class="modal-close" id="modalClose" aria-label="Fermer">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-    <div class="play-overlay"><svg width="18" height="18" viewBox="0 0 24 24" fill="#152A56"><path d="M8 5v14l11-7z"/></svg></div>
-  `;
-  document.getElementById("modalClose").onclick = closeModal;
+    </button>`;
 
-  const videoArea = document.getElementById("modalVideoArea");
   if(e.video){
-    videoArea.innerHTML = `<div class="modal-video-wrap"><iframe src="https://www.youtube.com/embed/${e.video}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" loading="lazy"></iframe></div>`;
+    mediaEl.style.background = "#000";
+    mediaEl.innerHTML = closeBtnHtml + `
+      <iframe src="https://www.youtube.com/embed/${e.video}" style="width:100%;height:100%;border:none;"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" loading="lazy"></iframe>`;
   } else {
-    videoArea.innerHTML = `<div class="video-pending">${lang==="fr" ? "Photo et vidéo à venir" : "Foto y video próximamente"}</div>`;
+    mediaEl.style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`;
+    mediaEl.innerHTML = closeBtnHtml + `
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.6">
+        <rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 15l-5-4-5 4-3-2-5 4"/>
+      </svg>`;
   }
+  document.getElementById("modalClose").onclick = closeModal;
 
   document.getElementById("modalTicketBtn").textContent = t().ticketBtn;
 
@@ -723,9 +718,9 @@ window.addEventListener("load", ()=>{
     const splash = document.getElementById("splash");
     if(splash){
       splash.classList.add("hide");
-      setTimeout(()=> splash.remove(), 700);
+      setTimeout(()=> splash.remove(), 400);
     }
-  }, 1700);
+  }, 900);
 });
 </script>
 </body>
