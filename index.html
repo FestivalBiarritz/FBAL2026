@@ -204,6 +204,28 @@
   .home-video-wrap iframe{ width:100%; height:210px; border:none; display:block; }
 
   .website-card{ background:var(--sky-light); }
+
+  .simple-row{
+    border:1px solid var(--border); border-radius:var(--radius-md); padding:10px 12px; margin-bottom:7px;
+    display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); background:var(--bg);
+  }
+  .simple-row-text{ flex:1; min-width:0; }
+  .simple-row-name{ font-size:13px; font-weight:600; }
+  .simple-row-sub{ font-size:11.5px; color:var(--text-secondary); margin-top:1px; }
+
+  .partner-group-title{ font-size:11.5px; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.3px; margin:12px 0 6px; }
+  .partner-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:4px; }
+  .partner-chip{
+    font-size:11.5px; padding:5px 10px; border-radius:var(--radius-md); border:1px solid var(--border);
+    color:var(--text-secondary); text-decoration:none; background:var(--bg);
+  }
+
+  .venue-block{ margin-bottom:8px; }
+  .venue-name{ font-size:13px; font-weight:600; }
+  .venue-address{ font-size:12px; color:var(--text-secondary); }
+  .transport-block{ margin-bottom:10px; }
+  .transport-title{ font-size:12.5px; font-weight:600; color:var(--yellow); margin-bottom:3px; }
+  .transport-text{ font-size:12.5px; color:var(--text-secondary); line-height:1.5; }
 </style>
 </head>
 <body>
@@ -324,6 +346,28 @@
 
       <div class="section-label" id="lblBillet">Billetterie</div>
       <a class="ticket-btn" id="ticketBtn" href="https://www.billetweb.fr/festival-biarritz-amerique-latine-2026" target="_blank" rel="noopener">Acheter mes billets</a>
+
+      <div class="section-label" id="lblVenir">Comment venir</div>
+      <div id="venuesList"></div>
+      <div id="transportList"></div>
+      <a class="info-card" href="https://maps.google.fr/maps/ms?msa=0&msid=212790079871011426812.0004c6d66981033cb7501&hl=fr&ie=UTF8&t=m&ll=43.481449,-1.559114&spn=0.014013,0.029998&z=15&output=embed" target="_blank" rel="noopener">
+        <div class="info-icon" style="background:var(--sky-light);">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5FA8F0" stroke-width="2"><path d="M9 20l-5.5-2.5a1 1 0 0 1-.5-.86V5.5a1 1 0 0 1 1.45-.9L9 7m0 13l6-3m-6 3V7m6 10l5.5 2.5a1 1 0 0 0 1.5-.9V5.5a1 1 0 0 0-.5-.86L15 2m0 15V2m0 0L9 4"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div class="info-title" id="mapsTitle">Voir le plan d'accès</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+
+      <div class="section-label" id="lblHotels">Hôtels partenaires</div>
+      <div id="hotelsList"></div>
+
+      <div class="section-label" id="lblRestos">Restaurants partenaires</div>
+      <div id="restosList"></div>
+
+      <div class="section-label" id="lblPartners">Partenaires du festival</div>
+      <div id="partnersList"></div>
     </section>
 
   </main>
@@ -376,7 +420,8 @@ const i18n = {
     emptyProg:"Aucune activité pour ce filtre", emptyFav:"Pas encore de favoris — touchez le cœur d'une activité pour l'ajouter ici",
     social:"Suivez le festival", hashtag:"Hashtag du festival", hashtagSub:"Partagez vos photos avec ce tag",
     playlist:"Playlist 2026", goodies:"Boutique du festival", goodiesSub:"Disponible sur BilletWeb",
-    billet:"Billetterie", ticketBtn:"Acheter mes billets", soon:"Bientôt"
+    billet:"Billetterie", ticketBtn:"Acheter mes billets", soon:"Bientôt",
+    venir:"Comment venir", maps:"Voir le plan d'accès", hotels:"Hôtels partenaires", restos:"Restaurants partenaires", partnersLbl:"Partenaires du festival"
   },
   es: {
     sub: "cines & culturas · 35.ª edición",
@@ -390,7 +435,8 @@ const i18n = {
     emptyProg:"Sin actividades para este filtro", emptyFav:"Aún no tienes favoritos — toca el corazón de una actividad para agregarla aquí",
     social:"Sigue al festival", hashtag:"Hashtag del festival", hashtagSub:"Comparte tus fotos con este tag",
     playlist:"Playlist 2026", goodies:"Tienda del festival", goodiesSub:"Disponible en BilletWeb",
-    billet:"Boletería", ticketBtn:"Comprar mis boletos", soon:"Pronto"
+    billet:"Boletería", ticketBtn:"Comprar mis boletos", soon:"Pronto",
+    venir:"Cómo llegar", maps:"Ver el mapa de acceso", hotels:"Hoteles colaboradores", restos:"Restaurantes colaboradores", partnersLbl:"Partners del festival"
   }
 };
 
@@ -444,6 +490,116 @@ const events = [
     descFr:"Cérémonie de clôture et annonce du palmarès, suivie de la projection du film lauréat.", descEs:"Ceremonia de clausura y anuncio del palmarès, seguida de la proyección de la película ganadora.", video:null}
 ];
 
+const venues = [
+  {name:"Gare du Midi", address:"23 avenue du Maréchal Foch, 64200 Biarritz"},
+  {name:"Cinéma Le Royal", address:"8 avenue du Maréchal Foch, 64200 Biarritz"},
+  {name:"Casino de Biarritz", address:"Grande Plage, 64200 Biarritz"}
+];
+
+const transportFr = [
+  {title:"En train", text:"Gare SNCF de Biarritz (allée du Moura). TGV et TER : 2h de Bordeaux, 1h de Pau, 2h30 de Toulouse, 4h de Paris Montparnasse. Navette Chronoplus entre la gare et le centre-ville."},
+  {title:"En voiture", text:"Autoroutes A63 et A64 (sortie 4). Bordeaux–Biarritz : 190 km. Toulouse–Biarritz : 300 km. Saint-Sébastien–Biarritz : 54 km. Covoiturage soutenu par Blablacar."},
+  {title:"En avion", text:"Aéroport international de Biarritz-Anglet-Bayonne, à 3 km du centre-ville. Vols directs Air France, Easyjet, Ryanair, Volotea. Navette Chronoplus jusqu'au centre."}
+];
+const transportEs = [
+  {title:"En tren", text:"Estación SNCF de Biarritz (allée du Moura). TGV y TER: 2h desde Burdeos, 1h desde Pau, 2h30 desde Toulouse, 4h desde París Montparnasse. Lanzadera Chronoplus hasta el centro."},
+  {title:"En coche", text:"Autopistas A63 y A64 (salida 4). Burdeos–Biarritz: 190 km. Toulouse–Biarritz: 300 km. San Sebastián–Biarritz: 54 km. El festival apoya el carpooling con Blablacar."},
+  {title:"En avión", text:"Aeropuerto internacional de Biarritz-Anglet-Bayonne, a 3 km del centro. Vuelos directos Air France, Easyjet, Ryanair, Volotea. Lanzadera Chronoplus hasta el centro."}
+];
+
+const hotels = [
+  {name:"Hôtel du Palais *****", address:"1 Avenue de l'Impératrice, Biarritz", url:"https://www.hyatt.com/fr-FR/hotel/france/hotel-du-palais-biarritz/biqub"},
+  {name:"Sofitel Biarritz Le Miramar *****", address:"13 Rue Louison Bobet", url:"https://all.accor.com/hotel/2049/index.fr.shtml"},
+  {name:"Hôtel Littéraire Jules Verne ****", address:"2 rue Guy Petit", url:"https://www.hotellitterairejulesverne.com/"},
+  {name:"Hôtel Ama ***", address:"8 Rue de la Maison Suisse, 64200 Biarritz", url:"https://www.amahotel.fr/"},
+  {name:"Hôtel Cosmopolitain ***", address:"1 rue Gambetta, 64200 Biarritz", url:"https://hotelcosmopolitain.com/"},
+  {name:"Hôtel Marbella ***", address:"11 rue du Port Vieux", url:"https://www.hotel-marbella.fr/"},
+  {name:"Hôtel Les Alizés **", address:"13 rue du Port Vieux, 64200 Biarritz", url:"https://www.hotel-lesalizes-biarritz.com/"},
+  {name:"Hôtel Saint James **", address:"1 rue des Halles", url:"https://www.hotel-saintjames.com/"},
+  {name:"Villa Etxe Gorria", address:"21 avenue du Maréchal Foch", url:"https://www.villaetxegorria-biarritz.fr/"}
+];
+
+const restaurants = [
+  {name:"Boulangerie Loubère", address:"11 rue Larralde, 64200 Biarritz", url:null},
+  {name:"La Coupole", address:"22 Pl. Georges Clemenceau, 64200 Biarritz", url:null},
+  {name:"La Pièce — Bar de la Gare du Midi", address:"23 avenue du Maréchal Foch", url:null},
+  {name:"Octopus", address:"2 Rue Gardères, 64200 Biarritz", url:"https://octopus-biarritz.com/"}
+];
+
+const partners = {
+  institutionnel: [
+    {name:"Ville de Biarritz", url:"http://www.biarritz.fr/"},
+    {name:"Région Nouvelle-Aquitaine", url:"https://www.nouvelle-aquitaine.fr/"},
+    {name:"Pyrénées-Atlantiques Le Département", url:"https://www.le64.fr/"},
+    {name:"CNC", url:"https://www.cnc.fr/"},
+    {name:"DRAC Nouvelle-Aquitaine", url:null},
+    {name:"Projeto Paradiso", url:"https://www.projetoparadiso.org.br/"},
+    {name:"Ministère de l'Europe et des Affaires Étrangères", url:"http://www.diplomatie.gouv.fr/fr/"},
+    {name:"Communauté d'agglomération Pays Basque", url:"https://www.communaute-paysbasque.fr/"},
+    {name:"Académie de Bordeaux", url:"https://www.ac-bordeaux.fr/"},
+    {name:"IHEAL", url:"http://www.iheal.univ-paris3.fr/"},
+    {name:"CREDA", url:"https://creda.cnrs.fr/lecreda/"},
+    {name:"Institut Universitaire de France", url:"https://www.iufrance.fr/"},
+    {name:"Sorbonne Nouvelle", url:"http://www.univ-paris3.fr/"},
+    {name:"ALCA", url:"http://ecla.aquitaine.fr/"},
+    {name:"Institut des Amériques", url:"https://www.institutdesameriques.fr/"},
+    {name:"SFCC", url:"https://www.syndicatdelacritique.com/"},
+    {name:"Cinémathèque française", url:"https://www.cinematheque.fr/"},
+    {name:"IAE", url:"http://iae.univ-pau.fr/"},
+    {name:"Scène nationale", url:"https://www.scenenationale.fr"},
+    {name:"Destination Biarritz", url:"https://www.destination-biarritz.fr"}
+  ],
+  media: [
+    {name:"France Télévisions", url:"http://www.francetelevisions.fr/"},
+    {name:"France 3", url:"https://www.france.tv/france-3/"},
+    {name:"France 3 Nouvelle-Aquitaine", url:"https://www.france.tv/france-3/nouvelle-aquitaine/"},
+    {name:"RFI / France 24", url:"https://www.francemediasmonde.com/fr/"},
+    {name:"ARTE", url:"https://www.arte.tv/fr"},
+    {name:"France Bleu Pays Basque", url:"https://www.francebleu.fr/pays-basque"},
+    {name:"CINÉ+", url:"https://www.canalplus.com/chaines/cineplus"},
+    {name:"Écran Total", url:"https://ecran-total.fr/"},
+    {name:"Sud Ouest", url:"http://www.sudouest.fr/"},
+    {name:"Vocable", url:"https://www.vocable.fr/"},
+    {name:"TVPI", url:"http://www.tvpi.fr/"},
+    {name:"Télérama", url:"https://www.telerama.fr/"},
+    {name:"Euskal Irratiak", url:"http://euskalirratiak.eus/"},
+    {name:"Nouveaux Espaces Latinos", url:"http://www.espaces-latinos.org/"}
+  ],
+  prive: [
+    {name:"Fondation Carasso", url:"https://www.fondationcarasso.org"},
+    {name:"Centro Náutico", url:"https://centro-nautico.com/"},
+    {name:"Casino Barrière", url:"https://www.casinosbarriere.com/fr.html"},
+    {name:"Air France", url:"http://www.airfrance.fr/"},
+    {name:"Volvo", url:"https://www.sipa-automobiles.fr/"},
+    {name:"Hôtel du Palais", url:"https://www.hyatt.com/fr-FR/hotel/france/hotel-du-palais-biarritz/biqub"},
+    {name:"Orange", url:"https://www.orange.fr/portail"},
+    {name:"Le Café de Paris", url:"http://www.hotel-cafedeparis-biarritz.com/"},
+    {name:"Hôtel Regina", url:"https://www.reginaexperimental.com"},
+    {name:"Sofitel", url:"https://sofitel.accor.com/fr/hotels/2049.html"},
+    {name:"Cityz Media", url:"https://www.cityzmedia.fr/"},
+    {name:"Aéroport de Biarritz", url:"https://biarritz.aeroport.fr/fr/"},
+    {name:"Maison Adam", url:"https://www.maisonadam.fr/"},
+    {name:"Heineken", url:"https://www.heinekenfrance.fr/"},
+    {name:"Laulhère", url:"https://laulhere-france.com/fr/"},
+    {name:"Librairie Bookstore", url:"https://bookstore-biarritz.business.site/"},
+    {name:"Graffiti", url:"http://www.graffiti-biarritz.com/"},
+    {name:"Cazaux Audiovisuel", url:"http://cazaux-audiovisuel.fr/"},
+    {name:"Le Royal", url:"https://www.royal-biarritz.com/"},
+    {name:"Cinéma L'Atalante", url:"https://atalante-cinema.org/"},
+    {name:"Ciné Passion", url:"http://www.cine-passion24.com/"},
+    {name:"CINA", url:"https://www.cinemas-na.fr/"},
+    {name:"Objectif Ciné", url:"http://ocine64.fr/"},
+    {name:"Cinevasion", url:"https://cinevasion64.wixsite.com/cinevasion64"},
+    {name:"Txokologie", url:"https://www.txokologie.fr"},
+    {name:"Crédit Mutuel", url:"https://www.creditmutuel.fr/"},
+    {name:"La Maison des Arts", url:"https://www.instagram.com/lamaisondesartsbiarritz/"},
+    {name:"AFLACOBA", url:"http://aflacoba.blogspot.fr/"},
+    {name:"Water Family", url:"https://waterfamily.org/"},
+    {name:"Assistance Audiovisuelle", url:"http://assaud.com"},
+    {name:"SIS Sécurité", url:"https://www.sis-securite.com/"},
+    {name:"Les Alchimistes", url:"https://alchimistes.co"}
+  ]
+};
 const stands = [
   {id:"s1", cat:"food", fr:"Empanadas Doña Lola", es:"Empanadas Doña Lola", descFr:"Empanadas argentines, sucré et salé", descEs:"Empanadas argentinas, dulces y saladas", zoneFr:"Village A · stand 3", zoneEs:"Village A · puesto 3", icon:"food", social:null},
   {id:"s2", cat:"food", fr:"Arepas El Sol", es:"Arepas El Sol", descFr:"Arepas vénézuéliennes", descEs:"Arepas venezolanas", zoneFr:"Village A · stand 5", zoneEs:"Village A · puesto 5", icon:"food", social:null},
@@ -503,9 +659,63 @@ function eventCardHtml(e){
   </div>`;
 }
 
+function renderVenues(){
+  document.getElementById("venuesList").innerHTML = venues.map(v=>`
+    <div class="venue-block">
+      <div class="venue-name">${v.name}</div>
+      <div class="venue-address">${v.address}</div>
+    </div>`).join("");
+}
+
+function renderTransport(){
+  const data = lang==="fr" ? transportFr : transportEs;
+  document.getElementById("transportList").innerHTML = data.map(tItem=>`
+    <div class="transport-block">
+      <div class="transport-title">${tItem.title}</div>
+      <div class="transport-text">${tItem.text}</div>
+    </div>`).join("");
+}
+
+function simpleRowHtml(item){
+  const inner = `
+    <div class="simple-row-text">
+      <div class="simple-row-name">${item.name}</div>
+      ${item.address ? `<div class="simple-row-sub">${item.address}</div>` : ''}
+    </div>
+    ${item.url ? `<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>` : ''}
+  `;
+  return item.url
+    ? `<a class="simple-row" href="${item.url}" target="_blank" rel="noopener">${inner}</a>`
+    : `<div class="simple-row">${inner}</div>`;
+}
+
+function renderHotels(){
+  document.getElementById("hotelsList").innerHTML = hotels.map(simpleRowHtml).join("");
+}
+
+function renderRestos(){
+  document.getElementById("restosList").innerHTML = restaurants.map(simpleRowHtml).join("");
+}
+
+function renderPartners(){
+  const groupLabels = lang==="fr"
+    ? {institutionnel:"Institutionnels", media:"Médias", prive:"Partenaires privés"}
+    : {institutionnel:"Institucionales", media:"Medios", prive:"Partners privados"};
+  let html = "";
+  ["institutionnel","media","prive"].forEach(key=>{
+    html += `<div class="partner-group-title">${groupLabels[key]}</div><div class="partner-chips">`;
+    html += partners[key].map(p=>
+      p.url ? `<a class="partner-chip" href="${p.url}" target="_blank" rel="noopener">${p.name}</a>`
+            : `<span class="partner-chip" style="opacity:0.7;">${p.name}</span>`
+    ).join("");
+    html += `</div>`;
+  });
+  document.getElementById("partnersList").innerHTML = html;
+}
+
 const catColors = {
-  cine:["#152A56","#378ADD"], musica:["#993556","#E2483D"], debate:["#3C3489","#7F77DD"],
-  taller:["#854F0B","#F4C430"], baile:["#3B6D11","#4FA34A"], uni:["#0C447C","#378ADD"]
+  cine:["#152A56","#5FA8F0"], musica:["#152A56","#E2483D"], debate:["#152A56","#A79CFF"],
+  litterature:["#152A56","#F4C430"], taller:["#152A56","#6FCB6B"]
 };
 
 function openModal(id){
@@ -624,6 +834,11 @@ function renderHeader(){
   document.getElementById("goodiesSoon").textContent = t().soon;
   document.getElementById("lblBillet").textContent = t().billet;
   document.getElementById("ticketBtn").textContent = t().ticketBtn;
+  document.getElementById("lblVenir").textContent = t().venir;
+  document.getElementById("mapsTitle").textContent = t().maps;
+  document.getElementById("lblHotels").textContent = t().hotels;
+  document.getElementById("lblRestos").textContent = t().restos;
+  document.getElementById("lblPartners").textContent = t().partnersLbl;
 }
 
 function renderDays(){
@@ -704,6 +919,8 @@ function setLang(l){
   renderProgramme();
   renderFavoris();
   renderStands();
+  renderTransport();
+  renderPartners();
 }
 
 document.getElementById("btnFr").onclick = ()=>setLang("fr");
@@ -727,6 +944,11 @@ renderDays();
 renderProgramme();
 renderFavoris();
 renderStands();
+renderVenues();
+renderTransport();
+renderHotels();
+renderRestos();
+renderPartners();
 
 if("serviceWorker" in navigator){
   window.addEventListener("load", ()=>{
