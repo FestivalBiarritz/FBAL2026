@@ -158,6 +158,48 @@
 
   iframe.spotify-embed{ border-radius:var(--radius-lg); width:100%; height:152px; border:none; }
 
+  /* EN VIVO */
+  .en-vivo-block{
+    border:1.5px solid var(--coral); border-radius:var(--radius-lg); padding:12px 14px;
+    margin-bottom:16px; display:flex; gap:10px; align-items:center; cursor:pointer;
+  }
+  .en-vivo-dot{
+    width:10px; height:10px; border-radius:50%; background:var(--coral); flex-shrink:0;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.45; transform:scale(0.8); }
+  }
+  .en-vivo-label{ font-size:10px; font-weight:700; color:var(--coral); text-transform:uppercase; letter-spacing:0.5px; }
+  .en-vivo-title{ font-size:14px; font-weight:600; }
+  .en-vivo-meta{ font-size:12px; color:var(--text-secondary); }
+
+  /* BURBUJAS INVITADOS */
+  .bubbles-hint{ font-size:12px; color:var(--text-tertiary); text-align:center; margin-bottom:14px; }
+  .bubbles-stage{
+    position:relative; width:100%; height:460px;
+  }
+  .bubble{
+    position:absolute; border-radius:50%; overflow:hidden; cursor:pointer;
+    border:2.5px solid rgba(255,255,255,0.25);
+    background:var(--bg-secondary);
+    transition:transform 0.15s ease, border-color 0.15s ease;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .bubble:active{ transform:scale(0.93); border-color:var(--yellow); }
+  .bubble img{ width:100%; height:100%; object-fit:cover; }
+  .bubble .bubble-initials{
+    font-size:18px; font-weight:700; color:rgba(255,255,255,0.6);
+    pointer-events:none;
+  }
+  .bubble-name{
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(to top, rgba(21,42,86,0.92), transparent);
+    text-align:center; font-size:9.5px; font-weight:600; padding:4px 2px 5px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff;
+  }
+
   .card.clickable{ cursor:pointer; }
 
   .modal-overlay{
@@ -253,6 +295,7 @@
   <nav class="tabs">
     <button class="tab-btn active" data-view="accueil" id="tabAccueil">Accueil</button>
     <button class="tab-btn" data-view="programme" id="tabProgramme">Programme</button>
+    <button class="tab-btn" data-view="invites" id="tabInvites">Invités</button>
     <button class="tab-btn" data-view="favoris" id="tabFavoris">Favoris</button>
     <button class="tab-btn" data-view="stands" id="tabStands">Stands</button>
     <button class="tab-btn" data-view="infos" id="tabInfos">Infos</button>
@@ -261,6 +304,8 @@
   <main>
 
     <section class="view active" id="view-accueil">
+      <div id="enVivoWrap"></div>
+
       <div class="section-label" id="lblAftermovie">Aftermovie 2025</div>
       <div class="home-video-wrap">
         <iframe src="https://www.youtube.com/embed/9ZaVxVQamcM" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" loading="lazy"></iframe>
@@ -308,6 +353,12 @@
       <div class="dates-bar" id="datesBar"></div>
       <div class="cat-row" id="catRow"></div>
       <div id="programmeList"></div>
+    </section>
+
+    <section class="view" id="view-invites">
+      <div class="section-label" id="lblInvites">Les invités</div>
+      <div class="bubbles-hint" id="invitesHint">Appuyez sur une bulle pour découvrir l'invité·e</div>
+      <div class="bubbles-stage" id="bubblesStage"></div>
     </section>
 
     <section class="view" id="view-favoris">
@@ -406,11 +457,34 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="inviteModalOverlay">
+  <div class="modal-sheet" style="padding-bottom:env(safe-area-inset-bottom);">
+    <div id="inviteModalHeader" style="position:relative; height:220px; border-radius:20px 20px 0 0; overflow:hidden; display:flex; align-items:flex-end;">
+      <div id="inviteModalPhoto" style="position:absolute; inset:0; background-size:cover; background-position:center top;"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(21,42,86,0.92) 0%, transparent 60%);"></div>
+      <button class="modal-close" id="inviteModalClose" aria-label="Fermer" style="top:12px; right:12px; position:absolute;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div style="position:relative; padding:14px 18px;">
+        <div id="inviteModalName" style="font-size:20px; font-weight:700; color:#fff;"></div>
+        <div id="inviteModalRole" style="font-size:12.5px; color:rgba(255,255,255,0.75); margin-top:2px;"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div id="inviteModalBio" style="font-size:13.5px; line-height:1.6; color:var(--text-secondary); margin-bottom:14px;"></div>
+      <a class="modal-ticket-btn" id="inviteModalLink" target="_blank" rel="noopener" style="background:var(--yellow); color:var(--navy); display:none;"></a>
+    </div>
+  </div>
+</div>
+
 <script>
 const i18n = {
   fr: {
     sub: "cinémas & cultures · 35e édition",
-    tabs: {accueil:"Accueil", programme:"Programme", favoris:"Favoris", stands:"Stands", infos:"Infos"},
+    tabs: {accueil:"Accueil", programme:"Programme", invites:"Invités", favoris:"Favoris", stands:"Stands", infos:"Infos"},
+    invites:"Les invité·e·s", invitesHint:"Appuyez sur une bulle pour découvrir l'invité·e",
+    enVivoLabel:"En ce moment", enVivoEmpty:"",
+    inviteLinkFilm:"Voir le film", inviteLinkLivre:"Voir le livre", inviteLinkPlus:"En savoir plus",
     aftermovie:"Aftermovie 2025", website:"Site officiel du festival", ctaProgramme:"Voir le programme",
     standSocial:"Voir sur Instagram", standSocialPending:"Réseaux à venir",
     cats: {all:"Tout", cine:"Cinéma", musica:"Musique", debate:"Débats", litterature:"Littérature", taller:"Ateliers"},
@@ -425,7 +499,10 @@ const i18n = {
   },
   es: {
     sub: "cines & culturas · 35.ª edición",
-    tabs: {accueil:"Inicio", programme:"Programa", favoris:"Favoritos", stands:"Stands", infos:"Info"},
+    tabs: {accueil:"Inicio", programme:"Programa", invites:"Invitados", favoris:"Favoritos", stands:"Stands", infos:"Info"},
+    invites:"Los invitados", invitesHint:"Toca una burbuja para descubrir al invitado",
+    enVivoLabel:"Ahora mismo", enVivoEmpty:"",
+    inviteLinkFilm:"Ver la película", inviteLinkLivre:"Ver el libro", inviteLinkPlus:"Más info",
     aftermovie:"Aftermovie 2025", website:"Sitio oficial del festival", ctaProgramme:"Ver el programa",
     standSocial:"Ver en Instagram", standSocialPending:"Redes próximamente",
     cats: {all:"Todo", cine:"Cine", musica:"Música", debate:"Debates", litterature:"Literatura", taller:"Talleres"},
@@ -713,6 +790,178 @@ function renderPartners(){
   document.getElementById("partnersList").innerHTML = html;
 }
 
+// ── INVITADOS (datos de ejemplo — reemplazar con la lista real) ──────────────
+const invites = [
+  {id:"i1", nameFr:"Sofia Reyes", nameEs:"Sofia Reyes",
+   roleFr:"Réalisatrice · Mexique", roleEs:"Directora · México",
+   bioFr:"Réalisatrice mexicaine dont le premier long métrage a remporté le prix du jury à Guadalajara. Elle présentera son nouveau film en avant-première au festival.",
+   bioEs:"Directora mexicana cuyo primer largometraje ganó el Premio del Jurado en Guadalajara. Presentará su nueva película en avant-première en el festival.",
+   photo:null, initials:"SR", color:"#E2483D",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
+
+  {id:"i2", nameFr:"Carlos Alvarado", nameEs:"Carlos Alvarado",
+   roleFr:"Écrivain · Colombie", roleEs:"Escritor · Colombia",
+   bioFr:"Auteur colombien lauréat du Prix Alfaguara 2024. Il participera à la table ronde littéraire et dédicacera son dernier roman.",
+   bioEs:"Escritor colombiano ganador del Premio Alfaguara 2024. Participará en la mesa literaria y firmará su última novela.",
+   photo:null, initials:"CA", color:"#F4C430",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le livre", linkTypeEs:"Ver el libro"},
+
+  {id:"i3", nameFr:"Ana Lima", nameEs:"Ana Lima",
+   roleFr:"Actrice · Brésil", roleEs:"Actriz · Brasil",
+   bioFr:"Actrice brésilienne révélée par la série internationale Cidade Invisível. Elle accompagnera la projection de son nouveau film.",
+   bioEs:"Actriz brasileña revelada por la serie internacional Cidade Invisível. Acompañará la proyección de su nueva película.",
+   photo:null, initials:"AL", color:"#6FCB6B",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
+
+  {id:"i4", nameFr:"Miguel Fernández", nameEs:"Miguel Fernández",
+   roleFr:"Musicien · Cuba", roleEs:"Músico · Cuba",
+   bioFr:"Membre fondateur du Septeto Santiaguero, groupe emblématique du son cubain traditionnel depuis 1994.",
+   bioEs:"Miembro fundador del Septeto Santiaguero, grupo emblemático del son cubano tradicional desde 1994.",
+   photo:null, initials:"MF", color:"#5FA8F0",
+   link:"https://www.billetweb.fr/festival-biarritz-amerique-latine-2026", linkTypeFr:"Billetterie", linkTypeEs:"Boletería"},
+
+  {id:"i5", nameFr:"Valentina Cruz", nameEs:"Valentina Cruz",
+   roleFr:"Documentariste · Argentine", roleEs:"Documentalista · Argentina",
+   bioFr:"Sa trilogie documentaire sur les migrations andines a été sélectionnée dans plus de 30 festivals internationaux.",
+   bioEs:"Su trilogía documental sobre las migraciones andinas ha sido seleccionada en más de 30 festivales internacionales.",
+   photo:null, initials:"VC", color:"#A79CFF",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
+
+  {id:"i6", nameFr:"Juana Moreno", nameEs:"Juana Moreno",
+   roleFr:"Poète · Chili", roleEs:"Poeta · Chile",
+   bioFr:"Poète et essayiste chilienne, elle animera un atelier d'écriture et participera aux rencontres littéraires du festival.",
+   bioEs:"Poeta y ensayista chilena, animará un taller de escritura y participará en los encuentros literarios del festival.",
+   photo:null, initials:"JM", color:"#FF8FAE",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le livre", linkTypeEs:"Ver el libro"},
+
+  {id:"i7", nameFr:"Pablo Herrera", nameEs:"Pablo Herrera",
+   roleFr:"Directeur de la photographie · Pérou", roleEs:"Director de fotografía · Perú",
+   bioFr:"DOP péruvien dont le travail sur La tierra prometida a été nominé aux Goya. Il donnera une masterclass ouverte au public.",
+   bioEs:"Director de fotografía peruano cuyo trabajo en La tierra prometida fue nominado a los Goya. Dará una masterclass abierta al público.",
+   photo:null, initials:"PH", color:"#F4C430",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"En savoir plus", linkTypeEs:"Más info"},
+
+  {id:"i8", nameFr:"Rosa Méndez", nameEs:"Rosa Méndez",
+   roleFr:"Productrice · Venezuela", roleEs:"Productora · Venezuela",
+   bioFr:"Productrice indépendante vénézuélienne, membre du jury de la compétition officielle de cette 35e édition.",
+   bioEs:"Productora independiente venezolana, miembro del jurado de la competencia oficial de esta 35.ª edición.",
+   photo:null, initials:"RM", color:"#E2483D",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"En savoir plus", linkTypeEs:"Más info"}
+];
+
+// Posiciones pre-calculadas para las burbujas (x%, y%, tamaño px)
+const bubbleLayout = [
+  {x:8,  y:8,   s:105},
+  {x:56, y:4,   s:118},
+  {x:5,  y:52,  s:98},
+  {x:60, y:46,  s:112},
+  {x:28, y:28,  s:100},
+  {x:18, y:72,  s:108},
+  {x:55, y:76,  s:95},
+  {x:78, y:22,  s:90}
+];
+
+function renderBubbles(){
+  const stage = document.getElementById("bubblesStage");
+  const stageW = stage.offsetWidth || 340;
+  stage.innerHTML = invites.map((inv, i) => {
+    const lay = bubbleLayout[i % bubbleLayout.length];
+    const s = lay.s;
+    const left = Math.round(lay.x / 100 * (stageW - s));
+    const top = lay.y * 4;
+    const name = lang==="fr" ? inv.nameFr : inv.nameEs;
+    const photoStyle = inv.photo ? `background-image:url('${inv.photo}');` : `background:${inv.color};`;
+    const inner = inv.photo
+      ? `<img src="${inv.photo}" alt="${name}" loading="lazy">`
+      : `<div class="bubble-initials">${inv.initials}</div>`;
+    return `<div class="bubble" style="width:${s}px;height:${s}px;left:${left}px;top:${top}px;${photoStyle}" onclick="openInviteModal('${inv.id}')">
+      ${inner}
+      <div class="bubble-name">${name}</div>
+    </div>`;
+  }).join("");
+}
+
+function openInviteModal(id){
+  const inv = invites.find(i=>i.id===id);
+  if(!inv) return;
+  const name = lang==="fr" ? inv.nameFr : inv.nameEs;
+  const role = lang==="fr" ? inv.roleFr : inv.roleEs;
+  const bio  = lang==="fr" ? inv.bioFr  : inv.bioEs;
+  const linkLabel = lang==="fr" ? inv.linkTypeFr : inv.linkTypeEs;
+
+  document.getElementById("inviteModalName").textContent = name;
+  document.getElementById("inviteModalRole").textContent = role;
+  document.getElementById("inviteModalBio").textContent = bio;
+
+  const photo = document.getElementById("inviteModalPhoto");
+  if(inv.photo){
+    photo.style.backgroundImage = `url('${inv.photo}')`;
+  } else {
+    photo.style.backgroundImage = "none";
+    photo.style.background = inv.color;
+  }
+
+  const link = document.getElementById("inviteModalLink");
+  if(inv.link){
+    link.href = inv.link;
+    link.textContent = linkLabel;
+    link.style.display = "block";
+  } else {
+    link.style.display = "none";
+  }
+
+  document.getElementById("inviteModalOverlay").classList.add("open");
+}
+document.getElementById("inviteModalClose").onclick = ()=>{
+  document.getElementById("inviteModalOverlay").classList.remove("open");
+};
+document.getElementById("inviteModalOverlay").addEventListener("click", ev=>{
+  if(ev.target.id==="inviteModalOverlay")
+    document.getElementById("inviteModalOverlay").classList.remove("open");
+});
+
+// ── EN VIVO ──────────────────────────────────────────────────────────────────
+const FEST_START = new Date("2026-09-26T00:00:00");
+const FEST_END   = new Date("2026-10-02T23:59:00");
+
+function renderEnVivo(){
+  const wrap = document.getElementById("enVivoWrap");
+  if(!wrap) return;
+  const now = new Date();
+  if(now < FEST_START || now > FEST_END){ wrap.innerHTML=""; return; }
+
+  const dayIndex = Math.floor((now - FEST_START)/(1000*60*60*24));
+  const hm = now.getHours()*60 + now.getMinutes();
+
+  function toMin(timeStr){ const [h,m]=timeStr.split(":").map(Number); return h*60+m; }
+  const happening = events.filter(e=>{
+    if(e.day !== dayIndex) return false;
+    const start = toMin(e.time);
+    const end = start + e.dur;
+    return hm >= start && hm < end;
+  });
+
+  if(!happening.length){ wrap.innerHTML=""; return; }
+
+  const html = happening.map(e=>{
+    const title = lang==="fr" ? e.fr : e.es;
+    const end = addMin(e.time, e.dur);
+    const hasDetail = !!e.descFr;
+    return `<div class="en-vivo-block" ${hasDetail?`onclick="openModal('${e.id}')"`:"onclick=\"switchTab('programme')\""}>
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <div class="en-vivo-dot"></div>
+          <span class="en-vivo-label">${t().enVivoLabel}</span>
+        </div>
+        <div class="en-vivo-title">${title}</div>
+        <div class="en-vivo-meta">${e.place} · ${e.time}–${end}</div>
+      </div>
+      <svg style="flex-shrink:0;opacity:0.5;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </div>`;
+  }).join("");
+  wrap.innerHTML = html;
+}
+
 const catColors = {
   cine:["#152A56","#5FA8F0"], musica:["#152A56","#E2483D"], debate:["#152A56","#A79CFF"],
   litterature:["#152A56","#F4C430"], taller:["#152A56","#6FCB6B"]
@@ -819,9 +1068,12 @@ function renderHeader(){
   document.getElementById("brandSub").textContent = t().sub;
   document.getElementById("tabAccueil").textContent = t().tabs.accueil;
   document.getElementById("tabProgramme").textContent = t().tabs.programme;
+  document.getElementById("tabInvites").textContent = t().tabs.invites;
   document.getElementById("tabFavoris").textContent = t().tabs.favoris;
   document.getElementById("tabStands").textContent = t().tabs.stands;
   document.getElementById("tabInfos").textContent = t().tabs.infos;
+  document.getElementById("lblInvites").textContent = t().invites;
+  document.getElementById("invitesHint").textContent = t().invitesHint;
   document.getElementById("lblAftermovie").textContent = t().aftermovie;
   document.getElementById("lblSocial").textContent = t().social;
   document.getElementById("websiteTitle").textContent = t().website;
@@ -921,6 +1173,8 @@ function setLang(l){
   renderStands();
   renderTransport();
   renderPartners();
+  renderBubbles();
+  renderEnVivo();
 }
 
 document.getElementById("btnFr").onclick = ()=>setLang("fr");
@@ -949,6 +1203,9 @@ renderTransport();
 renderHotels();
 renderRestos();
 renderPartners();
+renderBubbles();
+renderEnVivo();
+setInterval(renderEnVivo, 60000);
 
 if("serviceWorker" in navigator){
   window.addEventListener("load", ()=>{
