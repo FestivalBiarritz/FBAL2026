@@ -184,10 +184,11 @@
     position:absolute; border-radius:50%; overflow:hidden; cursor:pointer;
     border:2.5px solid rgba(255,255,255,0.25);
     background:var(--bg-secondary);
-    transition:transform 0.15s ease, border-color 0.15s ease;
+    transition:border-color 0.15s ease;
     display:flex; align-items:center; justify-content:center;
+    will-change:transform;
   }
-  .bubble:active{ transform:scale(0.93); border-color:var(--yellow); }
+  .bubble:active{ border-color:var(--yellow); }
   .bubble img{ width:100%; height:100%; object-fit:cover; }
   .bubble .bubble-initials{
     font-size:18px; font-weight:700; color:rgba(255,255,255,0.6);
@@ -198,6 +199,35 @@
     background:linear-gradient(to top, rgba(21,42,86,0.92), transparent);
     text-align:center; font-size:9.5px; font-weight:600; padding:4px 2px 5px;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff;
+  }
+
+  @keyframes float-a{
+    0%{ transform:translate(0,0); }
+    25%{ transform:translate(7px,-11px); }
+    50%{ transform:translate(-5px,-18px); }
+    75%{ transform:translate(-10px,-6px); }
+    100%{ transform:translate(0,0); }
+  }
+  @keyframes float-b{
+    0%{ transform:translate(0,0); }
+    30%{ transform:translate(-9px,8px); }
+    55%{ transform:translate(6px,14px); }
+    80%{ transform:translate(11px,3px); }
+    100%{ transform:translate(0,0); }
+  }
+  @keyframes float-c{
+    0%{ transform:translate(0,0); }
+    20%{ transform:translate(5px,9px); }
+    50%{ transform:translate(12px,-5px); }
+    70%{ transform:translate(3px,-13px); }
+    100%{ transform:translate(0,0); }
+  }
+  .bubble.f-a{ animation:float-a 9s ease-in-out infinite; }
+  .bubble.f-b{ animation:float-b 11s ease-in-out infinite; }
+  .bubble.f-c{ animation:float-c 13s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce){
+    .bubble.f-a, .bubble.f-b, .bubble.f-c{ animation:none; }
   }
 
   .card.clickable{ cursor:pointer; }
@@ -419,6 +449,8 @@
 
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
+
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v3.0</div>
     </section>
 
   </main>
@@ -864,6 +896,7 @@ const bubbleLayout = [
 function renderBubbles(){
   const stage = document.getElementById("bubblesStage");
   const stageW = stage.offsetWidth || 340;
+  const floatClasses = ["f-a","f-b","f-c"];
   stage.innerHTML = invites.map((inv, i) => {
     const lay = bubbleLayout[i % bubbleLayout.length];
     const s = lay.s;
@@ -874,7 +907,9 @@ function renderBubbles(){
     const inner = inv.photo
       ? `<img src="${inv.photo}" alt="${name}" loading="lazy">`
       : `<div class="bubble-initials">${inv.initials}</div>`;
-    return `<div class="bubble" style="width:${s}px;height:${s}px;left:${left}px;top:${top}px;${photoStyle}" onclick="openInviteModal('${inv.id}')">
+    const fClass = floatClasses[i % floatClasses.length];
+    const delay = (i * 0.9).toFixed(1);
+    return `<div class="bubble ${fClass}" style="width:${s}px;height:${s}px;left:${left}px;top:${top}px;${photoStyle}animation-delay:-${delay}s;" onclick="openInviteModal('${inv.id}')">
       ${inner}
       <div class="bubble-name">${name}</div>
     </div>`;
