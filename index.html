@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>FBAL — Festival Biarritz Amérique Latine</title>
 <meta name="description" content="Programmation officielle du Festival Biarritz Amérique Latine 2026">
-<meta name="theme-color" content="#152A56">
+<meta name="theme-color" content="#122a76">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="icon" href="icons/icon-192.png">
 <style>
   :root{
-    --navy:#152A56;
-    --navy-light:#1E3A6E;
+    --navy:#122a76;
+    --navy-light:#415491;
     --coral:#E2483D;
     --coral-light:rgba(226,72,61,0.20);
     --yellow:#F4C430;
@@ -26,8 +26,8 @@
     --pink:#FF8FAE;
     --pink-light:rgba(255,143,174,0.20);
     --amber-text:#F4C430;
-    --bg:#1F4480;
-    --bg-secondary:#193968;
+    --bg:#334789;
+    --bg-secondary:#22387f;
     --border:rgba(255,255,255,0.16);
     --text:#FFFFFF;
     --text-secondary:rgba(255,255,255,0.72);
@@ -276,7 +276,7 @@
   }
   .bubble-name{
     position:absolute; bottom:0; left:0; right:0;
-    background:linear-gradient(to top, rgba(21,42,86,0.92), transparent);
+    background:linear-gradient(to top, rgba(18,42,118,0.92), transparent);
     text-align:center; font-size:9.5px; font-weight:600; padding:4px 2px 5px;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff;
   }
@@ -331,7 +331,7 @@
   .modal-media{ position:relative; width:100%; height:210px; overflow:hidden; border-radius:20px 20px 0 0; display:flex; align-items:center; justify-content:center; }
   .modal-close{
     position:absolute; top:12px; right:12px; width:30px; height:30px; border-radius:50%;
-    background:rgba(21,42,86,0.55); display:flex; align-items:center; justify-content:center;
+    background:rgba(18,42,118,0.55); display:flex; align-items:center; justify-content:center;
     border:none; cursor:pointer; z-index:2;
   }
   .modal-close svg{ width:16px; height:16px; color:#fff; }
@@ -473,8 +473,8 @@
         </a>
       </div>
       <a class="info-card website-card" href="https://www.festivaldebiarritz.com/" target="_blank" rel="noopener">
-        <div class="info-icon" style="background:#fff;">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5FA8F0" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg>
+        <div class="info-icon" style="background:var(--navy); padding:6px; overflow:hidden;">
+          <img src="assets/logo-35.png" alt="FBAL" style="width:100%; height:100%; object-fit:contain;">
         </div>
         <div style="flex:1;">
           <div class="info-title" id="websiteTitle">Site officiel du festival</div>
@@ -561,7 +561,7 @@
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
 
-      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v4.1</div>
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v4.5</div>
     </section>
 
   </main>
@@ -630,7 +630,7 @@
   <div class="modal-sheet" style="padding-bottom:env(safe-area-inset-bottom);">
     <div id="inviteModalHeader" style="position:relative; height:220px; border-radius:20px 20px 0 0; overflow:hidden; display:flex; align-items:flex-end;">
       <div id="inviteModalPhoto" style="position:absolute; inset:0; background-size:cover; background-position:center top;"></div>
-      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(21,42,86,0.92) 0%, transparent 60%);"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(18,42,118,0.92) 0%, transparent 60%);"></div>
       <button class="modal-close" id="inviteModalClose" aria-label="Fermer" style="top:12px; right:12px; position:absolute;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
@@ -1035,28 +1035,35 @@ const invites = [
 ];
 
 // Posiciones pre-calculadas para las burbujas (x%, y%, tamaño px)
+// Layout en cuadrícula equilibrada: 3 columnas que cubren todo el ancho,
+// con tamaños y alturas variados para que se vea orgánico pero repartido.
 const bubbleLayout = [
-  {x:8,  y:8,   s:105},
-  {x:56, y:4,   s:118},
-  {x:5,  y:52,  s:98},
-  {x:60, y:46,  s:112},
-  {x:28, y:28,  s:100},
-  {x:18, y:72,  s:108},
-  {x:55, y:76,  s:95},
-  {x:78, y:22,  s:90}
+  {col:0, y:6,   s:104},
+  {col:1, y:2,   s:112},
+  {col:2, y:10,  s:100},
+  {col:0, y:40,  s:98},
+  {col:1, y:38,  s:108},
+  {col:2, y:44,  s:96},
+  {col:0, y:73,  s:100},
+  {col:2, y:75,  s:102}
 ];
 
 function renderBubbles(){
   const stage = document.getElementById("bubblesStage");
   const stageW = stage.offsetWidth || 340;
   const floatClasses = ["f-a","f-b","f-c"];
+  const cols = 3;
   stage.innerHTML = invites.map((inv, i) => {
     const lay = bubbleLayout[i % bubbleLayout.length];
     const s = lay.s;
-    const left = Math.round(lay.x / 100 * (stageW - s));
+    // Centro de cada columna repartido en todo el ancho
+    const colCenter = (lay.col + 0.5) / cols * stageW;
+    let left = Math.round(colCenter - s/2);
+    // Mantener dentro de los bordes
+    left = Math.max(2, Math.min(left, stageW - s - 2));
     const top = lay.y * 4;
     const name = lang==="fr" ? inv.nameFr : inv.nameEs;
-    const photoStyle = inv.photo ? `background-image:url('${inv.photo}');` : `background:${inv.color};`;
+    const photoStyle = inv.photo ? `background-image:url('${inv.photo}');background-size:cover;background-position:center;` : `background:${inv.color};`;
     const inner = inv.photo
       ? `<img src="${inv.photo}" alt="${name}" loading="lazy">`
       : `<div class="bubble-initials">${inv.initials}</div>`;
@@ -1170,8 +1177,8 @@ function renderEnVivo(){
 }
 
 const catColors = {
-  cine:["#152A56","#5FA8F0"], musica:["#152A56","#E2483D"], debate:["#152A56","#A79CFF"],
-  litterature:["#152A56","#F4C430"], taller:["#152A56","#6FCB6B"]
+  cine:["#122a76","#5FA8F0"], musica:["#122a76","#E2483D"], debate:["#122a76","#A79CFF"],
+  litterature:["#122a76","#F4C430"], taller:["#122a76","#6FCB6B"]
 };
 
 function openModal(id){
@@ -1192,7 +1199,7 @@ function openModal(id){
     ${e.payant ? `<span class="tag payant">${t().payant}</span>` : (e.cat!=='cine' ? `<span class="tag gratuit">${t().gratuit}</span>` : '')}
   `;
 
-  const colors = catColors[e.cat] || ["#152A56","#378ADD"];
+  const colors = catColors[e.cat] || ["#122a76","#378ADD"];
   const mediaEl = document.getElementById("modalMedia");
   const closeBtnHtml = `
     <button class="modal-close" id="modalClose" aria-label="Fermer">
@@ -1238,7 +1245,7 @@ function openStandModal(id){
   document.getElementById("standModalMeta").textContent = zone;
   document.getElementById("standModalDesc").textContent = desc;
 
-  const colors = standColors[s.cat] || ["#152A56","#378ADD"];
+  const colors = standColors[s.cat] || ["#122a76","#378ADD"];
   const mediaEl = document.getElementById("standModalMedia");
   mediaEl.style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`;
   mediaEl.innerHTML = `
