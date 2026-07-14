@@ -251,8 +251,7 @@
   .radio-sub{ font-size:11.5px; color:var(--text-secondary); margin-top:1px; }
 
   .venues-map{
-    background:#fff; border-radius:var(--radius-lg); padding:6px;
-    margin-bottom:14px; overflow:hidden;
+    margin-bottom:14px;
   }
   .venues-map img{ width:100%; height:auto; display:block; }
 
@@ -667,7 +666,7 @@
 
       <div class="section-label" id="lblLieux">Découvrez les lieux du festival</div>
       <div class="venues-map">
-        <img src="assets/map-venues.png" alt="Plan des lieux du festival" loading="lazy">
+        <img src="assets/map-sedes.png" alt="Plan des lieux du festival" loading="lazy">
       </div>
       <div id="venuesList"></div>
 
@@ -683,7 +682,7 @@
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
 
-      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v5.1</div>
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v5.3</div>
     </section>
 
   </main>
@@ -868,6 +867,7 @@ const venues = [
     name:"Gare du Midi",
     address:"23 avenue du Maréchal Foch, 64200 Biarritz",
     img:"assets/venue-gare.png",
+    maps:"https://www.google.com/maps/search/?api=1&query=Gare+du+Midi+Biarritz",
     descFr:"Ancienne gare ferroviaire reconvertie en salle de spectacle, elle a été réhabilitée en espace culturel dans les années 90. La Gare du Midi est aujourd'hui l'un des lieux emblématiques du festival et une des plus grandes salles de spectacles du territoire. Un lieu chargé d'histoire… et de passion cinématographique.",
     descEs:"Antigua estación de tren reconvertida en sala de espectáculos, rehabilitada como espacio cultural en los años 90. Hoy la Gare du Midi es uno de los lugares emblemáticos del festival y una de las salas de espectáculos más grandes del territorio. Un lugar cargado de historia… y de pasión cinematográfica."
   },
@@ -876,6 +876,7 @@ const venues = [
     name:"Cinéma Le Royal",
     address:"8 avenue du Maréchal Foch, 64200 Biarritz",
     img:"assets/venue-royal.png",
+    maps:"https://www.google.com/maps/search/?api=1&query=Cinéma+Le+Royal+Biarritz",
     descFr:"Depuis plus de 100 ans, à quelques pas de la Grande Plage, le Royal Cinéma séduit les cinéphiles avec sa façade art déco et son ambiance chaleureuse. Avec son café tranquille et sa terrasse ensoleillée, c'est l'endroit parfait pour une pause entre deux films. Tout simplement, un lieu avec une âme.",
     descEs:"Desde hace más de 100 años, a pocos pasos de la Gran Playa, el Royal Cinéma enamora a los cinéfilos con su fachada art decó y ambiente acogedor. Con su café tranquilo y terraza soleada, es el lugar perfecto para una pausa entre películas. Simplemente, un sitio con alma."
   },
@@ -884,6 +885,7 @@ const venues = [
     name:"Casino Municipal",
     address:"1 avenue Édouard VII, 64200 Biarritz",
     img:"assets/venue-casino.png",
+    maps:"https://www.google.com/maps/search/?api=1&query=Casino+Municipal+Biarritz",
     descFr:"En plein cœur de Biarritz, face à la Grande Plage, se dresse le Casino Municipal. Construit en 1929 dans un style Art déco, ce bâtiment classé monument historique abrite bien plus que des salles de jeux : théâtre, restaurant, piscine, salons, bar sportif… c'est un lieu pluriel, élégant et vivant, chargé d'histoire et de rencontres. Chaque année, pendant le Festival Biarritz Amérique Latine, le Casino se transforme en Village du festival, un espace de convivialité ouvert à toutes et tous, face à l'océan.",
     descEs:"En pleno corazón de Biarritz, frente a la Gran Playa, se alza el Casino Municipal. Construido en 1929 en estilo Art déco, este edificio catalogado como monumento histórico alberga mucho más que salas de juego: teatro, restaurante, piscina, salones, bar deportivo… es un lugar plural, elegante y vivo, cargado de historia y de encuentros. Cada año, durante el Festival Biarritz Amérique Latine, el Casino se transforma en el Village del festival, un espacio de convivencia abierto a todas y todos, frente al océano."
   }
