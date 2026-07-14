@@ -209,6 +209,47 @@
 
   iframe.spotify-embed{ border-radius:var(--radius-lg); width:100%; height:152px; border:none; }
 
+  .fbaltv-block{ margin-bottom:18px; }
+  .fbaltv-head{ display:flex; align-items:center; gap:9px; margin-bottom:9px; }
+  .fbaltv-logo{ height:26px; width:auto; }
+  .fbaltv-live-tag{
+    font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    color:#fff; background:var(--coral); padding:3px 8px; border-radius:6px;
+    display:flex; align-items:center; gap:5px;
+  }
+  .fbaltv-live-dot{ width:6px; height:6px; border-radius:50%; background:#fff; animation:pulse 1.4s ease-in-out infinite; }
+  .fbaltv-player{ border-radius:var(--radius-lg); overflow:hidden; background:#000; }
+  .fbaltv-player iframe{ width:100%; height:210px; border:none; display:block; }
+  .fbaltv-offline{
+    border:1px dashed var(--border); border-radius:var(--radius-lg);
+    padding:22px 16px; text-align:center;
+  }
+  .fbaltv-offline img{ height:34px; width:auto; margin-bottom:10px; opacity:0.85; }
+  .fbaltv-offline-text{ font-size:12.5px; color:var(--text-secondary); margin-bottom:12px; }
+  .fbaltv-status{
+    font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    padding:3px 8px; border-radius:6px; display:inline-flex; align-items:center; gap:5px;
+  }
+  .fbaltv-status.live{ color:#fff; background:var(--coral); }
+  .fbaltv-status.off{ color:var(--text-tertiary); border:1px solid var(--border); }
+  .fbaltv-btn{
+    display:inline-block; background:var(--coral); color:#fff; text-decoration:none;
+    padding:9px 18px; border-radius:var(--radius-md); font-size:13px; font-weight:600;
+  }
+
+  .radio-card{
+    display:flex; align-items:center; gap:12px; padding:13px 14px;
+    border:1px solid var(--border); border-radius:var(--radius-lg);
+    text-decoration:none; color:var(--text); background:var(--bg); margin-bottom:10px;
+  }
+  .radio-ico{
+    width:42px; height:42px; border-radius:50%; background:var(--coral);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .radio-ico svg{ width:20px; height:20px; color:#fff; }
+  .radio-name{ font-size:14px; font-weight:600; }
+  .radio-sub{ font-size:11.5px; color:var(--text-secondary); margin-top:1px; }
+
   .plus-overlay{
     position:fixed; inset:0; background:rgba(10,16,32,0.55); display:none;
     align-items:flex-end; justify-content:center; z-index:60;
@@ -386,8 +427,43 @@
     color:var(--text-secondary); text-decoration:none; background:var(--bg);
   }
 
-  .venue-block{ margin-bottom:8px; }
+  .venue-block{
+    margin-bottom:12px; background:var(--bg); border-radius:var(--radius-lg);
+    padding:10px 12px 12px; border:1px solid var(--border);
+  }
+  .venue-img{ width:100%; max-width:220px; height:auto; display:block; margin:0 auto 6px; }
   .venue-name{ font-size:13px; font-weight:600; }
+
+  .fbaltv-block{
+    background:var(--bg); border-radius:var(--radius-lg); overflow:hidden;
+    border:1px solid var(--border); margin-bottom:18px;
+  }
+  .fbaltv-head{ display:flex; align-items:center; gap:10px; padding:12px 14px 10px; }
+  .fbaltv-logo{ height:30px; width:auto; }
+  .fbaltv-status{ margin-left:auto; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; }
+  .fbaltv-status.live{ color:var(--coral); display:flex; align-items:center; gap:5px; }
+  .fbaltv-status.off{ color:var(--text-tertiary); }
+  .fbaltv-player iframe{ width:100%; height:200px; border:none; display:block; }
+  .fbaltv-offline{
+    padding:20px 14px 22px; text-align:center;
+  }
+  .fbaltv-offline-text{ font-size:12.5px; color:var(--text-secondary); margin-bottom:12px; }
+  .fbaltv-btn{
+    display:inline-block; background:var(--coral); color:#fff; padding:9px 18px;
+    border-radius:var(--radius-md); font-size:13px; font-weight:600; text-decoration:none;
+  }
+
+  .radio-card{
+    display:flex; align-items:center; gap:12px; background:var(--bg);
+    border:1px solid var(--border); border-radius:var(--radius-lg); padding:12px 14px;
+    text-decoration:none; color:var(--text); margin-bottom:18px;
+  }
+  .radio-icon{
+    width:40px; height:40px; border-radius:var(--radius-md); background:var(--purple-light);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .radio-title{ font-size:14px; font-weight:600; }
+  .radio-sub{ font-size:11.5px; color:var(--text-secondary); margin-top:1px; }
   .venue-address{ font-size:12px; color:var(--text-secondary); }
   .transport-block{ margin-bottom:10px; }
   .transport-title{ font-size:12.5px; font-weight:600; color:var(--yellow); margin-bottom:3px; }
@@ -419,7 +495,7 @@
   </header>
 
   <nav class="bottom-nav">
-    <button class="bnav-btn active" data-view="programme" id="tabProgramme">
+    <button class="bnav-btn" data-view="programme" id="tabProgramme">
       <i class="bnav-ico" data-ico="calendar"></i>
       <span id="lblTabProgramme">Programme</span>
     </button>
@@ -427,7 +503,7 @@
       <i class="bnav-ico" data-ico="users"></i>
       <span id="lblTabInvites">Invité·es</span>
     </button>
-    <button class="bnav-center" data-view="accueil" id="tabAccueil" aria-label="Accueil">
+    <button class="bnav-center active" data-view="accueil" id="tabAccueil" aria-label="Accueil">
       <span class="bnav-center-circle"><img src="assets/abrazo.png" alt="Accueil" /></span>
       <span class="bnav-center-label" id="lblTabAccueil">Accueil</span>
     </button>
@@ -445,6 +521,9 @@
 
     <section class="view active" id="view-accueil">
       <div id="enVivoWrap"></div>
+
+      <div class="section-label" id="lblFbaltv">FBAL TV</div>
+      <div id="fbaltvWrap"></div>
 
       <div class="section-label" id="lblAftermovie">Aftermovie 2025</div>
       <div class="home-video-wrap">
@@ -479,6 +558,18 @@
         <div style="flex:1;">
           <div class="info-title" id="websiteTitle">Site officiel du festival</div>
           <div class="info-sub">festivaldebiarritz.com</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+
+      <div class="section-label" id="lblRadio">Radio</div>
+      <a class="radio-card" href="http://live.radio-campus.org:8000/klapperstein" target="_blank" rel="noopener">
+        <div class="radio-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11h16a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z"/><circle cx="8" cy="16" r="2.5"/><path d="M16 15h2M16 18h2M18 5 8.5 10"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div class="radio-name" id="radioTitle">Écouter la radio</div>
+          <div class="radio-sub" id="radioSub">Radio Campus · en direct</div>
         </div>
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
       </a>
@@ -561,7 +652,7 @@
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
 
-      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v4.5</div>
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v5.0</div>
     </section>
 
   </main>
@@ -664,6 +755,7 @@ const i18n = {
     emptyProg:"Aucune activité pour ce filtre", emptyFav:"Pas encore de favoris — touchez le cœur d'une activité pour l'ajouter ici",
     social:"Suivez le festival", hashtag:"Hashtag du festival", hashtagSub:"Partagez vos photos avec ce tag",
     playlist:"Playlist 2026", goodies:"Boutique du festival", goodiesSub:"Disponible sur BilletWeb",
+    radioLbl:"Radio", radioTitle:"Écouter la radio", radioSub:"Radio Campus · en direct",
     billet:"Billetterie", ticketBtn:"Acheter mes billets", soon:"Bientôt",
     venir:"Comment venir", maps:"Voir le plan d'accès", hotels:"Hôtels partenaires", restos:"Restaurants partenaires", partnersLbl:"Partenaires du festival"
   },
@@ -683,6 +775,7 @@ const i18n = {
     emptyProg:"Sin actividades para este filtro", emptyFav:"Aún no tienes favoritos — toca el corazón de una actividad para agregarla aquí",
     social:"Sigue al festival", hashtag:"Hashtag del festival", hashtagSub:"Comparte tus fotos con este tag",
     playlist:"Playlist 2026", goodies:"Tienda del festival", goodiesSub:"Disponible en BilletWeb",
+    radioLbl:"Radio", radioTitle:"Escuchar la radio", radioSub:"Radio Campus · en directo",
     billet:"Boletería", ticketBtn:"Comprar mis boletos", soon:"Pronto",
     venir:"Cómo llegar", maps:"Ver el mapa de acceso", hotels:"Hoteles colaboradores", restos:"Restaurantes colaboradores", partnersLbl:"Partners del festival"
   }
@@ -739,9 +832,9 @@ const events = [
 ];
 
 const venues = [
-  {name:"Gare du Midi", address:"23 avenue du Maréchal Foch, 64200 Biarritz"},
-  {name:"Cinéma Le Royal", address:"8 avenue du Maréchal Foch, 64200 Biarritz"},
-  {name:"Casino de Biarritz", address:"Grande Plage, 64200 Biarritz"}
+  {name:"Gare du Midi", address:"23 avenue du Maréchal Foch, 64200 Biarritz", img:"assets/venue-gare.png"},
+  {name:"Cinéma Le Royal", address:"8 avenue du Maréchal Foch, 64200 Biarritz", img:"assets/venue-royal.png"},
+  {name:"Casino de Biarritz", address:"Grande Plage, 64200 Biarritz", img:"assets/venue-casino.png"}
 ];
 
 const transportFr = [
@@ -924,6 +1017,7 @@ function eventCardHtml(e, idx){
 function renderVenues(){
   document.getElementById("venuesList").innerHTML = venues.map(v=>`
     <div class="venue-block">
+      ${v.img ? `<img class="venue-img" src="${v.img}" alt="${v.name}" loading="lazy">` : ''}
       <div class="venue-name">${v.name}</div>
       <div class="venue-address">${v.address}</div>
     </div>`).join("");
@@ -1122,6 +1216,65 @@ const FEST_END   = new Date("2026-10-02T23:59:00");
 // Cuando lleguen las fechas reales (26 sep–2 oct 2026), se activa solo con datos reales.
 const DEMO_MODE = true;
 
+// ── FBAL TV ──────────────────────────────────────────────────────────────────
+// Durante el festival: reproductor del directo de YouTube embebido.
+// Fuera del festival: logo + boton al canal.
+const YT_CHANNEL_URL = "https://www.youtube.com/@festivalbiarritzameriquelatine";
+
+// PENDIENTE: pegar aqui el ID del canal de YouTube (empieza con "UC...").
+// Como sacarlo: entra al canal en YouTube > Personalizar canal > Configuracion avanzada,
+// o mira la URL cuando estas en la pestaña "Acerca de" del canal.
+// Mientras este vacio, se muestra el boton al canal en vez del reproductor embebido.
+const YT_CHANNEL_ID = "";
+
+function renderFbalTv(){
+  const wrap = document.getElementById("fbaltvWrap");
+  if(!wrap) return;
+  const now = new Date();
+  const duringFestival = (now >= FEST_START && now <= FEST_END);
+  const logo = `<img class="fbaltv-logo" src="assets/fbaltv-logo.png" alt="FBAL TV">`;
+
+  // Solo se puede embeber el directo si tenemos el ID del canal
+  if(duringFestival && YT_CHANNEL_ID){
+    const liveEmbed = `https://www.youtube.com/embed/live_stream?channel=${YT_CHANNEL_ID}`;
+    wrap.innerHTML = `
+      <div class="fbaltv-block">
+        <div class="fbaltv-head">
+          ${logo}
+          <span class="fbaltv-status live"><span class="en-vivo-dot"></span>${lang==="fr"?"En direct":"En vivo"}</span>
+        </div>
+        <div class="fbaltv-player">
+          <iframe src="${liveEmbed}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const txt = duringFestival
+    ? (lang==="fr" ? "L'émission du jour est en direct sur la chaîne YouTube du festival."
+                   : "La emisión del día está en directo en el canal de YouTube del festival.")
+    : (lang==="fr" ? "L'émission quotidienne du festival, en direct du 26 septembre au 2 octobre."
+                   : "La emisión diaria del festival, en directo del 26 de septiembre al 2 de octubre.");
+  const btn = duringFestival
+    ? (lang==="fr" ? "Regarder en direct" : "Ver en directo")
+    : (lang==="fr" ? "Voir la chaîne" : "Ver el canal");
+  const status = duringFestival
+    ? `<span class="fbaltv-status live"><span class="en-vivo-dot"></span>${lang==="fr"?"En direct":"En vivo"}</span>`
+    : `<span class="fbaltv-status off">${lang==="fr"?"Bientôt":"Pronto"}</span>`;
+
+  wrap.innerHTML = `
+    <div class="fbaltv-block">
+      <div class="fbaltv-head">
+        ${logo}
+        ${status}
+      </div>
+      <div class="fbaltv-offline">
+        <div class="fbaltv-offline-text">${txt}</div>
+        <a class="fbaltv-btn" href="${YT_CHANNEL_URL}" target="_blank" rel="noopener">${btn}</a>
+      </div>
+    </div>`;
+}
+
 function renderEnVivo(){
   const wrap = document.getElementById("enVivoWrap");
   if(!wrap) return;
@@ -1300,6 +1453,9 @@ function renderHeader(){
   document.getElementById("lblHashtag").textContent = t().hashtag;
   document.getElementById("hashtagSub").textContent = t().hashtagSub;
   document.getElementById("lblPlaylist").textContent = t().playlist;
+  document.getElementById("lblRadio").textContent = t().radioLbl;
+  document.getElementById("radioTitle").textContent = t().radioTitle;
+  document.getElementById("radioSub").textContent = t().radioSub;
   document.getElementById("lblGoodies").textContent = t().goodies;
   document.getElementById("goodiesSub").textContent = t().goodiesSub;
   document.getElementById("goodiesSoon").textContent = t().soon;
@@ -1397,6 +1553,7 @@ function setLang(l){
   renderPartners();
   renderBubbles();
   renderEnVivo();
+  renderFbalTv();
 }
 
 document.getElementById("btnFr").onclick = ()=>setLang("fr");
@@ -1471,6 +1628,7 @@ renderRestos();
 renderPartners();
 renderBubbles();
 renderEnVivo();
+renderFbalTv();
 updateFavTopBtn();
 setInterval(renderEnVivo, 60000);
 
