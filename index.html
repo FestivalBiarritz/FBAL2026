@@ -250,6 +250,41 @@
   .radio-name{ font-size:14px; font-weight:600; }
   .radio-sub{ font-size:11.5px; color:var(--text-secondary); margin-top:1px; }
 
+  .venues-map{
+    background:#fff; border-radius:var(--radius-lg); padding:6px;
+    margin-bottom:14px; overflow:hidden;
+  }
+  .venues-map img{ width:100%; height:auto; display:block; }
+
+  .venue-item{
+    background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-lg);
+    margin-bottom:9px; overflow:hidden; cursor:pointer;
+  }
+  .venue-head{ display:flex; align-items:center; gap:11px; padding:9px 12px; }
+  .venue-thumb{ width:74px; height:auto; flex-shrink:0; }
+  .venue-head-text{ flex:1; min-width:0; }
+  .venue-title{ font-size:13.5px; font-weight:600; }
+  .venue-addr{ font-size:11.5px; color:var(--text-secondary); margin-top:1px; }
+  .venue-caret{ width:16px; height:16px; color:var(--text-tertiary); transition:transform 0.25s ease; flex-shrink:0; }
+  .venue-item.open .venue-caret{ transform:rotate(90deg); }
+
+  .venue-body{ display:none; padding:0 12px 12px; }
+  .venue-item.open .venue-body{ display:block; animation:venue-open 0.3s ease; }
+  @keyframes venue-open{
+    from{ opacity:0; transform:translateY(-6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .venue-desc{ font-size:12.5px; line-height:1.55; color:var(--text-secondary); margin-bottom:12px; }
+  .venue-maps-btn{
+    display:flex; align-items:center; justify-content:center; gap:7px;
+    background:var(--coral); color:#fff; text-decoration:none;
+    padding:10px 0; border-radius:var(--radius-md); font-size:13px; font-weight:600;
+  }
+  .venue-maps-btn svg{ width:15px; height:15px; }
+  @media (prefers-reduced-motion: reduce){
+    .venue-item.open .venue-body{ animation:none; }
+  }
+
   .plus-overlay{
     position:fixed; inset:0; background:rgba(10,16,32,0.55); display:none;
     align-items:flex-end; justify-content:center; z-index:60;
@@ -630,18 +665,14 @@
       <div class="section-label" id="lblBillet">Billetterie</div>
       <a class="ticket-btn" id="ticketBtn" href="https://www.billetweb.fr/festival-biarritz-amerique-latine-2026" target="_blank" rel="noopener">Acheter mes billets</a>
 
-      <div class="section-label" id="lblVenir">Comment venir</div>
+      <div class="section-label" id="lblLieux">Découvrez les lieux du festival</div>
+      <div class="venues-map">
+        <img src="assets/map-venues.png" alt="Plan des lieux du festival" loading="lazy">
+      </div>
       <div id="venuesList"></div>
+
+      <div class="section-label" id="lblVenir">Comment venir à Biarritz</div>
       <div id="transportList"></div>
-      <a class="info-card" href="https://maps.google.fr/maps/ms?msa=0&msid=212790079871011426812.0004c6d66981033cb7501&hl=fr&ie=UTF8&t=m&ll=43.481449,-1.559114&spn=0.014013,0.029998&z=15&output=embed" target="_blank" rel="noopener">
-        <div class="info-icon" style="background:var(--sky-light);">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5FA8F0" stroke-width="2"><path d="M9 20l-5.5-2.5a1 1 0 0 1-.5-.86V5.5a1 1 0 0 1 1.45-.9L9 7m0 13l6-3m-6 3V7m6 10l5.5 2.5a1 1 0 0 0 1.5-.9V5.5a1 1 0 0 0-.5-.86L15 2m0 15V2m0 0L9 4"/></svg>
-        </div>
-        <div style="flex:1;">
-          <div class="info-title" id="mapsTitle">Voir le plan d'accès</div>
-        </div>
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-      </a>
 
       <div class="section-label" id="lblHotels">Hôtels partenaires</div>
       <div id="hotelsList"></div>
@@ -652,7 +683,7 @@
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
 
-      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v5.0</div>
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v5.1</div>
     </section>
 
   </main>
@@ -757,7 +788,7 @@ const i18n = {
     playlist:"Playlist 2026", goodies:"Boutique du festival", goodiesSub:"Disponible sur BilletWeb",
     radioLbl:"Radio", radioTitle:"Écouter la radio", radioSub:"Radio Campus · en direct",
     billet:"Billetterie", ticketBtn:"Acheter mes billets", soon:"Bientôt",
-    venir:"Comment venir", maps:"Voir le plan d'accès", hotels:"Hôtels partenaires", restos:"Restaurants partenaires", partnersLbl:"Partenaires du festival"
+    venir:"Comment venir à Biarritz", lieux:"Découvrez les lieux du festival", maps:"Voir le plan d'accès", hotels:"Hôtels partenaires", restos:"Restaurants partenaires", partnersLbl:"Partenaires du festival"
   },
   es: {
     sub: "cines & culturas · 35.ª edición",
@@ -777,7 +808,7 @@ const i18n = {
     playlist:"Playlist 2026", goodies:"Tienda del festival", goodiesSub:"Disponible en BilletWeb",
     radioLbl:"Radio", radioTitle:"Escuchar la radio", radioSub:"Radio Campus · en directo",
     billet:"Boletería", ticketBtn:"Comprar mis boletos", soon:"Pronto",
-    venir:"Cómo llegar", maps:"Ver el mapa de acceso", hotels:"Hoteles colaboradores", restos:"Restaurantes colaboradores", partnersLbl:"Partners del festival"
+    venir:"Cómo llegar a Biarritz", lieux:"Descubre los lugares del festival", maps:"Ver el mapa de acceso", hotels:"Hoteles colaboradores", restos:"Restaurantes colaboradores", partnersLbl:"Partners del festival"
   }
 };
 
@@ -832,9 +863,30 @@ const events = [
 ];
 
 const venues = [
-  {name:"Gare du Midi", address:"23 avenue du Maréchal Foch, 64200 Biarritz", img:"assets/venue-gare.png"},
-  {name:"Cinéma Le Royal", address:"8 avenue du Maréchal Foch, 64200 Biarritz", img:"assets/venue-royal.png"},
-  {name:"Casino de Biarritz", address:"Grande Plage, 64200 Biarritz", img:"assets/venue-casino.png"}
+  {
+    id:"gare",
+    name:"Gare du Midi",
+    address:"23 avenue du Maréchal Foch, 64200 Biarritz",
+    img:"assets/venue-gare.png",
+    descFr:"Ancienne gare ferroviaire reconvertie en salle de spectacle, elle a été réhabilitée en espace culturel dans les années 90. La Gare du Midi est aujourd'hui l'un des lieux emblématiques du festival et une des plus grandes salles de spectacles du territoire. Un lieu chargé d'histoire… et de passion cinématographique.",
+    descEs:"Antigua estación de tren reconvertida en sala de espectáculos, rehabilitada como espacio cultural en los años 90. Hoy la Gare du Midi es uno de los lugares emblemáticos del festival y una de las salas de espectáculos más grandes del territorio. Un lugar cargado de historia… y de pasión cinematográfica."
+  },
+  {
+    id:"royal",
+    name:"Cinéma Le Royal",
+    address:"8 avenue du Maréchal Foch, 64200 Biarritz",
+    img:"assets/venue-royal.png",
+    descFr:"Depuis plus de 100 ans, à quelques pas de la Grande Plage, le Royal Cinéma séduit les cinéphiles avec sa façade art déco et son ambiance chaleureuse. Avec son café tranquille et sa terrasse ensoleillée, c'est l'endroit parfait pour une pause entre deux films. Tout simplement, un lieu avec une âme.",
+    descEs:"Desde hace más de 100 años, a pocos pasos de la Gran Playa, el Royal Cinéma enamora a los cinéfilos con su fachada art decó y ambiente acogedor. Con su café tranquilo y terraza soleada, es el lugar perfecto para una pausa entre películas. Simplemente, un sitio con alma."
+  },
+  {
+    id:"casino",
+    name:"Casino Municipal",
+    address:"1 avenue Édouard VII, 64200 Biarritz",
+    img:"assets/venue-casino.png",
+    descFr:"En plein cœur de Biarritz, face à la Grande Plage, se dresse le Casino Municipal. Construit en 1929 dans un style Art déco, ce bâtiment classé monument historique abrite bien plus que des salles de jeux : théâtre, restaurant, piscine, salons, bar sportif… c'est un lieu pluriel, élégant et vivant, chargé d'histoire et de rencontres. Chaque année, pendant le Festival Biarritz Amérique Latine, le Casino se transforme en Village du festival, un espace de convivialité ouvert à toutes et tous, face à l'océan.",
+    descEs:"En pleno corazón de Biarritz, frente a la Gran Playa, se alza el Casino Municipal. Construido en 1929 en estilo Art déco, este edificio catalogado como monumento histórico alberga mucho más que salas de juego: teatro, restaurante, piscina, salones, bar deportivo… es un lugar plural, elegante y vivo, cargado de historia y de encuentros. Cada año, durante el Festival Biarritz Amérique Latine, el Casino se transforma en el Village del festival, un espacio de convivencia abierto a todas y todos, frente al océano."
+  }
 ];
 
 const transportFr = [
@@ -1014,13 +1066,39 @@ function eventCardHtml(e, idx){
   </div>`;
 }
 
+function mapsUrl(name, address){
+  // Enlace universal: abre Google Maps en Android/web y Apple Maps en iPhone
+  const q = encodeURIComponent(`${name}, ${address}`);
+  return `https://maps.google.com/?q=${q}`;
+}
+
 function renderVenues(){
-  document.getElementById("venuesList").innerHTML = venues.map(v=>`
-    <div class="venue-block">
-      ${v.img ? `<img class="venue-img" src="${v.img}" alt="${v.name}" loading="lazy">` : ''}
-      <div class="venue-name">${v.name}</div>
-      <div class="venue-address">${v.address}</div>
-    </div>`).join("");
+  const btnLabel = lang==="fr" ? "M'y rendre" : "Cómo llegar";
+  document.getElementById("venuesList").innerHTML = venues.map(v=>{
+    const desc = lang==="fr" ? v.descFr : v.descEs;
+    return `<div class="venue-item" id="venue-${v.id}" onclick="toggleVenue('${v.id}')">
+      <div class="venue-head">
+        <img class="venue-thumb" src="${v.img}" alt="${v.name}" loading="lazy">
+        <div class="venue-head-text">
+          <div class="venue-title">${v.name}</div>
+          <div class="venue-addr">${v.address}</div>
+        </div>
+        <svg class="venue-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="venue-body">
+        <div class="venue-desc">${desc}</div>
+        <a class="venue-maps-btn" href="${mapsUrl(v.name, v.address)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          ${btnLabel}
+        </a>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggleVenue(id){
+  const el = document.getElementById("venue-"+id);
+  if(el) el.classList.toggle("open");
 }
 
 function renderTransport(){
@@ -1462,7 +1540,7 @@ function renderHeader(){
   document.getElementById("lblBillet").textContent = t().billet;
   document.getElementById("ticketBtn").textContent = t().ticketBtn;
   document.getElementById("lblVenir").textContent = t().venir;
-  document.getElementById("mapsTitle").textContent = t().maps;
+  document.getElementById("lblLieux").textContent = t().lieux;
   document.getElementById("lblHotels").textContent = t().hotels;
   document.getElementById("lblRestos").textContent = t().restos;
   document.getElementById("lblPartners").textContent = t().partnersLbl;
@@ -1550,6 +1628,7 @@ function setLang(l){
   renderFavoris();
   renderStands();
   renderTransport();
+  renderVenues();
   renderPartners();
   renderBubbles();
   renderEnVivo();
