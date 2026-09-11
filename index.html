@@ -176,13 +176,13 @@
 
   .empty{ text-align:center; padding:40px 0; color:var(--text-secondary); font-size:13.5px; }
 
-  .stand-card{ border:1px solid var(--border); border-radius:var(--radius-lg); padding:12px 14px; margin-bottom:9px; display:flex; gap:12px; align-items:center; background:var(--bg); }
-  .stand-icon{ width:38px; height:38px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; }
-  .stand-icon.food{ background:var(--yellow-light); color:var(--yellow); }
-  .stand-icon.craft{ background:var(--purple-light); color:var(--purple); }
-  .stand-name{ font-size:14px; font-weight:600; margin-bottom:2px; }
-  .stand-desc{ font-size:12px; color:var(--text-secondary); margin-bottom:4px; }
-  .stand-zone{ font-size:11px; color:var(--text-tertiary); }
+  .stand-card{ border:1px solid var(--border); border-radius:var(--radius-lg); padding:10px 12px; margin-bottom:9px; display:flex; gap:12px; align-items:center; background:var(--bg); }
+  .stand-thumb{ width:56px; height:56px; border-radius:var(--radius-md); flex-shrink:0; background-size:cover; background-position:center; background-color:var(--bg-secondary); }
+  .stand-name{ font-size:14px; font-weight:600; margin-bottom:1px; }
+  .stand-sub{ font-size:11px; color:var(--yellow); margin-bottom:3px; font-weight:500; }
+  .stand-desc{ font-size:12px; color:var(--text-secondary); line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .atelier-horaires{ margin-top:14px; padding:10px 12px; background:var(--green-light); border-radius:var(--radius-md); font-size:12.5px; color:var(--text); line-height:1.6; }
+  .atelier-horaires-lbl{ font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--green); margin-bottom:4px; }
 
   .section-label{ font-size:12.5px; color:var(--text-secondary); font-weight:600; margin:18px 0 8px; text-transform:uppercase; letter-spacing:0.3px; }
   .section-label:first-child{ margin-top:0; }
@@ -684,7 +684,7 @@
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
 
-      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v6.0</div>
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v6.1</div>
     </section>
 
   </main>
@@ -781,7 +781,7 @@ const i18n = {
     aftermovie:"Aftermovie 2025", website:"Site officiel du festival", ctaProgramme:"Voir le programme",
     standSocial:"Voir sur Instagram", standSocialPending:"Réseaux à venir",
     cats: {all:"Tout", cine:"Cinéma", musica:"Musique", debate:"Débats", litterature:"Littérature", taller:"Ateliers"},
-    standCats: {all:"Tout", food:"Gastronomie", craft:"Artisanat"},
+    standCats: {all:"Tout", food:"Gastronomie", craft:"Artisanat", atelier:"Ateliers"},
     typeLabels: {compet_long:"Compét. — long métrage", compet_court:"Compét. — court métrage", compet_fiction:"Compét. — fiction", hors:"Hors compétition", avant:"Avant-première", focus:"Focus"},
     payant:"Payant", gratuit:"Gratuit", fin:"fin",
     emptyProg:"Aucune activité pour ce filtre", emptyFav:"Pas encore de favoris — touchez le cœur d'une activité pour l'ajouter ici",
@@ -801,7 +801,7 @@ const i18n = {
     aftermovie:"Aftermovie 2025", website:"Sitio oficial del festival", ctaProgramme:"Ver el programa",
     standSocial:"Ver en Instagram", standSocialPending:"Redes próximamente",
     cats: {all:"Todo", cine:"Cine", musica:"Música", debate:"Debates", litterature:"Literatura", taller:"Talleres"},
-    standCats: {all:"Todo", food:"Gastronomía", craft:"Artesanía"},
+    standCats: {all:"Todo", food:"Gastronomía", craft:"Artesanía", atelier:"Talleres"},
     typeLabels: {compet_long:"Competencia — largometraje", compet_court:"Competencia — cortometraje", compet_fiction:"Competencia — ficción", hors:"Fuera de competencia", avant:"Avant-première", focus:"Focus"},
     payant:"De pago", gratuit:"Gratis", fin:"fin",
     emptyProg:"Sin actividades para este filtro", emptyFav:"Aún no tienes favoritos — toca el corazón de una actividad para agregarla aquí",
@@ -830,7 +830,7 @@ const days = [
 ];
 
 const cats = ["all","cine","musica","debate","litterature","taller"];
-const standCatsList = ["all","food","craft"];
+const standCatsList = ["all","craft","food","atelier"];
 
 const catIcons = {
   all:"M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
@@ -1113,13 +1113,37 @@ const partners = {
   ]
 };
 const stands = [
-  {id:"s1", cat:"food", fr:"Empanadas Doña Lola", es:"Empanadas Doña Lola", descFr:"Empanadas argentines, sucré et salé", descEs:"Empanadas argentinas, dulces y saladas", zoneFr:"Village A · stand 3", zoneEs:"Village A · puesto 3", icon:"food", social:null},
-  {id:"s2", cat:"food", fr:"Arepas El Sol", es:"Arepas El Sol", descFr:"Arepas vénézuéliennes", descEs:"Arepas venezolanas", zoneFr:"Village A · stand 5", zoneEs:"Village A · puesto 5", icon:"food", social:null},
-  {id:"s3", cat:"food", fr:"Mezcal & co", es:"Mezcal & co", descFr:"Cocktails et bières latino-américaines", descEs:"Cócteles y cervezas latinoamericanas", zoneFr:"Village B · bar central", zoneEs:"Village B · bar central", icon:"food", social:null},
-  {id:"s4", cat:"food", fr:"Tacos al pastor", es:"Tacos al pastor", descFr:"Cuisine mexicaine de rue", descEs:"Comida mexicana de calle", zoneFr:"Village A · stand 7", zoneEs:"Village A · puesto 7", icon:"food", social:null},
-  {id:"s5", cat:"craft", fr:"Manos andinas", es:"Manos andinas", descFr:"Tissages et textiles andins faits main", descEs:"Tejidos y textiles andinos hechos a mano", zoneFr:"Village B · stand 2", zoneEs:"Village B · puesto 2", icon:"craft", social:null},
-  {id:"s6", cat:"craft", fr:"Bijoux Wayuu", es:"Joyas Wayuu", descFr:"Bijoux artisanaux colombiens", descEs:"Joyería artesanal colombiana", zoneFr:"Village B · stand 4", zoneEs:"Village B · puesto 4", icon:"craft", social:null},
-  {id:"s7", cat:"craft", fr:"Cuir & cuero", es:"Cuir & cuero", descFr:"Maroquinerie artisanale", descEs:"Marroquinería artesanal", zoneFr:"Village A · stand 9", zoneEs:"Village A · puesto 9", icon:"craft", social:null}
+  {id:"a1", cat:"craft", fr:"La Maison Péruvienne", pays:"Pérou", descFr:"Marque franco-péruvienne qui valorise les savoir-faire artisanaux du Pérou : pièces uniques de décoration, textiles, miroirs et mobilier upcyclé, en collaboration avec 11 ateliers d'artisans de la côte aux Andes.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/la-maison-peruvienne-26-700x518.jpeg", social:"https://www.instagram.com/lamaisonperuvienne/", web:"http://www.lamaisonperuvienne.com"},
+  {id:"a2", cat:"craft", fr:"Art d'Amazonie", pays:"Brésil", descFr:"Accessoires et objets de décoration faits main par des communautés autochtones et artisans d'Amazonie brésilienne, à partir de matières végétales locales.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/art-d-amazonie-700x467.jpg", social:"https://www.instagram.com/artdamazonie/", web:"https://artdamazonie.fr/"},
+  {id:"a3", cat:"craft", fr:"Sinduli", pays:"Colombie", descFr:"« Sinduli » signifie colibri en langue kogis. Stéphane et Natalia, couple d'artisans franco-colombien, présentent leurs bijoux tissés à l'aiguille avec des perles de verre.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/sinduli-2026-700x465.png", social:"https://www.instagram.com/sinduli_art/", web:"https://www.etsy.com/shop/SINDULI"},
+  {id:"a4", cat:"craft", fr:"Moclan", pays:"Pays Basque Sud", descFr:"Sacs uniques où design contemporain, couleurs audacieuses et fabrication responsable s'unissent. Produits conçus et fabriqués entre le Pays Basque et la Catalogne.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/moclan-e1786092842318.jpeg", social:"https://www.instagram.com/cmoi.et.moclan/", web:"https://www.faire.com/direct/moclan"},
+  {id:"a5", cat:"craft", fr:"Gozo Natural Botanicals", pays:"Costa Rica", descFr:"Produits cosmétiques naturels à base de plantes médicinales. En particulier le moringa, « l'arbre de la vie », connu pour ses vertus sur la santé de la peau.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/gozo-natural-botanicals-2026-394x700.jpg", social:"https://www.instagram.com/gozonaturalbotanicals/"},
+  {id:"a6", cat:"craft", fr:"Evu Arts & Créations", pays:"Argentine", descFr:"Artiste visuelle argentine passionnée d'illustration et de peinture. Un art qui reflète ses mondes imaginaires et la réalité latino-américaine : couleurs, textures et mysticisme.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/evu-arts-creations-481x700.png", social:"https://www.instagram.com/evu_arts_creations/", web:"https://evu-arts-creations.sumupstore.com/"},
+  {id:"a7", cat:"craft", fr:"Art des Andes", pays:"Pérou", descFr:"L'artisanat qui donne vie à la pierre. Chaque taille de pierre naît de la patience et du respect de la matière. Aucune pièce n'est identique à une autre.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/art-des-andes-perou-700x580.png", social:null},
+  {id:"a8", cat:"craft", fr:"Inca Ayar", pays:"Pérou", descFr:"Bijoux péruviens en macramé, fils métal, pierre et graines depuis 2006. Importation d'artisanat du Pérou : instruments de musique, pochettes, hamacs…", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/inca-ayar-2026-700x525.jpeg", social:"https://www.instagram.com/artisanatincaayar/", web:"http://www.artisanat-inca-ayar.fr"},
+  {id:"a9", cat:"craft", fr:"Chasqui Handmade", pays:"Pérou", descFr:"Depuis le temps des Incas, la laine d'Alpaca est exploitée pour sa fibre fine, douce et chaude. Une large gamme pleine de couleurs andines importée directement du Pérou.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/chasqui-473x700.png", social:"http://www.lechasqui.com"},
+  {id:"a10", cat:"craft", fr:"Artisanat Mexicain", pays:"Mexique", descFr:"Articles pour la maison en terre cuite, bois, papier mâché et textiles. Le tout fabriqué au Mexique, dont une partie par une famille de l'état de Michoacán.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/artianat-mexicain-700x674.png", social:"https://www.instagram.com/artisanatmexicain/"},
+  {id:"a11", cat:"craft", fr:"Anahi Bijoux", pays:"Brésil", descFr:"La nature, l'or végétal : le capim dorado, une herbe unique au monde cultivée à la main dans le respect de l'environnement, dans la région de Jalapão au Brésil.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/anahi-bijoux.jpeg", social:"https://www.instagram.com/anahibijoux/"},
+  {id:"a12", cat:"craft", fr:"Caminito Al Sur", pays:"Argentine", descFr:"Épicerie latino & traiteur artisanal installé à Anglet : saveurs authentiques d'Argentine et d'Amérique latine. Yerba maté, dulce de leche, empanadas, tapas, pâtisseries maison.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/caminito-al-sur-525x700.jpeg", social:"https://www.instagram.com/caminito.al.sur/"},
+  {id:"a13", cat:"craft", fr:"Muchito", pays:"Pérou", descFr:"Un univers qui associe sequins et broderies, où motif rime avec festif. Une collection dessinée en France et réalisée au Pérou, et une autre issue de la revalorisation de pièces de seconde main.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/muchito-491x700.png", social:"https://www.instagram.com/muchito.artesania"},
+  {id:"a14", cat:"craft", fr:"Wary", pays:"Équateur", descFr:"Chapeaux en tout genre, sacs en laine ou raphia, petits vêtements en laine d'alpaga, animaux taillés dans le bois. L'univers d'Edwin, artisan équatorien, laisse place à l'imaginaire andin.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/wary-2026-copie-534x700.jpeg", social:"https://www.facebook.com/EMWary/"},
+  {id:"a15", cat:"craft", fr:"Mano del Inca", pays:"Pérou", descFr:"Née de la passion de Manuel Hancco, artisan créateur de bijoux en pierres naturelles. Chaque pièce est imaginée et réalisée à la main, inspirée des traditions artisanales.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/mano-del-inca-2026-700x399.png", social:"https://www.facebook.com/LaManoDelInca/"},
+  {id:"a16", cat:"craft", fr:"Metamorfosis", pays:"Pérou", descFr:"Marque de mode circulaire née dans les prisons de Lima. À travers le tissage à la main et le design responsable, création d'opportunités de réinsertion pour les femmes privées de liberté.", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/metamorfosis.jpeg", social:"https://www.instagram.com/metamorfosis.peru"},
+  {id:"g17", cat:"food", fr:"Maiki", pays:"Amérique latine", descFr:"Cuisine et saveurs d'Amérique latine au Village du festival.", social:null},
+  {id:"g18", cat:"food", fr:"L'Atelier du Chocolat", pays:"France", descFr:"Chocolats artisanaux, une institution biarrote présente au Village.", social:null},
+  {id:"g19", cat:"food", fr:"Caminito Al Sur", pays:"Argentine", descFr:"Épicerie latino et traiteur artisanal : empanadas, yerba maté, spécialités latino-américaines et pâtisseries maison.", social:"https://www.instagram.com/caminito.al.sur/"},
+  {id:"g20", cat:"food", fr:"Saline", pays:"France", descFr:"Restauration au Village du festival.", social:null},
+  {id:"at1", cat:"atelier", fr:"Broderie mexicaine", anim:"Viviana (Melon Creations)", tech:"Broderie", prix:"10€ / 2h", descFr:"Initiez-vous à la broderie colorée du Mexique avec la broderie Tenango. Vous apprendrez les points de base en brodant une fleur. Tous niveaux, matériel fourni.", horaires:"Sam 26 · 14h — Dim 27 · 16h30 — Mar 29 · 11h — Jeu 1 · 16h30", billet:"https://www.billetweb.fr/shop.php?event=broderie-mexicaine-festival&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/foto-mexicaine-vivi-700x700.jpg", social:"https://www.instagram.com/melon_creations/"},
+  {id:"at2", cat:"atelier", fr:"Broderie péruvienne", anim:"Viviana (Melon Creations)", tech:"Broderie", prix:"10€ / 2h", descFr:"Apprenez la broderie traditionnelle péruvienne en brodant la fleur d'Ayacucho. Tous niveaux, matériel fourni.", horaires:"Sam 26 · 16h30 — Lun 28 · 11h — Mar 29 · 14h — Ven 2 · 14h", billet:"https://www.billetweb.fr/shop.php?event=broderie-peruvienne1&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/foto-peru-vivi-700x700.jpg", social:"https://www.instagram.com/melon_creations/"},
+  {id:"at3", cat:"atelier", fr:"Arpilleras chilenas", anim:"Viviana (Melon Creations)", tech:"Broderie", prix:"10€ / 2h", descFr:"Apprenez la technique textile traditionnelle des arpilleras, née au Chili comme forme d'expression et de protestation. Créez votre propre phrase de résistance.", horaires:"Dim 27 · 11h — Lun 28 · 14h — Mar 29 · 16h30 — Ven 2 · 16h30", billet:"https://www.billetweb.fr/shop.php?event=arpilleras&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/foto-arpilleras-vivi-700x700.jpg", social:"https://www.instagram.com/melon_creations/"},
+  {id:"at4", cat:"atelier", fr:"Métal repoussé", anim:"Viviana (Melon Creations)", tech:"Métal repoussé", prix:"10€ / 2h", descFr:"Découvrez le repoussé sur métal : modeler et décorer une feuille de métal en relief à l'aide d'outils simples. Tous niveaux, matériel fourni.", horaires:"Dim 27 · 14h — Lun 28 · 16h30 — Jeu 1 · 11h", billet:"https://www.billetweb.fr/shop.php?event=metal-repousse4&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/foto-metal-vivi-700x700.jpg", social:"https://www.instagram.com/melon_creations/"},
+  {id:"at5", cat:"atelier", fr:"Dessin à la plume et à l'encre", anim:"Sofía", tech:"Encre", prix:"10€ / 2h", descFr:"Créez votre propre personnage de cinéma à la plume et à l'encre de Chine. On explore les émotions de manière ludique autour du cinéma, la culture et l'Amérique latine. Dès 8 ans. Atelier en espagnol.", horaires:"Sam 26 · 14h et 16h — Dim 27 · 14h et 16h", billet:"https://www.billetweb.fr/shop.php?event=ateliers-de-dessin-a-la-plume-et-a-lencre-talleres-de-dibujo-de-pluma-y-tinta-china&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/sofia1-700x700.jpg", social:"https://www.instagram.com/sofia_herbon/"},
+  {id:"at6", cat:"atelier", fr:"Porte-clés pompom", anim:"Macarena (Atipika)", tech:"Tissage", prix:"10€ / 1h", descFr:"Inspirez-vous des couleurs et traditions textiles d'Amérique latine pour créer un porte-clés unique aux motifs colorés et pompons.", horaires:"Mar 29 · 11h, 14h et 17h — Mer 30 · 11h et 13h45 — Jeu 1 · 11h et 13h45", billet:"https://www.billetweb.fr/shop.php?event=atelier-pompon2&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/maca1-700x700.jpg", social:"https://www.instagram.com/atipikafrance/"},
+  {id:"at7", cat:"atelier", fr:"Bijou de sac pompom", anim:"Macarena (Atipika)", tech:"Bijouterie", prix:"10€ / 1h", descFr:"Inspirez-vous des couleurs et traditions textiles d'Amérique latine pour créer un bijou de sac unique aux motifs colorés et pompons.", horaires:"Mar 29 · 12h30 et 15h30 — Mer 30 · 12h30 et 15h — Jeu 1 · 12h30 et 15h", billet:"https://www.billetweb.fr/shop.php?event=atelier-pompon1&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/maca4-700x700.jpg", social:"https://www.instagram.com/atipikafrance/"},
+  {id:"at8", cat:"atelier", fr:"Crochet de point péruvien", anim:"Fiorella (Le Fabuleux Crochet)", tech:"Crochet", prix:"10€ / 1h", descFr:"Découvrez un point de crochet traditionnel péruvien et réalisez un échantillon avec différents fils et laines. Matériel fourni.", horaires:"Mer 30 · 14h et 16h30 — Jeu 1 · 14h et 16h30 — Ven 2 · 11h et 14h", billet:"https://www.billetweb.fr/shop.php?event=atelier-de-crochet-de-point-peruvien&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/fiorella5-700x700.jpg", social:"https://www.instagram.com/lefabuleuxcrochet/"},
+  {id:"at9", cat:"atelier", fr:"Quilling floral — initiales décorées", anim:"Karmen", tech:"Quilling", prix:"10€ / 2h", descFr:"Découvrez l'art du quilling floral en réalisant une initiale décorée de fleurs en papier. Accessible à tous, matériel fourni. Atelier en espagnol.", horaires:"Ven 2 · 11h et 16h30", billet:"https://www.billetweb.fr/shop.php?event=crea-y-decora-con-quilling-floral-regala-iniciales-unicas-y-flores-de-papel&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/carmen3-700x700.jpg", social:"https://www.instagram.com/karmin_arte/"},
+  {id:"at10", cat:"atelier", fr:"Quilling zoo", anim:"Karmen", tech:"Quilling", prix:"10€ / 2h", descFr:"Créez de jolis animaux en papier grâce à la technique du quilling. Un atelier ludique à partager en famille. Matériel fourni. Atelier en espagnol.", horaires:"Mer 30 · 11h et 16h30", billet:"https://www.billetweb.fr/shop.php?event=quilling-zoo-diviertete-creando-con-tus-manos-animales-con-papel-en-familia&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/1440648.jpg", social:"https://www.instagram.com/karmin_arte/"},
+  {id:"at11", cat:"atelier", fr:"Iris Folding — la magie du papier en spirale", anim:"Karmen", tech:"Quilling", prix:"10€ / 2h", descFr:"Découvrez la technique de l'Iris Folding et réalisez une création en papier aux motifs en spirale. Accessible à tous, matériel fourni. Atelier en espagnol.", horaires:"Lun 28 · 11h, 14h et 16h30", billet:"https://www.billetweb.fr/shop.php?event=taller-creativo-de-iris-folding-aprende-la-magia-en-espiral-con-papel&multi=45583&color=132378&from_multi=1", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/1440641.jpg", social:"https://www.instagram.com/karmin_arte/"},
 ];
 
 function t(){ return i18n[lang]; }
@@ -1582,40 +1606,66 @@ document.getElementById("modalOverlay").addEventListener("click", (ev)=>{
   if(ev.target.id === "modalOverlay") closeModal();
 });
 
-const standColors = { food:["#854F0B","#F4C430"], craft:["#3C3489","#7F77DD"] };
+const standColors = { food:["#854F0B","#F4C430"], craft:["#3C3489","#7F77DD"], atelier:["#2C6E2A","#6FCB6B"] };
 
 function openStandModal(id){
   const s = stands.find(st=>st.id===id);
   if(!s) return;
-  const name = lang==="fr" ? s.fr : s.es;
-  const desc = lang==="fr" ? s.descFr : s.descEs;
-  const zone = lang==="fr" ? s.zoneFr : s.zoneEs;
+  const name = lang==="fr" ? s.fr : (s.es || s.fr);
+  const desc = lang==="fr" ? s.descFr : (s.descEs || s.descFr);
+  const isAtelier = s.cat === "atelier";
 
   document.getElementById("standModalTitle").textContent = name;
-  document.getElementById("standModalMeta").textContent = zone;
-  document.getElementById("standModalDesc").textContent = desc;
 
+  // Meta: pais (stand) o animador+tecnica+precio (atelier)
+  let meta = "";
+  if(isAtelier){
+    meta = `${s.anim} · ${s.tech} · ${s.prix}`;
+  } else if(s.pays){
+    meta = s.pays;
+  }
+  document.getElementById("standModalMeta").textContent = meta;
+
+  // Descripcion + horarios si es atelier
+  let bodyHtml = desc || "";
+  if(isAtelier && s.horaires){
+    const lbl = lang==="fr" ? "Horaires" : "Horarios";
+    bodyHtml += `<div class="atelier-horaires"><div class="atelier-horaires-lbl">${lbl}</div>${s.horaires}</div>`;
+  }
+  document.getElementById("standModalDesc").innerHTML = bodyHtml;
+
+  // Media: foto real o gradiente
   const colors = standColors[s.cat] || ["#122a76","#378ADD"];
   const mediaEl = document.getElementById("standModalMedia");
-  mediaEl.style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`;
-  mediaEl.innerHTML = `
-    <button class="modal-close" id="standModalClose" aria-label="Fermer">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-  `;
+  const closeBtn = `<button class="modal-close" id="standModalClose" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>`;
+  if(s.img){
+    mediaEl.style.background = "#000";
+    mediaEl.innerHTML = closeBtn + `<img src="${s.img}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">`;
+  } else {
+    mediaEl.style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`;
+    mediaEl.innerHTML = closeBtn;
+  }
   document.getElementById("standModalClose").onclick = closeStandModal;
 
+  // Boton: inscription (atelier) o Instagram/web (stand)
   const socialBtn = document.getElementById("standModalSocial");
-  if(s.social){
-    socialBtn.href = s.social;
-    socialBtn.textContent = t().standSocial;
+  if(isAtelier && s.billet){
+    socialBtn.href = s.billet;
+    socialBtn.textContent = lang==="fr" ? "S'inscrire" : "Inscribirse";
     socialBtn.style.opacity = 1;
     socialBtn.style.pointerEvents = "auto";
+    socialBtn.style.display = "block";
+    socialBtn.style.background = "var(--coral)";
+  } else if(s.social){
+    socialBtn.href = s.social;
+    const isInsta = s.social.includes("instagram");
+    socialBtn.textContent = isInsta ? (lang==="fr"?"Voir sur Instagram":"Ver en Instagram") : (lang==="fr"?"Site web":"Sitio web");
+    socialBtn.style.opacity = 1;
+    socialBtn.style.pointerEvents = "auto";
+    socialBtn.style.display = "block";
+    socialBtn.style.background = "var(--sky)";
   } else {
-    socialBtn.removeAttribute("href");
-    socialBtn.textContent = t().standSocialPending;
-    socialBtn.style.opacity = 0.5;
-    socialBtn.style.pointerEvents = "none";
+    socialBtn.style.display = "none";
   }
 
   document.getElementById("standModalOverlay").classList.add("open");
@@ -1706,20 +1756,20 @@ function renderFavoris(){
 }
 
 function standCardHtml(s, idx){
-  const name = lang==="fr" ? s.fr : s.es;
-  const desc = lang==="fr" ? s.descFr : s.descEs;
-  const zone = lang==="fr" ? s.zoneFr : s.zoneEs;
-  const accent = s.cat==="food" ? "#F4C430" : "#A79CFF";
+  const name = lang==="fr" ? s.fr : (s.es || s.fr);
+  const desc = lang==="fr" ? s.descFr : (s.descEs || s.descFr);
+  const accent = s.cat==="food" ? "#F4C430" : (s.cat==="atelier" ? "#6FCB6B" : "#A79CFF");
   const delay = typeof idx === "number" ? Math.min(idx * 0.055, 0.4) : 0;
-  const iconPath = s.icon==="food"
-    ? '<path d="M5 4v9a3 3 0 1 0 6 0V4M8 4v6M11 4v6"/><path d="M17 4v16M17 4c3 0 4 2 4 5s-1 5-4 5"/>'
-    : '<path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6z"/>';
+  const sub = s.cat==="atelier" ? `${s.tech} · ${s.prix}` : (s.pays || "");
+  const thumb = s.img
+    ? `<div class="stand-thumb" style="background-image:url('${s.img}');"></div>`
+    : `<div class="stand-thumb stand-thumb-empty" style="background:${accent}22;"></div>`;
   return `<div class="stand-card" style="cursor:pointer; border-left:3px solid ${accent}; --card-delay:${delay}s;" onclick="openStandModal('${s.id}')">
-    <div class="stand-icon ${s.icon}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${iconPath}</svg></div>
-    <div style="flex:1;">
+    ${thumb}
+    <div style="flex:1; min-width:0;">
       <div class="stand-name">${name}</div>
+      ${sub ? `<div class="stand-sub">${sub}</div>` : ''}
       <div class="stand-desc">${desc}</div>
-      <div class="stand-zone">${zone}</div>
     </div>
   </div>`;
 }
