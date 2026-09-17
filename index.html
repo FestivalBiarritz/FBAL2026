@@ -684,7 +684,7 @@
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
 
-      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v6.8</div>
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v6.9</div>
     </section>
 
   </main>
@@ -784,7 +784,7 @@ const i18n = {
     inviteLinkFilm:"Voir le film", inviteLinkLivre:"Voir le livre", inviteLinkPlus:"En savoir plus",
     aftermovie:"Aftermovie 2025", website:"Site officiel du festival", ctaProgramme:"Voir le programme",
     standSocial:"Voir sur Instagram", standSocialPending:"Réseaux à venir",
-    cats: {all:"Tout", cine:"Cinéma", musica:"Musique", debate:"Débats", litterature:"Littérature", taller:"Ateliers"},
+    cats: {all:"Tout", cine:"Cinéma", musica:"Musique", debate:"Débats", litterature:"Littérature", baltv:"BAL TV", taller:"Ateliers"},
     standCats: {all:"Tout", food:"Gastronomie", craft:"Artisanat", atelier:"Ateliers"},
     typeLabels: {compet_long:"Compét. — long métrage", compet_court:"Compét. — court métrage", compet_fiction:"Compét. — fiction", hors:"Hors compétition", avant:"Avant-première", focus:"Focus"},
     payant:"Payant", gratuit:"Gratuit", fin:"fin",
@@ -803,7 +803,7 @@ const i18n = {
     inviteLinkFilm:"Ver la película", inviteLinkLivre:"Ver el libro", inviteLinkPlus:"Más info",
     aftermovie:"Aftermovie 2025", website:"Sitio oficial del festival", ctaProgramme:"Ver el programa",
     standSocial:"Ver en Instagram", standSocialPending:"Redes próximamente",
-    cats: {all:"Todo", cine:"Cine", musica:"Música", debate:"Debates", litterature:"Literatura", taller:"Talleres"},
+    cats: {all:"Todo", cine:"Cine", musica:"Música", debate:"Debates", litterature:"Literatura", baltv:"BAL TV", taller:"Talleres"},
     standCats: {all:"Todo", food:"Gastronomía", craft:"Artesanía", atelier:"Talleres"},
     typeLabels: {compet_long:"Competencia — largometraje", compet_court:"Competencia — cortometraje", compet_fiction:"Competencia — ficción", hors:"Fuera de competencia", avant:"Avant-première", focus:"Focus"},
     payant:"De pago", gratuit:"Gratis", fin:"fin",
@@ -831,7 +831,7 @@ const days = [
   {label:"2 oct", date:"2026-10-02"}
 ];
 
-const cats = ["all","cine","musica","debate","litterature"];
+const cats = ["all","cine","musica","debate","litterature","baltv"];
 const standCatsList = ["all","craft","food","atelier"];
 
 const catIcons = {
@@ -978,6 +978,18 @@ const events = [
   {id:"e131", day:6, cat:"musica", time:"21:00", dur:60, fr:"CONCERT — Carameloco", place:"Village", gratuit:true, descFr:"Cuba. Salsa.", descEs:"Cuba. Salsa.", slug:"carameloco", video:null},
   {id:"e132", day:6, cat:"musica", time:"22:00", dur:120, fr:"DJ SET — La Prieto", place:"Village", gratuit:true, descFr:"Colombie. Néo-perreo.", descEs:"Colombie. Néo-perreo.", slug:"el-batif-la-prieto", video:null},
   {id:"e133", day:6, cat:"musica", time:"00:00", dur:120, fr:"DJ SET — El Batif", place:"Village", gratuit:true, descFr:"France. DJ set.", descEs:"France. DJ set.", slug:"el-batif", video:null},
+
+  // ── ABRAZO D'HONNEUR ──────────────────────────────────────────────────────
+  {id:"e134", day:0, cat:"cine", time:"16:15", dur:120, fr:"ABRAZO D'HONNEUR — Eduardo Carrasco", es:"ABRAZO DE HONOR — Eduardo Carrasco", place:"Gare du Midi", type:"ceremonie", tagFr:"Abrazo d'Honneur", tagEs:"Abrazo de Honor", descFr:"Remise de l'Abrazo d'Honneur à Eduardo Carrasco, musicien et membre fondateur du groupe chilien Quilapayún, suivie du film Quilapayún más allá de la canción.", descEs:"Entrega del Abrazo de Honor a Eduardo Carrasco, músico y miembro fundador del grupo chileno Quilapayún, seguida de la película Quilapayún más allá de la canción.", slug:"abrazo-honneur-eduardo-carrasco", video:null},
+
+  // ── BAL TV — émission quotidienne 18h30 (Village + YouTube) ────────────────
+  {id:"e135", day:0, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-26", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
+  {id:"e136", day:1, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-27", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
+  {id:"e137", day:2, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-28", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
+  {id:"e138", day:3, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-29", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
+  {id:"e139", day:4, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-30", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
+  {id:"e140", day:5, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-01", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
+  {id:"e141", day:6, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-02", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
 ];
 
 const venues = [
@@ -1188,7 +1200,7 @@ function toggleFav(id){
 }
 
 const catAccent = {
-  cine:"#5FA8F0", musica:"#E2483D", debate:"#A79CFF", litterature:"#F4C430", taller:"#6FCB6B"
+  cine:"#5FA8F0", musica:"#E2483D", debate:"#A79CFF", litterature:"#F4C430", taller:"#6FCB6B", baltv:"#FF6FB5"
 };
 
 function eventCardHtml(e, idx){
@@ -1296,91 +1308,59 @@ function renderPartners(){
 
 // ── INVITADOS (datos de ejemplo — reemplazar con la lista real) ──────────────
 const invites = [
-  {id:"i1", nameFr:"Sofia Reyes", nameEs:"Sofia Reyes",
-   roleFr:"Réalisatrice · Mexique", roleEs:"Directora · México",
-   bioFr:"Réalisatrice mexicaine dont le premier long métrage a remporté le prix du jury à Guadalajara. Elle présentera son nouveau film en avant-première au festival.",
-   bioEs:"Directora mexicana cuyo primer largometraje ganó el Premio del Jurado en Guadalajara. Presentará su nueva película en avant-première en el festival.",
-   photo:null, initials:"SR", color:"#E2483D",
-   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
-
-  {id:"i2", nameFr:"Carlos Alvarado", nameEs:"Carlos Alvarado",
-   roleFr:"Écrivain · Colombie", roleEs:"Escritor · Colombia",
-   bioFr:"Auteur colombien lauréat du Prix Alfaguara 2024. Il participera à la table ronde littéraire et dédicacera son dernier roman.",
-   bioEs:"Escritor colombiano ganador del Premio Alfaguara 2024. Participará en la mesa literaria y firmará su última novela.",
-   photo:null, initials:"CA", color:"#F4C430",
-   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le livre", linkTypeEs:"Ver el libro"},
-
-  {id:"i3", nameFr:"Ana Lima", nameEs:"Ana Lima",
-   roleFr:"Actrice · Brésil", roleEs:"Actriz · Brasil",
-   bioFr:"Actrice brésilienne révélée par la série internationale Cidade Invisível. Elle accompagnera la projection de son nouveau film.",
-   bioEs:"Actriz brasileña revelada por la serie internacional Cidade Invisível. Acompañará la proyección de su nueva película.",
-   photo:null, initials:"AL", color:"#6FCB6B",
-   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
-
-  {id:"i4", nameFr:"Miguel Fernández", nameEs:"Miguel Fernández",
-   roleFr:"Musicien · Cuba", roleEs:"Músico · Cuba",
-   bioFr:"Membre fondateur du Septeto Santiaguero, groupe emblématique du son cubain traditionnel depuis 1994.",
-   bioEs:"Miembro fundador del Septeto Santiaguero, grupo emblemático del son cubano tradicional desde 1994.",
-   photo:null, initials:"MF", color:"#5FA8F0",
-   link:"https://www.billetweb.fr/festival-biarritz-amerique-latine-2026", linkTypeFr:"Billetterie", linkTypeEs:"Boletería"},
-
-  {id:"i5", nameFr:"Valentina Cruz", nameEs:"Valentina Cruz",
-   roleFr:"Documentariste · Argentine", roleEs:"Documentalista · Argentina",
-   bioFr:"Sa trilogie documentaire sur les migrations andines a été sélectionnée dans plus de 30 festivals internationaux.",
-   bioEs:"Su trilogía documental sobre las migraciones andinas ha sido seleccionada en más de 30 festivales internacionales.",
-   photo:null, initials:"VC", color:"#A79CFF",
-   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
-
-  {id:"i6", nameFr:"Juana Moreno", nameEs:"Juana Moreno",
-   roleFr:"Poète · Chili", roleEs:"Poeta · Chile",
-   bioFr:"Poète et essayiste chilienne, elle animera un atelier d'écriture et participera aux rencontres littéraires du festival.",
-   bioEs:"Poeta y ensayista chilena, animará un taller de escritura y participará en los encuentros literarios del festival.",
-   photo:null, initials:"JM", color:"#FF8FAE",
-   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le livre", linkTypeEs:"Ver el libro"},
-
-  {id:"i7", nameFr:"Pablo Herrera", nameEs:"Pablo Herrera",
-   roleFr:"Directeur de la photographie · Pérou", roleEs:"Director de fotografía · Perú",
-   bioFr:"DOP péruvien dont le travail sur La tierra prometida a été nominé aux Goya. Il donnera une masterclass ouverte au public.",
-   bioEs:"Director de fotografía peruano cuyo trabajo en La tierra prometida fue nominado a los Goya. Dará una masterclass abierta al público.",
-   photo:null, initials:"PH", color:"#F4C430",
+  {id:"i1", nameFr:"Leonardo Padura", nameEs:"Leonardo Padura",
+   roleFr:"Écrivain · Cuba", roleEs:"Escritor · Cuba",
+   bioFr:"Écrivain cubain de renommée internationale, né à La Havane, créateur du détective Mario Conde et lauréat du Prix Princesse des Asturies des Lettres. Le festival lui remet un Abrazo d'Honneur et lui consacre une rencontre autour de son œuvre et de Cuba.",
+   bioEs:"Escritor cubano de renombre internacional, nacido en La Habana, creador del detective Mario Conde y ganador del Premio Princesa de Asturias de las Letras. El festival le entrega un Abrazo de Honor y le dedica un encuentro en torno a su obra y a Cuba.",
+   photo:null, initials:"LP", color:"#F4C430",
    link:"https://www.festivaldebiarritz.com/", linkTypeFr:"En savoir plus", linkTypeEs:"Más info"},
 
-  {id:"i8", nameFr:"Rosa Méndez", nameEs:"Rosa Méndez",
-   roleFr:"Productrice · Venezuela", roleEs:"Productora · Venezuela",
-   bioFr:"Productrice indépendante vénézuélienne, membre du jury de la compétition officielle de cette 35e édition.",
-   bioEs:"Productora independiente venezolana, miembro del jurado de la competencia oficial de esta 35.ª edición.",
-   photo:null, initials:"RM", color:"#E2483D",
+  {id:"i2", nameFr:"Régis Debray", nameEs:"Régis Debray",
+   roleFr:"Écrivain & philosophe · France", roleEs:"Escritor y filósofo · Francia",
+   bioFr:"Philosophe et écrivain français, fondateur de la médiologie et proche des mouvements révolutionnaires latino-américains des années 1960. Grand témoin de cette 35e édition, il participe à une rencontre consacrée à la figure du Che Guevara aux côtés de Costa-Gavras.",
+   bioEs:"Filósofo y escritor francés, fundador de la mediología y cercano a los movimientos revolucionarios latinoamericanos de los años 1960. Gran testigo de esta 35.ª edición, participa en un encuentro sobre la figura del Che Guevara junto a Costa-Gavras.",
+   photo:null, initials:"RD", color:"#5FA8F0",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"En savoir plus", linkTypeEs:"Más info"},
+
+  {id:"i3", nameFr:"Carmen Castillo", nameEs:"Carmen Castillo",
+   roleFr:"Cinéaste & écrivaine · Chili-France", roleEs:"Cineasta y escritora · Chile-Francia",
+   bioFr:"Cinéaste et écrivaine franco-chilienne, elle préside le jury documentaire de cette édition. Le festival présente son film Lo que en nosotros calla et lui consacre une rencontre.",
+   bioEs:"Cineasta y escritora franco-chilena, preside el jurado de documentales de esta edición. El festival presenta su película Lo que en nosotros calla y le dedica un encuentro.",
+   photo:null, initials:"CC", color:"#E2483D",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
+
+  {id:"i4", nameFr:"Eduardo Carrasco", nameEs:"Eduardo Carrasco",
+   roleFr:"Musicien · Chili", roleEs:"Músico · Chile",
+   bioFr:"Musicien et compositeur, membre fondateur du groupe chilien Quilapayún, figure de la musique engagée liée à l'histoire du Chili. Le festival lui remet un Abrazo d'Honneur le 26 septembre, suivi du film Quilapayún más allá de la canción.",
+   bioEs:"Músico y compositor, miembro fundador del grupo chileno Quilapayún, figura de la música comprometida ligada a la historia de Chile. El festival le entrega un Abrazo de Honor el 26 de septiembre, seguido de la película Quilapayún más allá de la canción.",
+   photo:null, initials:"EC", color:"#6FCB6B",
    link:"https://www.festivaldebiarritz.com/", linkTypeFr:"En savoir plus", linkTypeEs:"Más info"}
 ];
 
-// Posiciones pre-calculadas para las burbujas (x%, y%, tamaño px)
-// Layout en cuadrícula equilibrada: 3 columnas que cubren todo el ancho,
-// con tamaños y alturas variados para que se vea orgánico pero repartido.
-const bubbleLayout = [
-  {col:0, y:6,   s:104},
-  {col:1, y:2,   s:112},
-  {col:2, y:10,  s:100},
-  {col:0, y:40,  s:98},
-  {col:1, y:38,  s:108},
-  {col:2, y:44,  s:96},
-  {col:0, y:73,  s:100},
-  {col:2, y:75,  s:102}
-];
+// El layout de las burbujas se calcula dinámicamente en renderBubbles()
+// según el número de invitados (grilla de 3 columnas que crece hacia abajo).
 
 function renderBubbles(){
   const stage = document.getElementById("bubblesStage");
   const stageW = stage.offsetWidth || 340;
   const floatClasses = ["f-a","f-b","f-c"];
   const cols = 3;
+  const n = invites.length;
+  const rows = Math.ceil(n / cols) || 1;
+  const rowH = 132;
+  const baseSize = 94;
+  const sizeJitter = [10, 0, 14, 4, 12, 2];
+  const yJitter = [0, 16, 6, 14, 2, 20];
+  // La altura del escenario crece segun cuantos invitados haya
+  stage.style.height = (rows * rowH + 24) + "px";
   stage.innerHTML = invites.map((inv, i) => {
-    const lay = bubbleLayout[i % bubbleLayout.length];
-    const s = lay.s;
-    // Centro de cada columna repartido en todo el ancho
-    const colCenter = (lay.col + 0.5) / cols * stageW;
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const s = baseSize + sizeJitter[i % sizeJitter.length];
+    const colCenter = (col + 0.5) / cols * stageW;
     let left = Math.round(colCenter - s/2);
-    // Mantener dentro de los bordes
     left = Math.max(2, Math.min(left, stageW - s - 2));
-    const top = lay.y * 4;
+    const top = row * rowH + yJitter[i % yJitter.length];
     const name = lang==="fr" ? inv.nameFr : inv.nameEs;
     const photoStyle = inv.photo ? `background-image:url('${inv.photo}');background-size:cover;background-position:center;` : `background:${inv.color};`;
     const inner = inv.photo
@@ -1450,7 +1430,7 @@ const YT_CHANNEL_URL = "https://www.youtube.com/@festivalbiarritzameriquelatine"
 // Como sacarlo: entra al canal en YouTube > Personalizar canal > Configuracion avanzada,
 // o mira la URL cuando estas en la pestaña "Acerca de" del canal.
 // Mientras este vacio, se muestra el boton al canal en vez del reproductor embebido.
-const YT_CHANNEL_ID = "";
+const YT_CHANNEL_ID = "UCqoujwcLhtR21CxqC9HBrVw";
 
 function renderFbalTv(){
   const wrap = document.getElementById("fbaltvWrap");
@@ -1562,7 +1542,7 @@ function renderEnVivo(){
 
 const catColors = {
   cine:["#122a76","#5FA8F0"], musica:["#122a76","#E2483D"], debate:["#122a76","#A79CFF"],
-  litterature:["#122a76","#F4C430"], taller:["#122a76","#6FCB6B"]
+  litterature:["#122a76","#F4C430"], taller:["#122a76","#6FCB6B"], baltv:["#122a76","#FF6FB5"]
 };
 
 function openModal(id){
@@ -1756,7 +1736,8 @@ function renderCats(){
 function renderProgramme(){
   renderCats();
   const list = document.getElementById("programmeList");
-  const filtered = events.filter(e=>e.day===curDay && (curCat==="all"||e.cat===curCat));
+  const filtered = events.filter(e=>e.day===curDay && (curCat==="all"||e.cat===curCat))
+    .sort((a,b)=> a.time.localeCompare(b.time));
   list.innerHTML = filtered.length ? filtered.map((e,i)=>eventCardHtml(e,i)).join("") : `<div class="empty">${t().emptyProg}</div>`;
 }
 

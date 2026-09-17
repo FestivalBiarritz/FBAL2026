@@ -1,4 +1,4 @@
-const CACHE_NAME = "bal-app-v17";
+const CACHE_NAME = "bal-app-v18";
 const ASSETS = ["/", "/index.html", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
