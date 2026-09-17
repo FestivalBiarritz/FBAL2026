@@ -604,18 +604,6 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
       </a>
 
-      <div class="section-label" id="lblRadio">Radio</div>
-      <a class="radio-card" href="http://live.radio-campus.org:8000/klapperstein" target="_blank" rel="noopener">
-        <div class="radio-ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11h16a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z"/><circle cx="8" cy="16" r="2.5"/><path d="M16 15h2M16 18h2M18 5 8.5 10"/></svg>
-        </div>
-        <div style="flex:1;">
-          <div class="radio-name" id="radioTitle">Écouter la radio</div>
-          <div class="radio-sub" id="radioSub">Radio Campus · en direct</div>
-        </div>
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-      </a>
-
       <div class="section-label" id="lblPlaylist">Playlist 2026</div>
       <iframe class="spotify-embed" src="https://open.spotify.com/embed/playlist/0zkYzpI86jA9wcD6oYQAOQ?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
@@ -690,7 +678,7 @@
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
 
-      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v6.5</div>
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v6.6</div>
     </section>
 
   </main>
@@ -797,7 +785,6 @@ const i18n = {
     emptyProg:"Aucune activité pour ce filtre", emptyFav:"Pas encore de favoris — touchez le cœur d'une activité pour l'ajouter ici",
     social:"Suivez le festival", hashtag:"Hashtag du festival", hashtagSub:"Partagez vos photos avec ce tag",
     playlist:"Playlist 2026", goodies:"Boutique du festival", goodiesSub:"Disponible sur BilletWeb",
-    radioLbl:"Radio", radioTitle:"Écouter la radio", radioSub:"Radio Campus · en direct",
     billet:"Billetterie", ticketBtn:"Acheter mes billets", soon:"Bientôt",
     venir:"Comment venir à Biarritz", lieux:"Découvrez les lieux du festival", maps:"Voir le plan d'accès", hotels:"Hôtels partenaires", restos:"Restaurants partenaires", partnersLbl:"Partenaires du festival"
   },
@@ -817,7 +804,6 @@ const i18n = {
     emptyProg:"Sin actividades para este filtro", emptyFav:"Aún no tienes favoritos — toca el corazón de una actividad para agregarla aquí",
     social:"Sigue al festival", hashtag:"Hashtag del festival", hashtagSub:"Comparte tus fotos con este tag",
     playlist:"Playlist 2026", goodies:"Tienda del festival", goodiesSub:"Disponible en BilletWeb",
-    radioLbl:"Radio", radioTitle:"Escuchar la radio", radioSub:"Radio Campus · en directo",
     billet:"Boletería", ticketBtn:"Comprar mis boletos", soon:"Pronto",
     venir:"Cómo llegar a Biarritz", lieux:"Descubre los lugares del festival", maps:"Ver el mapa de acceso", hotels:"Hoteles colaboradores", restos:"Restaurantes colaboradores", partnersLbl:"Partners del festival"
   }
@@ -1619,7 +1605,13 @@ function openModal(id){
     trailerBtn.style.display = "none";
   }
 
-  document.getElementById("modalTicketBtn").textContent = t().ticketBtn;
+  const ticketBtn = document.getElementById("modalTicketBtn");
+  if(e.gratuit){
+    ticketBtn.style.display = "none";
+  } else {
+    ticketBtn.style.display = "block";
+    ticketBtn.textContent = t().ticketBtn;
+  }
 
   document.getElementById("modalOverlay").classList.add("open");
 }
@@ -1725,9 +1717,6 @@ function renderHeader(){
   document.getElementById("lblHashtag").textContent = t().hashtag;
   document.getElementById("hashtagSub").textContent = t().hashtagSub;
   document.getElementById("lblPlaylist").textContent = t().playlist;
-  document.getElementById("lblRadio").textContent = t().radioLbl;
-  document.getElementById("radioTitle").textContent = t().radioTitle;
-  document.getElementById("radioSub").textContent = t().radioSub;
   document.getElementById("lblGoodies").textContent = t().goodies;
   document.getElementById("goodiesSub").textContent = t().goodiesSub;
   document.getElementById("goodiesSoon").textContent = t().soon;
