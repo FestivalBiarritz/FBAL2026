@@ -311,26 +311,32 @@
   .plus-chevron{ width:15px; height:15px; color:var(--text-tertiary); }
 
   /* EN VIVO */
-  .en-vivo-block{
+  .en-vivo-box{
     border:1.5px solid var(--coral); border-radius:var(--radius-lg); padding:12px 14px;
-    margin-bottom:16px; display:flex; gap:10px; align-items:center; cursor:pointer;
-    animation: breathe 2.6s ease-in-out infinite;
+    margin-bottom:16px; animation: breathe 2.6s ease-in-out infinite;
   }
   @keyframes breathe{
     0%,100%{ box-shadow:0 0 0 0 rgba(226,72,61,0.35); border-color:var(--coral); }
     50%{ box-shadow:0 0 14px 2px rgba(226,72,61,0.25); border-color:#FF6B5B; }
   }
+  .en-vivo-head{ display:flex; align-items:center; gap:7px; margin-bottom:10px; }
+  .en-vivo-head-label{ font-size:11px; font-weight:700; color:var(--coral); text-transform:uppercase; letter-spacing:0.6px; }
+  .en-vivo-item{
+    display:flex; gap:10px; align-items:center; cursor:pointer;
+    padding:9px 10px; border-radius:var(--radius-md); background:var(--bg);
+    margin-top:7px;
+  }
+  .en-vivo-item:first-of-type{ margin-top:0; }
   .en-vivo-dot{
-    width:10px; height:10px; border-radius:50%; background:var(--coral); flex-shrink:0;
+    width:9px; height:9px; border-radius:50%; background:var(--coral); flex-shrink:0;
     animation: pulse 1.4s ease-in-out infinite;
   }
   @keyframes pulse{
     0%,100%{ opacity:1; transform:scale(1); }
     50%{ opacity:0.45; transform:scale(0.8); }
   }
-  .en-vivo-label{ font-size:10px; font-weight:700; color:var(--coral); text-transform:uppercase; letter-spacing:0.5px; }
-  .en-vivo-title{ font-size:14px; font-weight:600; }
-  .en-vivo-meta{ font-size:12px; color:var(--text-secondary); }
+  .en-vivo-title{ font-size:13.5px; font-weight:600; }
+  .en-vivo-meta{ font-size:11.5px; color:var(--text-secondary); margin-top:1px; }
 
   /* BURBUJAS INVITADOS */
   .bubbles-hint{ font-size:12px; color:var(--text-tertiary); text-align:center; margin-bottom:14px; }
@@ -678,7 +684,7 @@
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
 
-      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v6.6</div>
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v6.8</div>
     </section>
 
   </main>
@@ -908,7 +914,7 @@ const events = [
   {id:"e67", day:3, cat:"cine", time:"17:30", dur:102, fr:"CENIZA EN LA BOCA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Diego Luna. Mexique - Espagne. Lucila quitte le Mexique avec son petit frère pour retrouver leur mère à Madrid, partie quelques années plus tôt à la recherche d'un avenir meilleur. Quand ils arrivent enfin, la réalité amère et étouffante qui les attend s'avère bien plus dure que ce que Lucila avait imaginé. Malgré tout, elle est déterminée à tirer le meilleur parti de cette nouvelle vie fragile. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Diego Luna. Mexique - Espagne.", slug:"ceniza-en-la-boca", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/ceniza-en-la-boca_1-700x293.jpeg", video:null},
   {id:"e68", day:3, cat:"cine", time:"18:00", dur:105, fr:"DICIEMBRE", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Lucas Gallo. Uruguay - Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Lucas Gallo. Uruguay - Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"diciembre", video:"WpToZNa6UFM"},
   {id:"e69", day:3, cat:"cine", time:"18:45", dur:68, fr:"EL NIÑO QUE SUEÑA", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Andrés Varela. Uruguay - France. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Andrés Varela. Uruguay - France. Con la presencia del equipo de la película o de un invitado.", slug:"el-nino-que-suena", video:null},
-  {id:"e70", day:3, cat:"cine", time:"20:00", dur:112, fr:"LA PERRA", place:"Gare du Midi", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : Dominga Sotomayor. Chili - Brésil.", descEs:"Dirección: Dominga Sotomayor. Chili - Brésil.", slug:"la-perra", video:null},
+  {id:"e70", day:3, cat:"cine", time:"20:30", dur:112, fr:"LA PERRA", place:"Gare du Midi", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : Dominga Sotomayor. Chili - Brésil.", descEs:"Dirección: Dominga Sotomayor. Chili - Brésil.", slug:"la-perra", video:null},
   {id:"e71", day:3, cat:"cine", time:"20:15", dur:106, fr:"NOSOTRAS", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Priscilla Aguirre. Équateur. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Priscilla Aguirre. Équateur. Con la presencia del equipo de la película o de un invitado.", slug:"nosotras-2", video:null},
   {id:"e72", day:3, cat:"cine", time:"20:30", dur:108, fr:"LE DÉGEL", place:"Royal", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", payant:true, descFr:"Réalisation : Manuela Martinelli. Chili - États-Unis - Espagne - Mexique.", descEs:"Dirección: Manuela Martinelli. Chili - États-Unis - Espagne - Mexique.", slug:"le-degel", video:null},
   {id:"e73", day:3, cat:"musica", time:"18:00", dur:60, fr:"CONFÉRENCE MUSICALE — Lorenzo Salvador", place:"Village", gratuit:true, descFr:"France - Brésil. Conférence musicale.", descEs:"Francia - Brasil. Conferencia musical.", slug:"lorenzo-salvador-ma-flo", video:null},
@@ -1506,9 +1512,10 @@ function renderEnVivo(){
     dayIndex = Math.floor((now - FEST_START)/(1000*60*60*24));
     hm = now.getHours()*60 + now.getMinutes();
   } else if(DEMO_MODE){
-    // Fuera de fechas: mostrar un ejemplo (dia de apertura, 18:30)
-    dayIndex = 0;
-    hm = 18*60 + 30;
+    // Fuera de fechas: mostrar un ejemplo en un momento con varias cosas a la vez
+    // Lundi 28 (day 2) à 18h15 : plusieurs séances + BAL TV en simultané
+    dayIndex = 2;
+    hm = 18*60 + 15;
     isExample = true;
   } else {
     wrap.innerHTML = "";
@@ -1525,27 +1532,32 @@ function renderEnVivo(){
 
   if(!happening.length){ wrap.innerHTML=""; return; }
 
-  const label = isExample
-    ? (lang==="fr" ? "En direct (exemple)" : "En vivo (ejemplo)")
-    : t().enVivoLabel;
+  const headLabel = isExample
+    ? (lang==="fr" ? "En direct maintenant (exemple)" : "En vivo ahora (ejemplo)")
+    : (lang==="fr" ? "En direct maintenant" : "En vivo ahora");
 
-  const html = happening.map(e=>{
-    const title = lang==="fr" ? e.fr : e.es;
+  const cards = happening.map(e=>{
+    const title = lang==="fr" ? e.fr : (e.es || e.fr);
     const end = addMin(e.time, e.dur);
     const hasDetail = !!e.descFr;
-    return `<div class="en-vivo-block" ${hasDetail?`onclick="openModal('${e.id}')"`:"onclick=\"switchTab('programme')\""}>
-      <div>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
-          <div class="en-vivo-dot"></div>
-          <span class="en-vivo-label">${label}</span>
-        </div>
+    const accent = catAccent[e.cat] || "var(--coral)";
+    return `<div class="en-vivo-item" style="border-left:3px solid ${accent};" ${hasDetail?`onclick="openModal('${e.id}')"`:"onclick=\"switchTab('programme')\""}>
+      <div style="flex:1; min-width:0;">
         <div class="en-vivo-title">${title}</div>
         <div class="en-vivo-meta">${e.place} · ${e.time}–${end}</div>
       </div>
-      <svg style="flex-shrink:0;opacity:0.5;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      <svg style="flex-shrink:0;opacity:0.5;" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </div>`;
   }).join("");
-  wrap.innerHTML = html;
+
+  wrap.innerHTML = `
+    <div class="en-vivo-box">
+      <div class="en-vivo-head">
+        <span class="en-vivo-dot"></span>
+        <span class="en-vivo-head-label">${headLabel}</span>
+      </div>
+      ${cards}
+    </div>`;
 }
 
 const catColors = {
