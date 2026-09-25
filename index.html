@@ -165,6 +165,8 @@
   .tag.renc{ background:var(--sky-light); color:var(--sky); }
   .tag.payant{ background:var(--sky-light); color:var(--sky); }
   .tag.gratuit{ background:var(--green-light); color:var(--green); }
+  .tag.invite{ background:rgba(255,255,255,0.16); color:#fff; display:inline-flex; align-items:center; gap:4px; }
+  .tag.invite .guest-ico{ width:12px; height:12px; }
   .fav-btn{ background:none; border:none; cursor:pointer; padding:2px; flex-shrink:0; }
   .fav-btn svg{ width:19px; height:19px; }
   .fav-btn.pop svg{ animation: heart-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -340,24 +342,6 @@
 
   /* BURBUJAS INVITADOS */
   .bubbles-hint{ font-size:12px; color:var(--text-tertiary); text-align:center; margin-bottom:14px; }
-
-  /* LISTA DE INVITADOS */
-  .inv-section{ margin-bottom:20px; }
-  .inv-section-head{ display:flex; align-items:center; gap:8px; margin:6px 0 8px; }
-  .inv-section-bar{ width:4px; height:15px; border-radius:2px; }
-  .inv-section-title{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:var(--text-secondary); }
-  .inv-section-count{ font-size:11px; color:var(--text-tertiary); font-weight:600; }
-  .inv-card{ background:var(--bg-secondary); border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border); }
-  .inv-row{ display:flex; align-items:center; gap:12px; padding:12px 13px; cursor:pointer; border-bottom:1px solid var(--border); transition:background 0.12s ease; }
-  .inv-row:last-child{ border-bottom:none; }
-  .inv-row:active{ background:rgba(255,255,255,0.05); }
-  .inv-avatar{ flex-shrink:0; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; }
-  .inv-info{ flex:1; min-width:0; }
-  .inv-name{ font-size:14.5px; font-weight:650; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .inv-sub{ font-size:11.5px; color:var(--text-secondary); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .inv-slot{ font-size:11px; color:var(--coral); font-weight:600; margin-top:3px; }
-  .inv-chevron{ flex-shrink:0; color:var(--text-tertiary); }
-  .inv-modal-slot{ display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; color:var(--coral); background:rgba(226,72,61,0.10); border-radius:10px; padding:9px 11px; margin-bottom:13px; }
   .bubbles-stage{
     position:relative; width:100%; height:460px;
   }
@@ -588,7 +572,7 @@
     <section class="view active" id="view-accueil">
       <div id="enVivoWrap"></div>
 
-      <div class="section-label" id="lblFbaltv">BAL TV</div>
+      <div class="section-label" id="lblFbaltv">FBAL TV</div>
       <div id="fbaltvWrap"></div>
 
       <div class="section-label" id="lblAftermovie">Aftermovie 2025</div>
@@ -642,9 +626,8 @@
 
     <section class="view" id="view-invites">
       <div class="section-label" id="lblInvites">Les invités</div>
-      <div class="bubbles-hint" id="invitesHint">Appuyez sur un nom pour voir sa séance</div>
-      <div class="cat-row" id="inviteGroupRow"></div>
-      <div id="invitesList"></div>
+      <div class="bubbles-hint" id="invitesHint">Appuyez sur une bulle pour découvrir l'invité·e</div>
+      <div class="bubbles-stage" id="bubblesStage"></div>
     </section>
 
     <section class="view" id="view-favoris">
@@ -703,7 +686,7 @@
       <div class="section-label" id="lblPartners">Partenaires du festival</div>
       <div id="partnersList"></div>
 
-      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v7.5</div>
+      <div style="text-align:center; margin-top:24px; font-size:10px; color:var(--text-tertiary);">FBAL app · v6.9</div>
     </section>
 
   </main>
@@ -786,9 +769,8 @@
       </div>
     </div>
     <div class="modal-body">
-      <div id="inviteModalSlot" class="inv-modal-slot" style="display:none;"></div>
       <div id="inviteModalBio" style="font-size:13.5px; line-height:1.6; color:var(--text-secondary); margin-bottom:14px;"></div>
-      <a class="modal-ticket-btn" id="inviteModalLink" style="background:var(--yellow); color:var(--navy); display:none; cursor:pointer;"></a>
+      <a class="modal-ticket-btn" id="inviteModalLink" target="_blank" rel="noopener" style="background:var(--yellow); color:var(--navy); display:none;"></a>
     </div>
   </div>
 </div>
@@ -799,16 +781,15 @@ const i18n = {
     sub: "cinémas & cultures · 35e édition",
     tabs: {accueil:"Accueil", programme:"Programme", invites:"Invité·es", favoris:"Favoris", stands:"Village", infos:"Infos", plus:"Plus"},
     plusBillets:"Mes billets", pratiques:"Infos pratiques", pratiquesHint:"plan · hôtels · restos",
-    invites:"Les invité·e·s", invitesHint:"Appuyez sur un nom pour voir sa séance",
-    inviteGroups:{all:"Tous", cine:"Réalisateurs", interp:"Acteurs", lit:"Littérature", jury:"Jury", inst:"Institutionnel"},
+    invites:"Les invité·e·s", invitesHint:"Appuyez sur une bulle pour découvrir l'invité·e",
     enVivoLabel:"En ce moment", enVivoEmpty:"",
     inviteLinkFilm:"Voir le film", inviteLinkLivre:"Voir le livre", inviteLinkPlus:"En savoir plus",
     aftermovie:"Aftermovie 2025", website:"Site officiel du festival", ctaProgramme:"Voir le programme",
     standSocial:"Voir sur Instagram", standSocialPending:"Réseaux à venir",
-    cats: {all:"Tout", cine:"Cinéma", musica:"Musique", debate:"Débats", litterature:"Littérature", baltv:"BAL TV", taller:"Ateliers"},
+    cats: {all:"Tout", cine:"Cinéma", musica:"Musique", debate:"Débats", litterature:"Littérature", taller:"Ateliers"},
     standCats: {all:"Tout", food:"Gastronomie", craft:"Artisanat", atelier:"Ateliers"},
     typeLabels: {compet_long:"Compét. — long métrage", compet_court:"Compét. — court métrage", compet_fiction:"Compét. — fiction", hors:"Hors compétition", avant:"Avant-première", focus:"Focus"},
-    payant:"Payant", gratuit:"Gratuit", fin:"fin",
+    payant:"Payant", gratuit:"Gratuit", fin:"fin", invite:"Invité·e",
     emptyProg:"Aucune activité pour ce filtre", emptyFav:"Pas encore de favoris — touchez le cœur d'une activité pour l'ajouter ici",
     social:"Suivez le festival", hashtag:"Hashtag du festival", hashtagSub:"Partagez vos photos avec ce tag",
     playlist:"Playlist 2026", goodies:"Boutique du festival", goodiesSub:"Disponible sur BilletWeb",
@@ -819,16 +800,15 @@ const i18n = {
     sub: "cines & culturas · 35.ª edición",
     tabs: {accueil:"Inicio", programme:"Programa", invites:"Invitados", favoris:"Favoritos", stands:"Village", infos:"Info", plus:"Más"},
     plusBillets:"Mis boletos", pratiques:"Info práctica", pratiquesHint:"mapa · hoteles · restos",
-    invites:"Los invitados", invitesHint:"Toca un nombre para ver su sesión",
-    inviteGroups:{all:"Todos", cine:"Directores", interp:"Actores", lit:"Literatura", jury:"Jurado", inst:"Institucional"},
+    invites:"Los invitados", invitesHint:"Toca una burbuja para descubrir al invitado",
     enVivoLabel:"Ahora mismo", enVivoEmpty:"",
     inviteLinkFilm:"Ver la película", inviteLinkLivre:"Ver el libro", inviteLinkPlus:"Más info",
     aftermovie:"Aftermovie 2025", website:"Sitio oficial del festival", ctaProgramme:"Ver el programa",
     standSocial:"Ver en Instagram", standSocialPending:"Redes próximamente",
-    cats: {all:"Todo", cine:"Cine", musica:"Música", debate:"Debates", litterature:"Literatura", baltv:"BAL TV", taller:"Talleres"},
+    cats: {all:"Todo", cine:"Cine", musica:"Música", debate:"Debates", litterature:"Literatura", taller:"Talleres"},
     standCats: {all:"Todo", food:"Gastronomía", craft:"Artesanía", atelier:"Talleres"},
     typeLabels: {compet_long:"Competencia — largometraje", compet_court:"Competencia — cortometraje", compet_fiction:"Competencia — ficción", hors:"Fuera de competencia", avant:"Avant-première", focus:"Focus"},
-    payant:"De pago", gratuit:"Gratis", fin:"fin",
+    payant:"De pago", gratuit:"Gratis", fin:"fin", invite:"Invitado",
     emptyProg:"Sin actividades para este filtro", emptyFav:"Aún no tienes favoritos — toca el corazón de una actividad para agregarla aquí",
     social:"Sigue al festival", hashtag:"Hashtag del festival", hashtagSub:"Comparte tus fotos con este tag",
     playlist:"Playlist 2026", goodies:"Tienda del festival", goodiesSub:"Disponible en BilletWeb",
@@ -853,7 +833,7 @@ const days = [
   {label:"2 oct", date:"2026-10-02"}
 ];
 
-const cats = ["all","cine","musica","debate","litterature","baltv"];
+const cats = ["all","cine","musica","debate","litterature"];
 const standCatsList = ["all","craft","food","atelier"];
 
 const catIcons = {
@@ -868,7 +848,7 @@ const catIcons = {
 // id is unique key, fr/es title, type for cine items, dur minutes, day index (0-6), cat
 const events = [
   {id:"e1", day:0, cat:"cine", time:"10:30", dur:106, fr:"PARA VIVIR", place:"Gare du Midi", type:"focus", tagFr:"Focus Cuba", tagEs:"Focus Cuba", payant:true, descFr:"Réalisation : Fabien Pisani. Mexique - Espagne - Cuba - États-Unis.", descEs:"Dirección: Fabien Pisani. Mexique - Espagne - Cuba - États-Unis.", slug:"para-vivir", video:null},
-  {id:"e2", day:0, cat:"cine", time:"11:00", dur:100, fr:"MAL DÍA PARA PESCAR", place:"Casino", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Álvaro Brechner. Uruguay - Espagne. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Álvaro Brechner. Uruguay - Espagne. Con la presencia del equipo de la película o de un invitado.", slug:"mal-dia-para-pescar", video:"5_dYDNnXiew"},
+  {id:"e2", day:0, cat:"cine", time:"11:00", dur:100, fr:"MAL DÍA PARA PESCAR", place:"Casino", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Álvaro Brechner. Uruguay - Espagne. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Álvaro Brechner. Uruguay - Espagne. Con la presencia del equipo de la película o de un invitado.", slug:"mal-dia-para-pescar", video:null},
   {id:"e3", day:0, cat:"cine", time:"13:30", dur:100, fr:"SIEMPRE SERÉ TU ANIMAL MATERNO", place:"Gare du Midi", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : Valentina Maurel. Belgique - France - Mexique. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Valentina Maurel. Belgique - France - Mexique. Con la presencia del equipo de la película o de un invitado.", slug:"siempre-sere-tu-animal-materno", video:null},
   {id:"e4", day:0, cat:"cine", time:"14:15", dur:163, fr:"JUAN, COMO SI NADA HUBIERA SUCEDIDO", place:"Casino", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", payant:true, descFr:"Réalisation : Carlos Echeverría. Argentine - Allemagne. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Carlos Echeverría. Argentine - Allemagne. Con la presencia del equipo de la película o de un invitado.", slug:"juan-como-si-nada-hubiera-sucedido", video:null},
   {id:"e5", day:0, cat:"litterature", time:"17:30", dur:60, fr:"RENCONTRE LITTÉRAIRE — Carmen Posadas", place:"Salon amb", type:"renc", tagFr:"Rencontre littéraire", tagEs:"Encuentro literario", gratuit:true, descFr:"Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"carmen-posadas", video:null},
@@ -881,10 +861,10 @@ const events = [
   {id:"e12", day:1, cat:"cine", time:"10:00", dur:97, fr:"LOS NIÑOS SIN TIERRA", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : René Ballesteros. France - Chili.", descEs:"Dirección: René Ballesteros. France - Chili.", slug:"los-ninos-sin-tierra", video:null},
   {id:"e13", day:1, cat:"cine", time:"12:00", dur:72, fr:"A FABULOSA MÁQUINA DO TEMPO", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Eliza Capai. Brésil. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Eliza Capai. Brésil. Con la presencia del equipo de la película o de un invitado.", slug:"a-fabulosa-maquina-do-tempo", video:"7uYd6XInhQI"},
   {id:"e14", day:1, cat:"litterature", time:"12:15", dur:60, fr:"RENCONTRE LITTÉRAIRE — URUGUAY", place:"Salon amb", type:"renc", tagFr:"Rencontre littéraire", tagEs:"Encuentro literario", gratuit:true, descFr:"Réalisation : Sergio Blanco, Leonor Courtoisie, Diego Recoba. Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Sergio Blanco, Leonor Courtoisie, Diego Recoba. Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"montevideo-ville-lettree", video:null},
-  {id:"e15", day:1, cat:"cine", time:"12:30", dur:101, fr:"NARCISO", place:"Gare du Midi", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", payant:true, descFr:"Réalisation : Marcelo Martinessi. Paraguay - Brésil - Portugal - Allemagne - Espagne - France - Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Marcelo Martinessi. Paraguay - Brésil - Portugal - Allemagne - Espagne - France - Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"narciso", video:"m2KcpHD-UnU"},
+  {id:"e15", day:1, cat:"cine", time:"12:30", dur:101, fr:"NARCISO", place:"Gare du Midi", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", payant:true, descFr:"Réalisation : Marcelo Martinessi. Paraguay - Brésil - Portugal - Allemagne - Espagne - France - Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Marcelo Martinessi. Paraguay - Brésil - Portugal - Allemagne - Espagne - France - Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"narciso", video:null},
   {id:"e16", day:1, cat:"cine", time:"13:45", dur:100, fr:"LOS VENCEDORES", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Pablo Aparo. Argentine.", descEs:"Dirección: Pablo Aparo. Argentine.", slug:"los-vencedores", video:"8WJPOe7IcR0"},
   {id:"e17", day:1, cat:"debate", time:"14:45", dur:60, fr:"RENCONTRE IHEAL — URUGUAY", place:"Salon amb", type:"renc", tagFr:"Rencontre IHEAL", tagEs:"Encuentro IHEAL", gratuit:true, descFr:"Réalisation : Vania Markarian, Eléonore Wurgler, Enrique Loedel. Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Vania Markarian, Eléonore Wurgler, Enrique Loedel. Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"montevideo-ville-lettree", video:null},
-  {id:"e18", day:1, cat:"cine", time:"15:15", dur:102, fr:"CENIZA EN LA BOCA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Diego Luna. Mexique - Espagne. Lucila quitte le Mexique avec son petit frère pour retrouver leur mère à Madrid, partie quelques années plus tôt à la recherche d'un avenir meilleur. Quand ils arrivent enfin, la réalité amère et étouffante qui les attend s'avère bien plus dure que ce que Lucila avait imaginé. Malgré tout, elle est déterminée à tirer le meilleur parti de cette nouvelle vie fragile. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Diego Luna. Mexique - Espagne. Con la presencia del equipo de la película o de un invitado.", slug:"ceniza-en-la-boca", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/ceniza-en-la-boca_1-700x293.jpeg", video:"y6sfS-cqLIc"},
+  {id:"e18", day:1, cat:"cine", time:"15:15", dur:102, fr:"CENIZA EN LA BOCA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Diego Luna. Mexique - Espagne. Lucila quitte le Mexique avec son petit frère pour retrouver leur mère à Madrid, partie quelques années plus tôt à la recherche d'un avenir meilleur. Quand ils arrivent enfin, la réalité amère et étouffante qui les attend s'avère bien plus dure que ce que Lucila avait imaginé. Malgré tout, elle est déterminée à tirer le meilleur parti de cette nouvelle vie fragile. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Diego Luna. Mexique - Espagne. Con la presencia del equipo de la película o de un invitado.", slug:"ceniza-en-la-boca", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/ceniza-en-la-boca_1-700x293.jpeg", video:null},
   {id:"e19", day:1, cat:"cine", time:"15:45", dur:77, fr:"CYRANO EN MI CABEZA", place:"Casino", type:"hors", tagFr:"Hors compétition", tagEs:"Fuera de competencia", payant:true, descFr:"Réalisation : Maxi Gutierrez. Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Maxi Gutierrez. Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"cyrano-en-mi-cabeza", video:null},
   {id:"e20", day:1, cat:"debate", time:"17:30", dur:60, fr:"CLIN D'ŒIL AU THÉÂTRE PORTEÑO", place:"Salon amb", type:"renc", tagFr:"Rencontre", tagEs:"Encuentro", gratuit:true, descFr:"Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"clin-doeil-theatre-porteno", video:null},
   {id:"e21", day:1, cat:"cine", time:"18:00", dur:105, fr:"DICIEMBRE", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Lucas Gallo. Argentine - Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Lucas Gallo. Argentine - Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"diciembre", video:"WpToZNa6UFM"},
@@ -897,7 +877,7 @@ const events = [
   {id:"e28", day:1, cat:"musica", time:"22:30", dur:90, fr:"DJ SET — MaxOne", place:"Village", gratuit:true, descFr:"Colombie. Latin fusion.", descEs:"Colombie. Latin fusion.", slug:"maxone-dimanche-27", video:null},
   {id:"e29", day:2, cat:"cine", time:"10:00", dur:95, fr:"HIEDRA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Ana Cristina Barragán. Équateur - Mexique - France - Espagne. Azucena espionne des adolescents d'un orphelinat qui vivent comme frères et sœurs. À 30 ans, elle est restée figée dans le passé à cause d'un événement marquant. Bien que leurs mondes sociaux les séparent, Azucena cherche quelque chose dans le groupe et se concentre particulièrement sur Julio, 17 ans. La blessure, l'attirance, le rire et la tendresse marquent leur rencontre.", descEs:"Dirección: Ana Cristina Barragán. Équateur - Mexique - France - Espagne.", slug:"hiedra", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/09/hiedra-700x467.jpg", video:"w330shSCmOY"},
   {id:"e30", day:2, cat:"cine", time:"10:00", dur:90, fr:"CHICAS TRISTES", place:"Casino", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", payant:true, descFr:"Réalisation : Fernanda Tovar. Mexique - Espagne.", descEs:"Dirección: Fernanda Tovar. Mexique - Espagne.", slug:"chicas-tristes", video:null},
-  {id:"e31", day:2, cat:"cine", time:"10:15", dur:94, fr:"WHISKY", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Juan Pablo Rebella, Pablo Stoll. Argentine - Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Juan Pablo Rebella, Pablo Stoll. Argentine - Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"whisky-2", video:"rNbNqBVBsHA"},
+  {id:"e31", day:2, cat:"cine", time:"10:15", dur:94, fr:"WHISKY", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Juan Pablo Rebella, Pablo Stoll. Argentine - Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Juan Pablo Rebella, Pablo Stoll. Argentine - Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"whisky-2", video:null},
   {id:"e32", day:2, cat:"cine", time:"12:00", dur:85, fr:"NADA SOBRE NOSOTROS", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Omar Vergara. Équateur.", descEs:"Dirección: Omar Vergara. Équateur.", slug:"nada-sobre-nosotros", video:null},
   {id:"e33", day:2, cat:"cine", time:"12:15", dur:91, fr:"NUNKUI", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Verenice Benítez. Équateur - Chili - Allemagne. Nunkui, une jeune Shuar, rêve de l'esprit féminin du potager qui porte le même nom qu'elle. Alors qu'elle apprend de sa grand-tante les chants et les secrets de leur culture, sa communauté est confrontée à des expulsions dues à l'arrivée de sociétés minières. Entre rêves prémonitoires, esprits et la lutte de son grand-père pour le territoire, Nunkui découvre sa place dans le monde. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Verenice Benítez. Équateur - Chili - Allemagne.", slug:"nunkui", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/1.-00-03-06-19_still_nunkui-700x378.jpg", video:"PT08V2h_ot4"},
   {id:"e34", day:2, cat:"cine", time:"11:00", dur:86, fr:"BOGOSHORTS — ADULTES", place:"Royal", type:"hors", tagFr:"Hors compétition", tagEs:"Fuera de competencia", gratuit:true, descFr:"Colombie.", descEs:"Colombie.", slug:"bogoshorts-adultes", video:null},
@@ -910,7 +890,7 @@ const events = [
   {id:"e41", day:2, cat:"cine", time:"15:45", dur:115, fr:"THÉÂTRE PORTEÑO — RICARDO III", place:"Royal", type:"hors", tagFr:"Hors compétition", tagEs:"Fuera de competencia", payant:true, descFr:"Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"theatre-porteno-ricardo-iii", video:null},
   {id:"e42", day:2, cat:"debate", time:"16:00", dur:60, fr:"TABLE RONDE — CUBA", place:"Salon amb", type:"renc", tagFr:"Rencontre", tagEs:"Encuentro", gratuit:true, descFr:"Cuba. En présence de l'équipe du film ou d'un invité.", descEs:"Cuba. Con la presencia del equipo de la película o de un invitado.", slug:"table-ronde-cuba", video:null},
   {id:"e43", day:2, cat:"cine", time:"16:30", dur:70, fr:"NIÑAS ESCARLATA", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Paula Cury. République dominicaine - Mexique - Allemagne.", descEs:"Dirección: Paula Cury. République dominicaine - Mexique - Allemagne.", slug:"ninas-escarlata", video:"27GXt8Jpewc"},
-  {id:"e44", day:2, cat:"cine", time:"17:45", dur:98, fr:"UN FUTURO BRILLANTE", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Lucía Garibaldi. Uruguay - Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Lucía Garibaldi. Uruguay - Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"un-futuro-brillante", video:"2-FI1TYFMdw"},
+  {id:"e44", day:2, cat:"cine", time:"17:45", dur:98, fr:"UN FUTURO BRILLANTE", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Lucía Garibaldi. Uruguay - Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Lucía Garibaldi. Uruguay - Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"un-futuro-brillante", video:null},
   {id:"e45", day:2, cat:"cine", time:"18:00", dur:95, fr:"CORAÇÃO DE LONA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Tuca Siqueira. Brésil.", descEs:"Dirección: Tuca Siqueira. Brésil.", slug:"coracao-de-lona", video:null},
   {id:"e46", day:2, cat:"cine", time:"18:15", dur:72, fr:"A FABULOSA MÁQUINA DO TEMPO", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Eliza Capai. Brésil. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Eliza Capai. Brésil. Con la presencia del equipo de la película o de un invitado.", slug:"a-fabulosa-maquina-do-tempo", video:"7uYd6XInhQI"},
   {id:"e47", day:2, cat:"cine", time:"18:15", dur:52, fr:"LA FRANCE QUILAPAYÚN", place:"Royal", type:"hors", tagFr:"Hors compétition", tagEs:"Fuera de competencia", gratuit:true, descFr:"Réalisation : Karine Bonjour. France. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Karine Bonjour. France. Con la presencia del equipo de la película o de un invitado.", slug:"la-france-quilapayun", video:null},
@@ -925,15 +905,15 @@ const events = [
   {id:"e56", day:3, cat:"debate", time:"10:00", dur:120, fr:"RENCONTRE IHEAL — USA / Amérique Latine", place:"Salon amb", type:"renc", tagFr:"Rencontre IHEAL", tagEs:"Encuentro IHEAL", gratuit:true, descFr:"En présence de l'équipe du film ou d'un invité.", descEs:"Con la presencia del equipo de la película o de un invitado.", slug:"rencontres-de-liheal-2026", video:null},
   {id:"e57", day:3, cat:"cine", time:"10:00", dur:39, fr:"BOGOSHORTS — ENFANTS", place:"Royal", type:"hors", tagFr:"Hors compétition", tagEs:"Fuera de competencia", gratuit:true, descFr:"Colombie.", descEs:"Colombie.", slug:"bogoshorts-enfants", video:null},
   {id:"e58", day:3, cat:"cine", time:"10:15", dur:85, fr:"EN LA CALIENTE", place:"Royal", type:"focus", tagFr:"Focus Cuba", tagEs:"Focus Cuba", payant:true, descFr:"Réalisation : Fabien Pisani. Cuba - États-Unis.", descEs:"Dirección: Fabien Pisani. Cuba - États-Unis.", slug:"en-la-caliente", video:null},
-  {id:"e59", day:3, cat:"cine", time:"12:00", dur:76, fr:"QUEMADURA CHINA", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Verónica Perrotta. Brésil - Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Verónica Perrotta. Brésil - Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"quemadura-china", video:"EzslAqMfG3c"},
+  {id:"e59", day:3, cat:"cine", time:"12:00", dur:76, fr:"QUEMADURA CHINA", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Verónica Perrotta. Brésil - Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Verónica Perrotta. Brésil - Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"quemadura-china", video:null},
   {id:"e60", day:3, cat:"cine", time:"12:30", dur:82, fr:"HANGAR ROJO", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Juan Pablo Sallato. Chili - Italie - Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Juan Pablo Sallato. Chili - Italie - Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"hangar-rojo", video:"MV7RhQbSEb0"},
-  {id:"e61", day:3, cat:"cine", time:"13:30", dur:91, fr:"THE PANAMA DECEPTION", place:"Casino", type:"focus", tagFr:"Documentaire", tagEs:"Documental", payant:true, descFr:"Réalisation : Barbara Trent. États-Unis - Royaume-Uni.", descEs:"Dirección: Barbara Trent. États-Unis - Royaume-Uni.", slug:"the-panama-deception", video:"A_YjIs6tYKs"},
+  {id:"e61", day:3, cat:"cine", time:"13:30", dur:91, fr:"THE PANAMA DECEPTION", place:"Casino", type:"focus", tagFr:"Documentaire", tagEs:"Documental", payant:true, descFr:"Réalisation : Barbara Trent. États-Unis - Royaume-Uni.", descEs:"Dirección: Barbara Trent. États-Unis - Royaume-Uni.", slug:"the-panama-deception", video:null},
   {id:"e62", day:3, cat:"debate", time:"13:30", dur:195, fr:"RENCONTRE IHEAL — USA / Amérique Latine", place:"Salon amb", type:"renc", tagFr:"Rencontre IHEAL", tagEs:"Encuentro IHEAL", gratuit:true, descFr:"En présence de l'équipe du film ou d'un invité.", descEs:"Con la presencia del equipo de la película o de un invitado.", slug:"rencontres-de-liheal-2026", video:null},
-  {id:"e63", day:3, cat:"cine", time:"14:30", dur:110, fr:"OJOS BIEN ABIERTOS", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Gonzalo Arijón. Uruguay - France - Argentine - Bolivie - Équateur. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Gonzalo Arijón. Uruguay - France - Argentine - Bolivie - Équateur. Con la presencia del equipo de la película o de un invitado.", slug:"ojos-bien-abiertos-un-viaje-por-la-sudamerica-de-hoy", video:"fzOs9rQiOYo"},
+  {id:"e63", day:3, cat:"cine", time:"14:30", dur:110, fr:"OJOS BIEN ABIERTOS", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Gonzalo Arijón. Uruguay - France - Argentine - Bolivie - Équateur. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Gonzalo Arijón. Uruguay - France - Argentine - Bolivie - Équateur. Con la presencia del equipo de la película o de un invitado.", slug:"ojos-bien-abiertos-un-viaje-por-la-sudamerica-de-hoy", video:null},
   {id:"e64", day:3, cat:"cine", time:"15:00", dur:98, fr:"BYE BYE, PARAÍSO", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Kim Elizondo Navarro. Costa Rica - Uruguay - Colombie. Après une jeunesse pleine de limitations, Vilma, 45 ans, a enfin atteint la vie privilégiée dont elle rêvait. Dans une maison de plage d'une des zones touristiques les plus exclusives du Costa Rica, elle attend seule la visite annuelle de son compagnon américain. Mais cette année, il ne vient pas, coupe la communication et l'argent commence à manquer. Vilma doit affronter le paradis sans son « prince charmant ».", descEs:"Dirección: Kim Elizondo Navarro. Costa Rica - Uruguay - Colombie.", slug:"bye-bye-paraiso", video:"LbfDBcWoipA"},
   {id:"e65", day:3, cat:"cine", time:"15:30", dur:100, fr:"LOS VENCEDORES", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Pablo Aparo. Argentine.", descEs:"Dirección: Pablo Aparo. Argentine.", slug:"los-vencedores", video:"8WJPOe7IcR0"},
   {id:"e66", day:3, cat:"cine", time:"17:15", dur:70, fr:"LE SIÈCLE DE COSTA-GAVRAS — ép. 4", place:"Royal", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", gratuit:true, descFr:"Réalisation : Yannick Kergoat. France. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Yannick Kergoat. France. Con la presencia del equipo de la película o de un invitado.", slug:"le-siecle-de-costa-gavras-episode-4", video:null},
-  {id:"e67", day:3, cat:"cine", time:"17:30", dur:102, fr:"CENIZA EN LA BOCA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Diego Luna. Mexique - Espagne. Lucila quitte le Mexique avec son petit frère pour retrouver leur mère à Madrid, partie quelques années plus tôt à la recherche d'un avenir meilleur. Quand ils arrivent enfin, la réalité amère et étouffante qui les attend s'avère bien plus dure que ce que Lucila avait imaginé. Malgré tout, elle est déterminée à tirer le meilleur parti de cette nouvelle vie fragile. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Diego Luna. Mexique - Espagne.", slug:"ceniza-en-la-boca", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/ceniza-en-la-boca_1-700x293.jpeg", video:"y6sfS-cqLIc"},
+  {id:"e67", day:3, cat:"cine", time:"17:30", dur:102, fr:"CENIZA EN LA BOCA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Diego Luna. Mexique - Espagne. Lucila quitte le Mexique avec son petit frère pour retrouver leur mère à Madrid, partie quelques années plus tôt à la recherche d'un avenir meilleur. Quand ils arrivent enfin, la réalité amère et étouffante qui les attend s'avère bien plus dure que ce que Lucila avait imaginé. Malgré tout, elle est déterminée à tirer le meilleur parti de cette nouvelle vie fragile. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Diego Luna. Mexique - Espagne.", slug:"ceniza-en-la-boca", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/ceniza-en-la-boca_1-700x293.jpeg", video:null},
   {id:"e68", day:3, cat:"cine", time:"18:00", dur:105, fr:"DICIEMBRE", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Lucas Gallo. Uruguay - Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Lucas Gallo. Uruguay - Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"diciembre", video:"WpToZNa6UFM"},
   {id:"e69", day:3, cat:"cine", time:"18:45", dur:68, fr:"EL NIÑO QUE SUEÑA", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Andrés Varela. Uruguay - France. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Andrés Varela. Uruguay - France. Con la presencia del equipo de la película o de un invitado.", slug:"el-nino-que-suena", video:null},
   {id:"e70", day:3, cat:"cine", time:"20:30", dur:112, fr:"LA PERRA", place:"Gare du Midi", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : Dominga Sotomayor. Chili - Brésil.", descEs:"Dirección: Dominga Sotomayor. Chili - Brésil.", slug:"la-perra", video:null},
@@ -945,19 +925,19 @@ const events = [
   {id:"e76", day:3, cat:"musica", time:"22:45", dur:75, fr:"DJ SET — Juan Ma Flo", place:"Village", gratuit:true, descFr:"Mexique. Rock, Jazz.", descEs:"Mexique. Rock, Jazz.", slug:"ma-flo", video:null},
   {id:"e77", day:4, cat:"cine", time:"10:00", dur:91, fr:"NUNKUI", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Verenice Benítez. Équateur - Chili - Allemagne. Nunkui, une jeune Shuar, rêve de l'esprit féminin du potager qui porte le même nom qu'elle. Alors qu'elle apprend de sa grand-tante les chants et les secrets de leur culture, sa communauté est confrontée à des expulsions dues à l'arrivée de sociétés minières. Entre rêves prémonitoires, esprits et la lutte de son grand-père pour le territoire, Nunkui découvre sa place dans le monde. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Verenice Benítez. Équateur - Chili - Allemagne. Con la presencia del equipo de la película o de un invitado.", slug:"nunkui", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/08/1.-00-03-06-19_still_nunkui-700x378.jpg", video:"PT08V2h_ot4"},
   {id:"e78", day:4, cat:"cine", time:"10:00", dur:86, fr:"NADA SOBRE NOSOTROS", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Omar Vergara. Équateur. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Omar Vergara. Équateur. Con la presencia del equipo de la película o de un invitado.", slug:"nada-sobre-nosotros", video:null},
-  {id:"e79", day:4, cat:"cine", time:"10:00", dur:81, fr:"COURTS-MÉTRAGES — Programme 1", place:"Royal", type:"compet", tagFr:"Compétition court", tagEs:"Competencia corto", gratuit:true, descFr:"Compétition courts-métrages (répartie sur les deux séances) : Allá en el cielo (R. Dextre), Caso isolado (J. Facury, E. Lemos Akatoy), Chulquín (L. Pérez Rivera), Época de plagas (G. Calvache), La hora de irse (R. Cozza), Miriam (K. Condado), Norheimsund, Os arcos dourados de Olinda (D. Henrique), Para los contrincantes (F. Luis), Pelotón Trueno (R. Blondeau).", descEs:"Competencia de cortometrajes (repartida en las dos sesiones): Allá en el cielo (R. Dextre), Caso isolado (J. Facury, E. Lemos Akatoy), Chulquín (L. Pérez Rivera), Época de plagas (G. Calvache), La hora de irse (R. Cozza), Miriam (K. Condado), Norheimsund, Os arcos dourados de Olinda (D. Henrique), Para los contrincantes (F. Luis), Pelotón Trueno (R. Blondeau).", slug:"courts-metrages-1", video:null},
-  {id:"e80", day:4, cat:"cine", time:"12:00", dur:96, fr:"NEURÓTICA ANÓNIMA", place:"Royal", type:"focus", tagFr:"Focus Cuba", tagEs:"Focus Cuba", payant:true, descFr:"Réalisation : Jorge Perugorría. Mexique - Cuba. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Jorge Perugorría. Mexique - Cuba. Con la presencia del equipo de la película o de un invitado.", slug:"neurotica-anonima", video:"SD9VtVW2LRI"},
+  {id:"e79", day:4, cat:"cine", time:"10:00", dur:81, fr:"COURTS-MÉTRAGES — Programme 1", place:"Royal", type:"compet", tagFr:"Compétition court", tagEs:"Competencia corto", gratuit:true, descFr:"En présence de l'équipe du film ou d'un invité.", descEs:"Con la presencia del equipo de la película o de un invitado.", slug:"courts-metrages-1", video:null},
+  {id:"e80", day:4, cat:"cine", time:"12:00", dur:96, fr:"NEURÓTICA ANÓNIMA", place:"Royal", type:"focus", tagFr:"Focus Cuba", tagEs:"Focus Cuba", payant:true, descFr:"Réalisation : Jorge Perugorría. Mexique - Cuba. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Jorge Perugorría. Mexique - Cuba. Con la presencia del equipo de la película o de un invitado.", slug:"neurotica-anonima", video:null},
   {id:"e81", day:4, cat:"cine", time:"12:15", dur:97, fr:"LOS NIÑOS SIN TIERRA", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : René Ballesteros. Chili - France. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: René Ballesteros. Chili - France. Con la presencia del equipo de la película o de un invitado.", slug:"los-ninos-sin-tierra", video:null},
   {id:"e82", day:4, cat:"cine", time:"12:30", dur:83, fr:"CINCO AÑOS, CUATRO MESES", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Esteban Hoyos García, Juan Miguel Gelacio. Colombie.", descEs:"Dirección: Esteban Hoyos García, Juan Miguel Gelacio. Colombie.", slug:"cinco-anos-cuatro-meses", video:"4WhHcH4SFuk"},
-  {id:"e83", day:4, cat:"cine", time:"14:30", dur:93, fr:"COURTS-MÉTRAGES — Programme 2", place:"Royal", type:"compet", tagFr:"Compétition court", tagEs:"Competencia corto", gratuit:true, descFr:"Compétition courts-métrages (répartie sur les deux séances) : Allá en el cielo (R. Dextre), Caso isolado (J. Facury, E. Lemos Akatoy), Chulquín (L. Pérez Rivera), Época de plagas (G. Calvache), La hora de irse (R. Cozza), Miriam (K. Condado), Norheimsund, Os arcos dourados de Olinda (D. Henrique), Para los contrincantes (F. Luis), Pelotón Trueno (R. Blondeau).", descEs:"Competencia de cortometrajes (repartida en las dos sesiones): Allá en el cielo (R. Dextre), Caso isolado (J. Facury, E. Lemos Akatoy), Chulquín (L. Pérez Rivera), Época de plagas (G. Calvache), La hora de irse (R. Cozza), Miriam (K. Condado), Norheimsund, Os arcos dourados de Olinda (D. Henrique), Para los contrincantes (F. Luis), Pelotón Trueno (R. Blondeau).", slug:"courts-metrages-2", video:null},
-  {id:"e84", day:4, cat:"debate", time:"15:00", dur:60, fr:"TABLE RONDE — Régis Debray & Costa-Gavras", place:"Casino", type:"renc", tagFr:"Rencontre", tagEs:"Encuentro", gratuit:true, descFr:"En présence de l'équipe du film ou d'un invité.", descEs:"Con la presencia del equipo de la película o de un invitado.", slug:"table-ronde-debray-gavras", video:null},
+  {id:"e83", day:4, cat:"cine", time:"14:30", dur:93, fr:"COURTS-MÉTRAGES — Programme 2", place:"Royal", type:"compet", tagFr:"Compétition court", tagEs:"Competencia corto", gratuit:true, slug:"courts-metrages-2", video:null},
+  {id:"e84", day:4, cat:"debate", time:"14:30", dur:60, fr:"TABLE RONDE — Régis Debray & Costa-Gavras", place:"Salon amb", type:"renc", tagFr:"Rencontre", tagEs:"Encuentro", gratuit:true, descFr:"En présence de l'équipe du film ou d'un invité.", descEs:"Con la presencia del equipo de la película o de un invitado.", slug:"table-ronde-debray-gavras", video:null},
   {id:"e85", day:4, cat:"cine", time:"14:45", dur:95, fr:"HIEDRA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Ana Cristina Barragán. Équateur - Mexique - France - Espagne. Azucena espionne des adolescents d'un orphelinat qui vivent comme frères et sœurs. À 30 ans, elle est restée figée dans le passé à cause d'un événement marquant. Bien que leurs mondes sociaux les séparent, Azucena cherche quelque chose dans le groupe et se concentre particulièrement sur Julio, 17 ans. La blessure, l'attirance, le rire et la tendresse marquent leur rencontre.", descEs:"Dirección: Ana Cristina Barragán. Équateur - France - Mexique. Con la presencia del equipo de la película o de un invitado.", slug:"hiedra", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/09/hiedra-700x467.jpg", video:"w330shSCmOY"},
   {id:"e86", day:4, cat:"cine", time:"14:45", dur:89, fr:"PAU D'ARCO", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Ana Aranha. Brésil. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Ana Aranha. Brésil. Con la presencia del equipo de la película o de un invitado.", slug:"pau-darco", video:"eG6LRA2PhUU"},
   {id:"e87", day:4, cat:"cine", time:"16:30", dur:69, fr:"WAORANI", place:"Royal", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", payant:true, descFr:"Réalisation : Luisana Carcelen. Équateur. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Luisana Carcelen. Équateur. Con la presencia del equipo de la película o de un invitado.", slug:"waorani", video:null},
   {id:"e88", day:4, cat:"cine", time:"16:45", dur:70, fr:"NIÑAS ESCARLATA", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Paula Cury. République dominicaine - Allemagne - Mexique. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Paula Cury. République dominicaine - Allemagne - Mexique. Con la presencia del equipo de la película o de un invitado.", slug:"ninas-escarlata", video:"27GXt8Jpewc"},
   {id:"e89", day:4, cat:"cine", time:"16:45", dur:80, fr:"MI NUEVA FORMA DE VER", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Lucía Gaviglio, Andrés Varela. Uruguay - Pays-Bas. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Lucía Gaviglio, Andrés Varela. Uruguay - Pays-Bas. Con la presencia del equipo de la película o de un invitado.", slug:"mi-nueva-forma-de-ver", video:null},
   {id:"e90", day:4, cat:"cine", time:"18:45", dur:100, fr:"LO QUE EN NOSOTROS CALLA", place:"Casino", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", payant:true, descFr:"Réalisation : Carmen Castillo. Chili - France. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Carmen Castillo. Chili - France. Con la presencia del equipo de la película o de un invitado.", slug:"lo-que-en-nosotros-calla", video:null},
-  {id:"e91", day:4, cat:"cine", time:"19:00", dur:84, fr:"MAMÁ ESTÁ ACÁ", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Claudia Abend, Adriana Loeff. Uruguay.", descEs:"Dirección: Claudia Abend, Adriana Loeff. Uruguay.", slug:"mama-esta-aca", video:"spsg0vjLC84"},
+  {id:"e91", day:4, cat:"cine", time:"19:00", dur:84, fr:"MAMÁ ESTÁ ACÁ", place:"Royal", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Claudia Abend, Adriana Loeff. Uruguay.", descEs:"Dirección: Claudia Abend, Adriana Loeff. Uruguay.", slug:"mama-esta-aca", video:null},
   {id:"e92", day:4, cat:"cine", time:"20:45", dur:78, fr:"BOGOTÁ 85", place:"Royal", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : Tomás Corredor. Colombie.", descEs:"Dirección: Tomás Corredor. Colombie.", slug:"bogota-85", video:null},
   {id:"e93", day:4, cat:"musica", time:"19:00", dur:135, fr:"DJ SET — WandaWitt", place:"Village", gratuit:true, descFr:"Argentine. DJ set.", descEs:"Argentine. DJ set.", slug:"wandawitt", video:null},
   {id:"e94", day:4, cat:"musica", time:"21:00", dur:105, fr:"GRAND CONCERT — Septeto Santiaguero", place:"Gare du Midi", payant:true, descFr:"Cuba. Son Cubano, Guaracha, Bolero.", descEs:"Cuba. Son Cubano, Guaracha, Bolero.", slug:"septeto-santiaguero-2", video:null},
@@ -966,9 +946,9 @@ const events = [
   {id:"e97", day:4, cat:"musica", time:"00:00", dur:120, fr:"DJ SET", place:"Village", gratuit:true, descFr:"DJ set.", descEs:"DJ set.", video:null},
   {id:"e98", day:5, cat:"cine", time:"10:00", dur:93, fr:"MORRO", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Rodrigo García Saiz. Mexique. Mateo est végétarien dans une petite ville de l'intérieur du Mexique. Depuis la mort de son fils, sa vie s'écoule entre routines silencieuses et une culpabilité sans nom. La violence des lieux demeure latente, comme un écho constant. Cet équilibre fragile se trouve perturbé lorsque Mateo doit soigner Morro, le chien blessé d'un chef de cartel local. En prenant soin de l'animal, un lien inattendu se crée : une relation sans jugement ni mots, qui redonne un sens à sa vie. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Rodrigo García Saiz. Mexique. Con la presencia del equipo de la película o de un invitado.", slug:"morro", img:"https://www.festivaldebiarritz.com/wp-content/uploads/2026/09/image-du-film-morro-700x394.jpeg", video:null},
   {id:"e99", day:5, cat:"cine", time:"10:00", dur:75, fr:"LLAMARSE OLIMPIA", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Indira Cato. Mexique. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Indira Cato. Mexique. Con la presencia del equipo de la película o de un invitado.", slug:"llamarse-olimpia", video:"tFixNRYXasw"},
-  {id:"e100", day:5, cat:"cine", time:"10:00", dur:93, fr:"COURTS-MÉTRAGES — Programme 1", place:"Royal", type:"compet", tagFr:"Compétition court", tagEs:"Competencia corto", gratuit:true, descFr:"Compétition courts-métrages (répartie sur les deux séances) : Allá en el cielo (R. Dextre), Caso isolado (J. Facury, E. Lemos Akatoy), Chulquín (L. Pérez Rivera), Época de plagas (G. Calvache), La hora de irse (R. Cozza), Miriam (K. Condado), Norheimsund, Os arcos dourados de Olinda (D. Henrique), Para los contrincantes (F. Luis), Pelotón Trueno (R. Blondeau).", descEs:"Competencia de cortometrajes (repartida en las dos sesiones): Allá en el cielo (R. Dextre), Caso isolado (J. Facury, E. Lemos Akatoy), Chulquín (L. Pérez Rivera), Época de plagas (G. Calvache), La hora de irse (R. Cozza), Miriam (K. Condado), Norheimsund, Os arcos dourados de Olinda (D. Henrique), Para los contrincantes (F. Luis), Pelotón Trueno (R. Blondeau).", slug:"courts-metrages-1", video:null},
+  {id:"e100", day:5, cat:"cine", time:"10:00", dur:93, fr:"COURTS-MÉTRAGES — Programme 1", place:"Royal", type:"compet", tagFr:"Compétition court", tagEs:"Competencia corto", gratuit:true, slug:"courts-metrages-1", video:null},
   {id:"e101", day:5, cat:"cine", time:"11:00", dur:73, fr:"BOGOSHORTS — ADOLESCENTS", place:"Royal", type:"hors", tagFr:"Hors compétition", tagEs:"Fuera de competencia", gratuit:true, descFr:"Colombie.", descEs:"Colombie.", slug:"bogoshorts-adolescents", video:null},
-  {id:"e102", day:5, cat:"cine", time:"12:15", dur:81, fr:"COURTS-MÉTRAGES — Programme 2", place:"Royal", type:"compet", tagFr:"Compétition court", tagEs:"Competencia corto", gratuit:true, descFr:"Compétition courts-métrages (répartie sur les deux séances) : Allá en el cielo (R. Dextre), Caso isolado (J. Facury, E. Lemos Akatoy), Chulquín (L. Pérez Rivera), Época de plagas (G. Calvache), La hora de irse (R. Cozza), Miriam (K. Condado), Norheimsund, Os arcos dourados de Olinda (D. Henrique), Para los contrincantes (F. Luis), Pelotón Trueno (R. Blondeau).", descEs:"Competencia de cortometrajes (repartida en las dos sesiones): Allá en el cielo (R. Dextre), Caso isolado (J. Facury, E. Lemos Akatoy), Chulquín (L. Pérez Rivera), Época de plagas (G. Calvache), La hora de irse (R. Cozza), Miriam (K. Condado), Norheimsund, Os arcos dourados de Olinda (D. Henrique), Para los contrincantes (F. Luis), Pelotón Trueno (R. Blondeau).", slug:"courts-metrages-2", video:null},
+  {id:"e102", day:5, cat:"cine", time:"12:15", dur:81, fr:"COURTS-MÉTRAGES — Programme 2", place:"Royal", type:"compet", tagFr:"Compétition court", tagEs:"Competencia corto", gratuit:true, slug:"courts-metrages-2", video:null},
   {id:"e103", day:5, cat:"cine", time:"12:30", dur:60, fr:"LA CAMINERA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Federico Pozzi. Argentine.", descEs:"Dirección: Federico Pozzi. Argentine.", slug:"la-caminera", video:"kant7R2TkaM"},
   {id:"e104", day:5, cat:"cine", time:"14:15", dur:108, fr:"CAMPEÓN GABACHO", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Jonás Cuarón. Mexique.", descEs:"Dirección: Jonás Cuarón. Mexique.", slug:"campeon-gabacho", video:null},
   {id:"e105", day:5, cat:"cine", time:"14:15", dur:98, fr:"LES SURVIVANTS DU CHE", place:"Casino", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", payant:true, descFr:"Réalisation : Christophe Réveille. France. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Christophe Réveille. France. Con la presencia del equipo de la película o de un invitado.", slug:"les-survivants-du-che", video:null},
@@ -976,7 +956,7 @@ const events = [
   {id:"e107", day:5, cat:"debate", time:"15:00", dur:60, fr:"RENCONTRE — Carmen Castillo", place:"Salon amb", type:"renc", tagFr:"Rencontre", tagEs:"Encuentro", gratuit:true, descFr:"Chili. En présence de l'équipe du film ou d'un invité.", descEs:"Chili. Con la presencia del equipo de la película o de un invitado.", slug:"rencontre-carmen-castillo", video:null},
   {id:"e108", day:5, cat:"cine", time:"16:45", dur:95, fr:"CORAÇÃO DE LONA", place:"Gare du Midi", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, descFr:"Réalisation : Tuca Siqueira. Brésil. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Tuca Siqueira. Brésil. Con la presencia del equipo de la película o de un invitado.", slug:"coracao-de-lona", video:null},
   {id:"e109", day:5, cat:"cine", time:"16:45", dur:80, fr:"EN TIERRA", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Simón Uribe Martínez. Colombie - France.", descEs:"Dirección: Simón Uribe Martínez. Colombie - France.", slug:"en-tierra", video:"SB4raxgADu8"},
-  {id:"e110", day:5, cat:"cine", time:"16:45", dur:93, fr:"EN EL CAMINO", place:"Royal", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : David Pablos. Mexique.", descEs:"Dirección: David Pablos. Mexique.", slug:"en-el-camino", video:"6WM4Ujw34cM"},
+  {id:"e110", day:5, cat:"cine", time:"16:45", dur:93, fr:"EN EL CAMINO", place:"Royal", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : David Pablos. Mexique.", descEs:"Dirección: David Pablos. Mexique.", slug:"en-el-camino", video:null},
   {id:"e111", day:5, cat:"debate", time:"17:00", dur:60, fr:"DÉLIBÉRATION PUBLIQUE SFCC", place:"", type:"renc", tagFr:"Rencontre", tagEs:"Encuentro", gratuit:true, descFr:"En présence de l'équipe du film ou d'un invité.", descEs:"Con la presencia del equipo de la película o de un invitado.", slug:"deliberation-sfcc", video:null},
   {id:"e112", day:5, cat:"cine", time:"18:30", dur:106, fr:"NOSOTRAS", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, descFr:"Réalisation : Priscilla Aguirre. Équateur. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Priscilla Aguirre. Équateur. Con la presencia del equipo de la película o de un invitado.", slug:"nosotras-2", video:null},
   {id:"e113", day:5, cat:"cine", time:"18:30", dur:96, fr:"PATRICIA", place:"Royal", type:"hors", tagFr:"Séance spéciale", tagEs:"Sesión especial", payant:true, descFr:"Réalisation : Aude Chevalier. Brésil - France. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Aude Chevalier. Brésil - France. Con la presencia del equipo de la película o de un invitado.", slug:"patricia", video:null},
@@ -987,31 +967,19 @@ const events = [
   {id:"e118", day:5, cat:"musica", time:"22:30", dur:90, fr:"DJ SET — Armando", place:"Village", gratuit:true, descFr:"Cuba. Salsa, Reggaeton.", descEs:"Cuba. Salsa, Reggaeton.", slug:"armando", video:null},
   {id:"e119", day:5, cat:"musica", time:"00:00", dur:120, fr:"DJ SET — Vitamlyn", place:"Village", gratuit:true, descFr:"Angola - Congo. Kuduro, Batida, Afro House.", descEs:"Angola - Congo. Kuduro, Batida, Afro House.", slug:"vitamlyn", video:null},
   {id:"e120", day:6, cat:"cine", time:"10:00", dur:90, fr:"REPRISE PALMARÈS — Fiction 1", place:"Casino", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, video:null},
-  {id:"e121", day:6, cat:"cine", time:"10:15", dur:98, fr:"EL BAÑO DEL PAPA", place:"Gare du Midi", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Enrique Fernández, César Charlone. Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Enrique Fernández, César Charlone. Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"el-bano-del-papa", video:"6vC8UxZ_q48"},
+  {id:"e121", day:6, cat:"cine", time:"10:15", dur:98, fr:"EL BAÑO DEL PAPA", place:"Gare du Midi", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Enrique Fernández, César Charlone. Uruguay. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Enrique Fernández, César Charlone. Uruguay. Con la presencia del equipo de la película o de un invitado.", slug:"el-bano-del-papa", video:null},
   {id:"e122", day:6, cat:"cine", time:"12:15", dur:90, fr:"REPRISE PALMARÈS — Doc 1", place:"Casino", type:"compet", tagFr:"Compétition doc", tagEs:"Competencia doc", payant:true, video:null},
-  {id:"e123", day:6, cat:"cine", time:"13:15", dur:107, fr:"SEIS MESES EN EL EDIFICIO ROSA CON AZUL", place:"Gare du Midi", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : Bruno Santamaría Razo. Mexique - Brésil - Danemark. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Bruno Santamaría Razo. Mexique - Brésil - Danemark. Con la presencia del equipo de la película o de un invitado.", slug:"seis-meses-en-el-edificio-rosa-con-azul", video:"IUkLGNmv6U0"},
+  {id:"e123", day:6, cat:"cine", time:"13:15", dur:107, fr:"SEIS MESES EN EL EDIFICIO ROSA CON AZUL", place:"Gare du Midi", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : Bruno Santamaría Razo. Mexique - Brésil - Danemark. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Bruno Santamaría Razo. Mexique - Brésil - Danemark. Con la presencia del equipo de la película o de un invitado.", slug:"seis-meses-en-el-edificio-rosa-con-azul", video:null},
   {id:"e124", day:6, cat:"cine", time:"14:15", dur:90, fr:"REPRISE PALMARÈS — Fiction 2", place:"Casino", type:"compet", tagFr:"Compétition fiction", tagEs:"Competencia ficción", payant:true, video:null},
-  {id:"e125", day:6, cat:"cine", time:"16:15", dur:102, fr:"PERROS", place:"Gare du Midi", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Gerardo Minutti. Uruguay - Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Gerardo Minutti. Uruguay - Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"perros", video:"ba8CI90ORUw"},
+  {id:"e125", day:6, cat:"cine", time:"16:15", dur:102, fr:"PERROS", place:"Gare du Midi", type:"focus", tagFr:"Focus", tagEs:"Focus", payant:true, descFr:"Réalisation : Gerardo Minutti. Uruguay - Argentine. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Gerardo Minutti. Uruguay - Argentine. Con la presencia del equipo de la película o de un invitado.", slug:"perros", video:null},
   {id:"e126", day:6, cat:"cine", time:"16:30", dur:90, fr:"REPRISE PALMARÈS — Doc 2", place:"Casino", payant:true, video:null},
-  {id:"e127", day:6, cat:"cine", time:"18:30", dur:99, fr:"LE CORDON", es:"EL CORDÓN", place:"Casino", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : Nolwenn Hervé. France - Venezuela. En présence de l'équipe du film.", descEs:"Dirección: Nolwenn Hervé. Francia - Venezuela. Con la presencia del equipo de la película.", slug:"el-cordon", video:null},
-  {id:"e128", day:6, cat:"cine", time:"20:30", dur:121, fr:"CÉRÉMONIE DE CLÔTURE — EL PARTIDO", es:"CEREMONIA DE CLAUSURA — EL PARTIDO", place:"Gare du Midi", type:"ceremonie", tagFr:"Clôture", tagEs:"Clausura", payant:true, descFr:"Réalisation : Juan Cabral, Santiago Franco. Argentine. Film de clôture de la 35e édition.", descEs:"Dirección: Juan Cabral, Santiago Franco. Argentina. Película de clausura de la 35.ª edición.", slug:"el-partido", video:null},
+  {id:"e127", day:6, cat:"cine", time:"18:15", dur:99, fr:"EL CORDÓN", place:"Casino", type:"avant", tagFr:"Avant-première", tagEs:"Avant-première", payant:true, descFr:"Réalisation : Nolwenn Hervé. France. En présence de l'équipe du film ou d'un invité.", descEs:"Dirección: Nolwenn Hervé. France. Con la presencia del equipo de la película o de un invitado.", slug:"el-cordon", video:null},
+  {id:"e128", day:6, cat:"cine", time:"20:30", dur:121, fr:"CÉRÉMONIE DE CLÔTURE", place:"Gare du Midi", type:"ceremonie", tagFr:"Clôture", tagEs:"Clausura", payant:true, video:null},
   {id:"e129", day:6, cat:"musica", time:"19:00", dur:60, fr:"DJ SET — La Prieto", place:"Village", gratuit:true, descFr:"Colombie. Néo-perreo.", descEs:"Colombie. Néo-perreo.", slug:"el-batif-la-prieto", video:null},
   {id:"e130", day:6, cat:"musica", time:"20:00", dur:60, fr:"DJ SET — El Batif", place:"Village", gratuit:true, descFr:"France. DJ set.", descEs:"France. DJ set.", slug:"el-batif", video:null},
   {id:"e131", day:6, cat:"musica", time:"21:00", dur:60, fr:"CONCERT — Carameloco", place:"Village", gratuit:true, descFr:"Cuba. Salsa.", descEs:"Cuba. Salsa.", slug:"carameloco", video:null},
   {id:"e132", day:6, cat:"musica", time:"22:00", dur:120, fr:"DJ SET — La Prieto", place:"Village", gratuit:true, descFr:"Colombie. Néo-perreo.", descEs:"Colombie. Néo-perreo.", slug:"el-batif-la-prieto", video:null},
   {id:"e133", day:6, cat:"musica", time:"00:00", dur:120, fr:"DJ SET — El Batif", place:"Village", gratuit:true, descFr:"France. DJ set.", descEs:"France. DJ set.", slug:"el-batif", video:null},
-
-  // ── ABRAZO D'HONNEUR ──
-  {id:"e134", day:0, cat:"cine", time:"16:15", dur:120, fr:"ABRAZO D'HONNEUR — Eduardo Carrasco", es:"ABRAZO DE HONOR — Eduardo Carrasco", place:"Gare du Midi", type:"ceremonie", tagFr:"Abrazo d'Honneur", tagEs:"Abrazo de Honor", descFr:"Remise de l'Abrazo d'Honneur à Eduardo Carrasco, membre fondateur de Quilapayún, suivie du film Quilapayún más allá de la canción.", descEs:"Entrega del Abrazo de Honor a Eduardo Carrasco, miembro fundador de Quilapayún, seguida de la película Quilapayún más allá de la canción.", slug:"abrazo-honneur-eduardo-carrasco", video:null},
-  // ── BAL TV — 18h30 diario ──
-  {id:"e135", day:0, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-26", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
-  {id:"e136", day:1, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-27", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
-  {id:"e137", day:2, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-28", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
-  {id:"e138", day:3, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-29", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
-  {id:"e139", day:4, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-30", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
-  {id:"e140", day:5, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-01", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
-  {id:"e141", day:6, cat:"baltv", time:"18:30", dur:60, fr:"BAL TV — Émission du jour", es:"BAL TV — Emisión del día", place:"Village", tagFr:"En direct", tagEs:"En vivo", gratuit:true, descFr:"Émission quotidienne du festival, en direct depuis le Village et sur la chaîne YouTube du festival.", descEs:"Emisión diaria del festival, en directo desde el Village y en el canal de YouTube del festival.", slug:"bal-tv-02", video:"live_stream?channel=UCqoujwcLhtR21CxqC9HBrVw"},
-  {id:"e143", day:3, cat:"cine", time:"20:00", dur:30, fr:"ABRAZO D'HONNEUR — Leonardo Padura", es:"ABRAZO DE HONOR — Leonardo Padura", place:"Gare du Midi", type:"ceremonie", tagFr:"Abrazo d'Honneur", tagEs:"Abrazo de Honor", gratuit:true, descFr:"Remise de l'Abrazo d'Honneur à l'écrivain cubain Leonardo Padura.", descEs:"Entrega del Abrazo de Honor al escritor cubano Leonardo Padura.", slug:"abrazo-honneur-padura", video:null},
 ];
 
 const venues = [
@@ -1083,12 +1051,6 @@ const partners = {
     {name:"DRAC Nouvelle-Aquitaine", url:null},
     {name:"Projeto Paradiso", url:"https://www.projetoparadiso.org.br/"},
     {name:"Ministère de l'Europe et des Affaires Étrangères", url:"http://www.diplomatie.gouv.fr/fr/"},
-    {name:"Ambassade de France en Uruguay", url:null},
-    {name:"Embajada del Uruguay en Francia", url:null},
-    {name:"Ministerio de Relaciones Exteriores (Uruguay)", url:null},
-    {name:"ACAU", url:null},
-    {name:"190 ans de l'Uruguay", url:null},
-    {name:"Collectif des festivals de cinéma et d'audiovisuel de Nouvelle-Aquitaine", url:null},
     {name:"Communauté d'agglomération Pays Basque", url:"https://www.communaute-paysbasque.fr/"},
     {name:"Académie de Bordeaux", url:"https://www.ac-bordeaux.fr/"},
     {name:"IHEAL", url:"http://www.iheal.univ-paris3.fr/"},
@@ -1206,6 +1168,10 @@ function heartIcon(filled){
     : '<svg viewBox="0 0 24 24" fill="none" stroke="#7C8AAE" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.5C14.3 5.2 15.8 4 18 4c4 0 5.5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg>';
 }
 
+function guestIcon(){
+  return '<svg class="guest-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7" r="3.4"/><path d="M5.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5z"/></svg>';
+}
+
 function updateFavTopBtn(){
   const btn = document.getElementById("favTopBtn");
   if(btn) btn.classList.toggle("has-favs", favs.length>0);
@@ -1228,7 +1194,7 @@ function toggleFav(id){
 }
 
 const catAccent = {
-  cine:"#5FA8F0", musica:"#E2483D", debate:"#A79CFF", litterature:"#F4C430", taller:"#6FCB6B", baltv:"#FF6FB5"
+  cine:"#5FA8F0", musica:"#E2483D", debate:"#A79CFF", litterature:"#F4C430", taller:"#6FCB6B"
 };
 
 function eventCardHtml(e, idx){
@@ -1237,6 +1203,7 @@ function eventCardHtml(e, idx){
   const endTime = addMin(e.time, e.dur);
   const tagLabel = e.tagFr ? (lang==="fr" ? e.tagFr : e.tagEs) : null;
   const hasDetail = !!e.descFr;
+  const hasGuest = !!e.descFr && e.descFr.indexOf("En présence") !== -1;
   const accent = catAccent[e.cat] || "var(--border)";
   const delay = typeof idx === "number" ? Math.min(idx * 0.055, 0.5) : 0;
   return `<div class="card ${hasDetail?'clickable':''}" style="border-left:3px solid ${accent}; --card-delay:${delay}s;" ${hasDetail?`onclick="openModal('${e.id}')"`:''}>
@@ -1247,6 +1214,7 @@ function eventCardHtml(e, idx){
       <div class="tags">
         ${tagLabel ? `<span class="tag ${e.type||''}">${tagLabel}</span>` : ''}
         ${e.payant ? `<span class="tag payant">${t().payant}</span>` : (e.gratuit ? `<span class="tag gratuit">${t().gratuit}</span>` : '')}
+        ${hasGuest ? `<span class="tag invite" title="${t().invite}">${guestIcon()}${t().invite}</span>` : ''}
       </div>
     </div>
     <button class="fav-btn" data-id="${e.id}" onclick="event.stopPropagation(); toggleFav('${e.id}')" aria-label="favori">${heartIcon(isFav)}</button>
@@ -1336,153 +1304,103 @@ function renderPartners(){
 
 // ── INVITADOS (datos de ejemplo — reemplazar con la lista real) ──────────────
 const invites = [
-  {id:"g1", group:"cine", nameFr:"Diego Luna", nameEs:"Diego Luna", roleFr:"Cinéaste · Mexique", roleEs:"Cineasta · México", bioFr:"Acteur et réalisateur mexicain. Il présente Ceniza en la boca en compétition fiction.", bioEs:"Actor y director mexicano. Presenta Ceniza en la boca en competencia ficción.", photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Diego%20Luna.jpg?width=400", color:"#5FA8F0", eventId:"e18", slotFr:"Dim 27 · 15h15 · Gare du Midi", slotEs:"Dom 27 · 15h15 · Gare du Midi"},
-  {id:"g2", group:"cine", nameFr:"Fernando Eimbcke", nameEs:"Fernando Eimbcke", roleFr:"Cinéaste · Mexique", roleEs:"Cineasta · México", bioFr:"Réalisateur de Moscas, film d'ouverture de la 35e édition.", bioEs:"Director de Moscas, película de apertura de la 35.ª edición.", photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Fernando%20Eimbcke.jpg?width=400", color:"#3C7DD9", eventId:"e6", slotFr:"Sam 26 · 19h30 · Gare du Midi", slotEs:"Sáb 26 · 19h30 · Gare du Midi"},
-  {id:"g3", group:"cine", nameFr:"Federico Pozzi", nameEs:"Federico Pozzi", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film LA CAMINERA.", bioEs:"Dirección de la película LA CAMINERA.", photo:null, color:"#6FA8DC", eventId:"e48", slotFr:"Lun 28 · 20h15 · Gare du Midi", slotEs:"Lun 28 · 20h15 · Gare du Midi"},
-  {id:"g4", group:"cine", nameFr:"Kim Elizondo", nameEs:"Kim Elizondo", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film BYE BYE, PARAISO.", bioEs:"Dirección de la película BYE BYE, PARAISO.", photo:null, color:"#4E93E6", eventId:"e23", slotFr:"Dim 27 · 20h30 · Gare du Midi", slotEs:"Dom 27 · 20h30 · Gare du Midi"},
-  {id:"g5", group:"cine", nameFr:"Esteban Hoyos", nameEs:"Esteban Hoyos", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film CINCO AÑOS, CUATRO MESES.", bioEs:"Dirección de la película CINCO AÑOS, CUATRO MESES.", photo:null, color:"#5FA8F0", eventId:"e11", slotFr:"Dim 27 · 10h00 · Gare du Midi", slotEs:"Dom 27 · 10h00 · Gare du Midi"},
-  {id:"g6", group:"cine", nameFr:"Juan Miguel Gelacio", nameEs:"Juan Miguel Gelacio", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film CINCO AÑOS, CUATRO MESES.", bioEs:"Dirección de la película CINCO AÑOS, CUATRO MESES.", photo:null, color:"#3C7DD9", eventId:"e11", slotFr:"Dim 27 · 10h00 · Gare du Midi", slotEs:"Dom 27 · 10h00 · Gare du Midi"},
-  {id:"g7", group:"cine", nameFr:"Tuca Siquiera", nameEs:"Tuca Siquiera", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film CORAÇÃO DE LONA.", bioEs:"Dirección de la película CORAÇÃO DE LONA.", photo:null, color:"#6FA8DC", eventId:"e45", slotFr:"Lun 28 · 18h00 · Gare du Midi", slotEs:"Lun 28 · 18h00 · Gare du Midi"},
-  {id:"g8", group:"cine", nameFr:"Juan Pablo Sallato", nameEs:"Juan Pablo Sallato", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film HANGAR ROJO.", bioEs:"Dirección de la película HANGAR ROJO.", photo:null, color:"#4E93E6", eventId:"e22", slotFr:"Dim 27 · 18h15 · Gare du Midi", slotEs:"Dom 27 · 18h15 · Gare du Midi"},
-  {id:"g9", group:"cine", nameFr:"Thierry Lenouvel", nameEs:"Thierry Lenouvel", roleFr:"Producteur·rice", roleEs:"Producción", bioFr:"Producteur·rice du film HIEDRA.", bioEs:"Producción de la película HIEDRA.", photo:null, color:"#5FA8F0", eventId:"e29", slotFr:"Lun 28 · 10h00 · Gare du Midi", slotEs:"Lun 28 · 10h00 · Gare du Midi"},
-  {id:"g10", group:"cine", nameFr:"Rodrigo García Saiz", nameEs:"Rodrigo García Saiz", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film MORRO.", bioEs:"Dirección de la película MORRO.", photo:null, color:"#3C7DD9", eventId:"e39", slotFr:"Lun 28 · 14h45 · Gare du Midi", slotEs:"Lun 28 · 14h45 · Gare du Midi"},
-  {id:"g11", group:"cine", nameFr:"Vérenice Benitez", nameEs:"Vérenice Benitez", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film NUNKUI.", bioEs:"Dirección de la película NUNKUI.", photo:null, color:"#6FA8DC", eventId:"e33", slotFr:"Lun 28 · 12h15 · Gare du Midi", slotEs:"Lun 28 · 12h15 · Gare du Midi"},
-  {id:"g12", group:"cine", nameFr:"Alex Piperno", nameEs:"Alex Piperno", roleFr:"Producteur·rice", roleEs:"Producción", bioFr:"Producteur·rice du film DICIEMBRE.", bioEs:"Producción de la película DICIEMBRE.", photo:null, color:"#4E93E6", eventId:"e21", slotFr:"Dim 27 · 18h00 · Casino", slotEs:"Dom 27 · 18h00 · Casino"},
-  {id:"g13", group:"cine", nameFr:"Mariana Genescá", nameEs:"Mariana Genescá", roleFr:"Producteur·rice", roleEs:"Producción", bioFr:"Productrice des films A fabulosa máquina do tempo et Pau d'Arco.", bioEs:"Productora de las películas A fabulosa máquina do tempo y Pau d'Arco.", photo:null, color:"#5FA8F0", eventId:"e13", slotFr:"Dim 27 · 12h00 · Casino", slotEs:"Dom 27 · 12h00 · Casino"},
-  {id:"g14", group:"cine", nameFr:"Omar Vergara", nameEs:"Omar Vergara", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film NADA SOBRE NOSOTROS.", bioEs:"Dirección de la película NADA SOBRE NOSOTROS.", photo:null, color:"#3C7DD9", eventId:"e32", slotFr:"Lun 28 · 12h00 · Casino", slotEs:"Lun 28 · 12h00 · Casino"},
-  {id:"g15", group:"cine", nameFr:"Paula Cury", nameEs:"Paula Cury", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film NIÑAS ESCARLATA.", bioEs:"Dirección de la película NIÑAS ESCARLATA.", photo:null, color:"#6FA8DC", eventId:"e43", slotFr:"Lun 28 · 16h30 · Casino", slotEs:"Lun 28 · 16h30 · Casino"},
-  {id:"g16", group:"cine", nameFr:"René Ballesteros", nameEs:"René Ballesteros", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film LOS NIÑOS SIN TIERRA.", bioEs:"Dirección de la película LOS NIÑOS SIN TIERRA.", photo:null, color:"#4E93E6", eventId:"e12", slotFr:"Dim 27 · 10h00 · Casino", slotEs:"Dom 27 · 10h00 · Casino"},
-  {id:"g17", group:"cine", nameFr:"Priscilla Aguirre", nameEs:"Priscilla Aguirre", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film NOSOTRAS.", bioEs:"Dirección de la película NOSOTRAS.", photo:null, color:"#5FA8F0", eventId:"e71", slotFr:"Mar 29 · 20h15 · Casino", slotEs:"Mar 29 · 20h15 · Casino"},
-  {id:"g18", group:"cine", nameFr:"Pablo Aparo", nameEs:"Pablo Aparo", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film LOS VENCEDORES.", bioEs:"Dirección de la película LOS VENCEDORES.", photo:null, color:"#3C7DD9", eventId:"e16", slotFr:"Dim 27 · 13h45 · Casino", slotEs:"Dom 27 · 13h45 · Casino"},
-  {id:"g19", group:"cine", nameFr:"Gabriela Calvache", nameEs:"Gabriela Calvache", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage EPOCA DE PLAGAS, en compétition officielle du festival.", bioEs:"Cortometraje EPOCA DE PLAGAS, en competencia oficial del festival.", photo:null, color:"#6FA8DC", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g20", group:"cine", nameFr:"Jamila Facury", nameEs:"Jamila Facury", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage CASO ISOLADO, en compétition officielle du festival.", bioEs:"Cortometraje CASO ISOLADO, en competencia oficial del festival.", photo:null, color:"#4E93E6", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g21", group:"cine", nameFr:"Edson Lemos Akatoy", nameEs:"Edson Lemos Akatoy", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage CASO ISOLADO, en compétition officielle du festival.", bioEs:"Cortometraje CASO ISOLADO, en competencia oficial del festival.", photo:null, color:"#5FA8F0", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g22", group:"cine", nameFr:"Federico Luis", nameEs:"Federico Luis", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage PARA LOS CONTRINCANTES, en compétition officielle du festival.", bioEs:"Cortometraje PARA LOS CONTRINCANTES, en competencia oficial del festival.", photo:null, color:"#3C7DD9", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g23", group:"cine", nameFr:"Laura Perez Rivera", nameEs:"Laura Perez Rivera", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage CHULQUIN, en compétition officielle du festival.", bioEs:"Cortometraje CHULQUIN, en competencia oficial del festival.", photo:null, color:"#6FA8DC", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g24", group:"cine", nameFr:"Douglas Henrique", nameEs:"Douglas Henrique", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage OS ARCOS DOURADOS DE OLINDA, en compétition officielle du festival.", bioEs:"Cortometraje OS ARCOS DOURADOS DE OLINDA, en competencia oficial del festival.", photo:null, color:"#4E93E6", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g25", group:"cine", nameFr:"Romain Blondeau", nameEs:"Romain Blondeau", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage PELOTON TRUENO, en compétition officielle du festival.", bioEs:"Cortometraje PELOTON TRUENO, en competencia oficial del festival.", photo:null, color:"#5FA8F0", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g26", group:"cine", nameFr:"Karla Condado", nameEs:"Karla Condado", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage MIRIAM, en compétition officielle du festival.", bioEs:"Cortometraje MIRIAM, en competencia oficial del festival.", photo:null, color:"#3C7DD9", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g27", group:"cine", nameFr:"Roddy Dextre", nameEs:"Roddy Dextre", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage ALLA EN EL CIELO, en compétition officielle du festival.", bioEs:"Cortometraje ALLA EN EL CIELO, en competencia oficial del festival.", photo:null, color:"#6FA8DC", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g28", group:"cine", nameFr:"Renzo Cozza", nameEs:"Renzo Cozza", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage LA HORA DE IRSE, en compétition officielle du festival.", bioEs:"Cortometraje LA HORA DE IRSE, en competencia oficial del festival.", photo:null, color:"#4E93E6", eventId:"e79", slotFr:"Mer 30 · 10h00 · Royal", slotEs:"Mié 30 · 10h00 · Royal"},
-  {id:"g29", group:"cine", nameFr:"Felipe Casanova", nameEs:"Felipe Casanova", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage O RIO DE JANEIRO CONTINUA LINDO, en compétition officielle du festival.", bioEs:"Cortometraje O RIO DE JANEIRO CONTINUA LINDO, en competencia oficial del festival.", photo:null, color:"#5FA8F0", eventId:"e114", slotFr:"Jeu 1 · 20h30 · Gare du Midi", slotEs:"Jue 1 · 20h30 · Gare du Midi"},
-  {id:"g30", group:"cine", nameFr:"Juan Crespo Lejbruder", nameEs:"Juan Crespo Lejbruder", roleFr:"Court-métrage en compétition", roleEs:"Cortometraje en competencia", bioFr:"Court-métrage EL CALLCENTER, en compétition officielle du festival.", bioEs:"Cortometraje EL CALLCENTER, en competencia oficial del festival.", photo:null, color:"#3C7DD9", eventId:"e114", slotFr:"Jeu 1 · 20h30 · Gare du Midi", slotEs:"Jue 1 · 20h30 · Gare du Midi"},
-  {id:"g31", group:"cine", nameFr:"Alvaro Brechner", nameEs:"Alvaro Brechner", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film MAL DÍA PARA PESCAR.", bioEs:"Dirección de la película MAL DÍA PARA PESCAR.", photo:null, color:"#6FA8DC", eventId:"e2", slotFr:"Sam 26 · 11h00 · Casino", slotEs:"Sáb 26 · 11h00 · Casino"},
-  {id:"g32", group:"cine", nameFr:"Cesar Charlone", nameEs:"Cesar Charlone", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film EL BAÑO DEL PAPA.", bioEs:"Dirección de la película EL BAÑO DEL PAPA.", photo:null, color:"#4E93E6", eventId:"e121", slotFr:"Ven 2 · 10h15 · Gare du Midi", slotEs:"Vie 2 · 10h15 · Gare du Midi"},
-  {id:"g33", group:"cine", nameFr:"Fernando Epstein", nameEs:"Fernando Epstein", roleFr:"Producteur·rice", roleEs:"Producción", bioFr:"Producteur·rice du film WHISKY.", bioEs:"Producción de la película WHISKY.", photo:null, color:"#5FA8F0", eventId:"e31", slotFr:"Lun 28 · 10h15 · Royal", slotEs:"Lun 28 · 10h15 · Royal"},
-  {id:"g34", group:"cine", nameFr:"Veronica Perrota", nameEs:"Veronica Perrota", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film QUEMADURA CHINA.", bioEs:"Dirección de la película QUEMADURA CHINA.", photo:null, color:"#3C7DD9", eventId:"e59", slotFr:"Mar 29 · 12h00 · Royal", slotEs:"Mar 29 · 12h00 · Royal"},
-  {id:"g35", group:"cine", nameFr:"Lucía Gaviglio", nameEs:"Lucía Gaviglio", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film MI NUEVA FORMA DE VER.", bioEs:"Dirección de la película MI NUEVA FORMA DE VER.", photo:null, color:"#6FA8DC", eventId:"e89", slotFr:"Mer 30 · 16h45 · Royal", slotEs:"Mié 30 · 16h45 · Royal"},
-  {id:"g36", group:"cine", nameFr:"Andrès Varela", nameEs:"Andrès Varela", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film EL NIÑO QUE SUEÑA.", bioEs:"Dirección de la película EL NIÑO QUE SUEÑA.", photo:null, color:"#4E93E6", eventId:"e69", slotFr:"Mar 29 · 18h45 · Royal", slotEs:"Mar 29 · 18h45 · Royal"},
-  {id:"g37", group:"cine", nameFr:"Gonzalo Arijon", nameEs:"Gonzalo Arijon", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film OJOS BIEN ABIERTOS.", bioEs:"Dirección de la película OJOS BIEN ABIERTOS.", photo:null, color:"#5FA8F0", eventId:"e63", slotFr:"Mar 29 · 14h30 · Royal", slotEs:"Mar 29 · 14h30 · Royal"},
-  {id:"g38", group:"cine", nameFr:"Rodrigo Pla", nameEs:"Rodrigo Pla", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film LOS NUEVOS.", bioEs:"Dirección de la película LOS NUEVOS.", photo:null, color:"#3C7DD9", eventId:"e106", slotFr:"Jeu 1 · 14h30 · Royal", slotEs:"Jue 1 · 14h30 · Royal"},
-  {id:"g39", group:"cine", nameFr:"Claudia Abend", nameEs:"Claudia Abend", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film MAMA ESTA ACA.", bioEs:"Dirección de la película MAMA ESTA ACA.", photo:null, color:"#6FA8DC", eventId:"e91", slotFr:"Mer 30 · 19h00 · Royal", slotEs:"Mié 30 · 19h00 · Royal"},
-  {id:"g40", group:"cine", nameFr:"Adriana Loeff", nameEs:"Adriana Loeff", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film MAMA ESTA ACA.", bioEs:"Dirección de la película MAMA ESTA ACA.", photo:null, color:"#4E93E6", eventId:"e91", slotFr:"Mer 30 · 19h00 · Royal", slotEs:"Mié 30 · 19h00 · Royal"},
-  {id:"g41", group:"cine", nameFr:"Guillermo Barbera", nameEs:"Guillermo Barbera", roleFr:"Scénariste", roleEs:"Guion", bioFr:"Scénariste du film CALLE CUBA.", bioEs:"Guion de la película CALLE CUBA.", photo:null, color:"#5FA8F0", eventId:"e36", slotFr:"Lun 28 · 13h30 · Royal", slotEs:"Lun 28 · 13h30 · Royal"},
-  {id:"g42", group:"cine", nameFr:"Léa Vidotto Labastie", nameEs:"Léa Vidotto Labastie", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film LOS PECES NO SE AHOGAN.", bioEs:"Dirección de la película LOS PECES NO SE AHOGAN.", photo:null, color:"#3C7DD9", eventId:"e35", slotFr:"Lun 28 · 12h45 · Royal", slotEs:"Lun 28 · 12h45 · Royal"},
-  {id:"g43", group:"cine", nameFr:"Bruno Santamaria Razo", nameEs:"Bruno Santamaria Razo", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film SEIS MESES EN EL EDIFICIO ROSA CON AZUL.", bioEs:"Dirección de la película SEIS MESES EN EL EDIFICIO ROSA CON AZUL.", photo:null, color:"#6FA8DC", eventId:"e123", slotFr:"Ven 2 · 13h15 · Gare du Midi", slotEs:"Vie 2 · 13h15 · Gare du Midi"},
-  {id:"g44", group:"cine", nameFr:"Marcelo Martinessi", nameEs:"Marcelo Martinessi", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film NARCISO.", bioEs:"Dirección de la película NARCISO.", photo:null, color:"#4E93E6", eventId:"e15", slotFr:"Dim 27 · 12h30 · Gare du Midi", slotEs:"Dom 27 · 12h30 · Gare du Midi"},
-  {id:"g45", group:"cine", nameFr:"Aude Chevalier", nameEs:"Aude Chevalier", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film PATRICIA.", bioEs:"Dirección de la película PATRICIA.", photo:null, color:"#5FA8F0", eventId:"e113", slotFr:"Jeu 1 · 18h30 · Royal", slotEs:"Jue 1 · 18h30 · Royal"},
-  {id:"g46", group:"cine", nameFr:"Christophe Dimitri Reveille", nameEs:"Christophe Dimitri Reveille", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film LE SIÈCLE DE COSTA-GAVRAS.", bioEs:"Dirección de la película LE SIÈCLE DE COSTA-GAVRAS.", photo:null, color:"#3C7DD9", eventId:"e105", slotFr:"Jeu 1 · 14h15 · Casino", slotEs:"Jue 1 · 14h15 · Casino"},
-  {id:"g47", group:"cine", nameFr:"Valentina Maurel", nameEs:"Valentina Maurel", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film SIEMPRE SERÉ TU ANIMAL MATERNO.", bioEs:"Dirección de la película SIEMPRE SERÉ TU ANIMAL MATERNO.", photo:null, color:"#6FA8DC", eventId:"e3", slotFr:"Sam 26 · 13h30 · Gare du Midi", slotEs:"Sáb 26 · 13h30 · Gare du Midi"},
-  {id:"g48", group:"cine", nameFr:"Nolwenn Hervé", nameEs:"Nolwenn Hervé", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film LE CORDON.", bioEs:"Dirección de la película LE CORDON.", photo:null, color:"#4E93E6", eventId:"e127", slotFr:"Ven 2 · 18h30 · Casino", slotEs:"Vie 2 · 18h30 · Casino"},
-  {id:"g49", group:"cine", nameFr:"Luisana Carcelen", nameEs:"Luisana Carcelen", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film WAORANI.", bioEs:"Dirección de la película WAORANI.", photo:null, color:"#5FA8F0", eventId:"e87", slotFr:"Mer 30 · 16h30 · Royal", slotEs:"Mié 30 · 16h30 · Royal"},
-  {id:"g50", group:"cine", nameFr:"Agnès Biscaichipy", nameEs:"Agnès Biscaichipy", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film INARUMEN.", bioEs:"Dirección de la película INARUMEN.", photo:null, color:"#3C7DD9", eventId:"e50", slotFr:"Lun 28 · 20h15 · Royal", slotEs:"Lun 28 · 20h15 · Royal"},
-  {id:"g51", group:"cine", nameFr:"Pablo César", nameEs:"Pablo César", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film ROMANCE DE LA LUNA NEGRA.", bioEs:"Dirección de la película ROMANCE DE LA LUNA NEGRA.", photo:null, color:"#6FA8DC", eventId:"e49", slotFr:"Lun 28 · 20h15 · Casino", slotEs:"Lun 28 · 20h15 · Casino"},
-  {id:"g52", group:"cine", nameFr:"Maxi Guttierez", nameEs:"Maxi Guttierez", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film CYRANO EN MI CABEZA.", bioEs:"Dirección de la película CYRANO EN MI CABEZA.", photo:null, color:"#4E93E6", eventId:"e19", slotFr:"Dim 27 · 15h45 · Casino", slotEs:"Dom 27 · 15h45 · Casino"},
-  {id:"g53", group:"cine", nameFr:"Karine Bonjour", nameEs:"Karine Bonjour", roleFr:"Cinéaste", roleEs:"Cineasta", bioFr:"Réalisation du film LA FRANCE QUILAPAYÚN.", bioEs:"Dirección de la película LA FRANCE QUILAPAYÚN.", photo:null, color:"#5FA8F0", eventId:"e47", slotFr:"Lun 28 · 18h15 · Royal", slotEs:"Lun 28 · 18h15 · Royal"},
-  {id:"g54", group:"interp", nameFr:"Costa-Gavras", nameEs:"Costa-Gavras", roleFr:"Cinéaste · France-Grèce", roleEs:"Cineasta · Francia-Grecia", bioFr:"Au cœur du documentaire Le siècle de Costa-Gavras. Rencontre autour du Che avec Régis Debray.", bioEs:"Protagonista del documental Le siècle de Costa-Gavras. Encuentro sobre el Che con Régis Debray.", photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Costa-Gavras.JPG?width=400", color:"#E2483D", eventId:"e66", slotFr:"Mar 29 · 17h15 · Royal", slotEs:"Mar 29 · 17h15 · Royal"},
-  {id:"g55", group:"interp", nameFr:"Régis Debray", nameEs:"Régis Debray", roleFr:"Écrivain & philosophe · France", roleEs:"Escritor y filósofo · Francia", bioFr:"Grand témoin de l'édition. Rencontre autour de la figure du Che Guevara avec Costa-Gavras.", bioEs:"Gran testigo de la edición. Encuentro sobre la figura del Che Guevara con Costa-Gavras.", photo:"https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%A9gis%20Debray.jpg?width=400", color:"#F0655B", eventId:"e84", slotFr:"Mer 30 · 15h00 · Casino", slotEs:"Mié 30 · 15h00 · Casino"},
-  {id:"g56", group:"interp", nameFr:"Eduardo Carrasco", nameEs:"Eduardo Carrasco", roleFr:"Musicien · Chili", roleEs:"Músico · Chile", bioFr:"Membre fondateur de Quilapayún. Abrazo d'Honneur, suivi du film Quilapayún más allá de la canción.", bioEs:"Miembro fundador de Quilapayún. Abrazo de Honor, seguido de la película Quilapayún más allá de la canción.", photo:null, color:"#C93F35", eventId:"e134", slotFr:"Sam 26 · 16h15 · Gare du Midi", slotEs:"Sáb 26 · 16h15 · Gare du Midi"},
-  {id:"g57", group:"interp", nameFr:"Nahuel Pérez Biscayart", nameEs:"Nahuel Pérez Biscayart", roleFr:"Interprète · Argentine", roleEs:"Intérprete · Argentina", bioFr:"Interprète dans Narciso, séance spéciale du festival.", bioEs:"Actúa en Narciso, sesión especial del festival.", photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Nahuel%20Perez%20Biscayart%20C%C3%A9sar%202018.jpg?width=400", color:"#EC5A50", eventId:"e15", slotFr:"Dim 27 · 12h30 · Gare du Midi", slotEs:"Dom 27 · 12h30 · Gare du Midi"},
-  {id:"g58", group:"interp", nameFr:"Marina de Tavira", nameEs:"Marina de Tavira", roleFr:"Interprète · Mexique", roleEs:"Intérprete · México", bioFr:"Interprète dans Siempre seré tu animal materno, en avant-première.", bioEs:"Actúa en Siempre seré tu animal materno, en avant-première.", photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Marina%20de%20Tavira%20%28cropped%29.jpg?width=400", color:"#E2483D", eventId:"e3", slotFr:"Sam 26 · 13h30 · Gare du Midi", slotEs:"Sáb 26 · 13h30 · Gare du Midi"},
-  {id:"g59", group:"interp", nameFr:"Joaquin Furriel", nameEs:"Joaquin Furriel", roleFr:"Interprète · Argentine", roleEs:"Intérprete · Argentina", bioFr:"Interprète dans La verdadera historia de Ricardo III.", bioEs:"Actúa en La verdadera historia de Ricardo III.", photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Joaquin%20Furriel.JPG?width=400", color:"#F0655B", eventId:"e41", slotFr:"Lun 28 · 15h45 · Royal", slotEs:"Lun 28 · 15h45 · Royal"},
-  {id:"g60", group:"interp", nameFr:"Jenny Navarrete", nameEs:"Jenny Navarrete", roleFr:"Interprète", roleEs:"Intérprete", bioFr:"Interprète dans le film CINCO AÑOS, CUATRO MESES.", bioEs:"Actúa en la película CINCO AÑOS, CUATRO MESES.", photo:null, color:"#C93F35", eventId:"e11", slotFr:"Dim 27 · 10h00 · Gare du Midi", slotEs:"Dom 27 · 10h00 · Gare du Midi"},
-  {id:"g61", group:"interp", nameFr:"Carmiña Martínez", nameEs:"Carmiña Martínez", roleFr:"Interprète", roleEs:"Intérprete", bioFr:"Interprète dans le film CINCO AÑOS, CUATRO MESES.", bioEs:"Actúa en la película CINCO AÑOS, CUATRO MESES.", photo:null, color:"#EC5A50", eventId:"e11", slotFr:"Dim 27 · 10h00 · Gare du Midi", slotEs:"Dom 27 · 10h00 · Gare du Midi"},
-  {id:"g62", group:"interp", nameFr:"Nestor Guzzini", nameEs:"Nestor Guzzini", roleFr:"Interprète", roleEs:"Intérprete", bioFr:"Interprète dans le film PERROS.", bioEs:"Actúa en la película PERROS.", photo:null, color:"#E2483D", eventId:"e125", slotFr:"Ven 2 · 16h15 · Gare du Midi", slotEs:"Vie 2 · 16h15 · Gare du Midi"},
-  {id:"g63", group:"interp", nameFr:"Martina Passegui", nameEs:"Martina Passegui", roleFr:"Interprète", roleEs:"Intérprete", bioFr:"Interprète dans le film UN FUTURO BRILLANTE.", bioEs:"Actúa en la película UN FUTURO BRILLANTE.", photo:null, color:"#F0655B", eventId:"e44", slotFr:"Lun 28 · 17h45 · Royal", slotEs:"Lun 28 · 17h45 · Royal"},
-  {id:"g64", group:"interp", nameFr:"Mirtha Ibarra", nameEs:"Mirtha Ibarra", roleFr:"Interprète", roleEs:"Intérprete", bioFr:"Interprète dans le film NEUROTICA ANONIMA.", bioEs:"Actúa en la película NEUROTICA ANONIMA.", photo:null, color:"#C93F35", eventId:"e80", slotFr:"Mer 30 · 12h00 · Royal", slotEs:"Mié 30 · 12h00 · Royal"},
-  {id:"g65", group:"interp", nameFr:"Diro Romero", nameEs:"Diro Romero", roleFr:"Interprète", roleEs:"Intérprete", bioFr:"Interprète dans le film NARCISO.", bioEs:"Actúa en la película NARCISO.", photo:null, color:"#EC5A50", eventId:"e15", slotFr:"Dim 27 · 12h30 · Gare du Midi", slotEs:"Dom 27 · 12h30 · Gare du Midi"},
-  {id:"g66", group:"interp", nameFr:"Daniela Marin Navarro", nameEs:"Daniela Marin Navarro", roleFr:"Interprète", roleEs:"Intérprete", bioFr:"Interprète dans le film SIEMPRE SERÉ TU ANIMAL MATERNO.", bioEs:"Actúa en la película SIEMPRE SERÉ TU ANIMAL MATERNO.", photo:null, color:"#E2483D", eventId:"e3", slotFr:"Sam 26 · 13h30 · Gare du Midi", slotEs:"Sáb 26 · 13h30 · Gare du Midi"},
-  {id:"g67", group:"interp", nameFr:"Esteban Butch", nameEs:"Esteban Butch", roleFr:"Invité·e", roleEs:"Invitado·a", bioFr:"Au cœur du film JUAN, COMO SI NADA HUBIERA SUCEDIDO.", bioEs:"Protagonista de la película JUAN, COMO SI NADA HUBIERA SUCEDIDO.", photo:null, color:"#F0655B", eventId:"e4", slotFr:"Sam 26 · 14h15 · Casino", slotEs:"Sáb 26 · 14h15 · Casino"},
-  {id:"g68", group:"interp", nameFr:"Gabriel Goity", nameEs:"Gabriel Goity", roleFr:"Interprète", roleEs:"Intérprete", bioFr:"Interprète dans le film CYRANO EN MI CABEZA.", bioEs:"Actúa en la película CYRANO EN MI CABEZA.", photo:null, color:"#C93F35", eventId:"e19", slotFr:"Dim 27 · 15h45 · Casino", slotEs:"Dom 27 · 15h45 · Casino"},
-  {id:"g69", group:"interp", nameFr:"Alexandra Carrasco", nameEs:"Alexandra Carrasco", roleFr:"Invité·e", roleEs:"Invitado·a", bioFr:"Au cœur du film LA FRANCE QUILAPAYÚN.", bioEs:"Protagonista de la película LA FRANCE QUILAPAYÚN.", photo:null, color:"#EC5A50", eventId:"e47", slotFr:"Lun 28 · 18h15 · Royal", slotEs:"Lun 28 · 18h15 · Royal"},
-  {id:"g70", group:"interp", nameFr:"Jacques Weber", nameEs:"Jacques Weber", roleFr:"Rencontre", roleEs:"Encuentro", bioFr:"Comédien invité aux rencontres du festival.", bioEs:"Actor invitado a los encuentros del festival.", photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Jacques%20Weber%2020070511%20Fnac%206.jpg?width=400", color:"#E2483D", eventId:null, slotFr:"", slotEs:""},
-  {id:"g71", group:"lit", nameFr:"Leonardo Padura", nameEs:"Leonardo Padura", roleFr:"Écrivain · Cuba", roleEs:"Escritor · Cuba", bioFr:"Écrivain cubain, créateur du détective Mario Conde et Prix Princesse des Asturies des Lettres. Abrazo d'Honneur et rencontre autour de son œuvre.", bioEs:"Escritor cubano, creador del detective Mario Conde y Premio Princesa de Asturias de las Letras. Abrazo de Honor y encuentro en torno a su obra.", photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Leonardo-padura-ffm003.jpg?width=400", color:"#F4C430", eventId:"e38", slotFr:"Lun 28 · 14h30 · Salon amb", slotEs:"Lun 28 · 14h30 · Salon amb"},
-  {id:"g72", group:"lit", nameFr:"Carmen Posadas", nameEs:"Carmen Posadas", roleFr:"Littérature", roleEs:"Literatura", bioFr:"Invité·e des rencontres littéraires du festival.", bioEs:"Invitado·a a los encuentros literarios del festival.", photo:null, color:"#E0B020", eventId:"e5", slotFr:"Sam 26 · 17h30 · Salon amb", slotEs:"Sáb 26 · 17h30 · Salon amb"},
-  {id:"g73", group:"lit", nameFr:"René Solis", nameEs:"René Solis", roleFr:"Littérature", roleEs:"Literatura", bioFr:"Invité·e des rencontres littéraires du festival.", bioEs:"Invitado·a a los encuentros literarios del festival.", photo:null, color:"#F6D25B", eventId:null, slotFr:"", slotEs:""},
-  {id:"g74", group:"lit", nameFr:"Diego Recoba", nameEs:"Diego Recoba", roleFr:"Littérature", roleEs:"Literatura", bioFr:"Invité·e des rencontres littéraires du festival.", bioEs:"Invitado·a a los encuentros literarios del festival.", photo:null, color:"#EAC33A", eventId:"e14", slotFr:"Dim 27 · 12h15 · Salon amb", slotEs:"Dom 27 · 12h15 · Salon amb"},
-  {id:"g75", group:"lit", nameFr:"Leonor Courtoisie", nameEs:"Leonor Courtoisie", roleFr:"Littérature", roleEs:"Literatura", bioFr:"Invité·e des rencontres littéraires du festival.", bioEs:"Invitado·a a los encuentros literarios del festival.", photo:null, color:"#F4C430", eventId:"e14", slotFr:"Dim 27 · 12h15 · Salon amb", slotEs:"Dom 27 · 12h15 · Salon amb"},
-  {id:"g76", group:"lit", nameFr:"Sergio Blanco", nameEs:"Sergio Blanco", roleFr:"Littérature", roleEs:"Literatura", bioFr:"Invité·e des rencontres littéraires du festival.", bioEs:"Invitado·a a los encuentros literarios del festival.", photo:null, color:"#E0B020", eventId:"e14", slotFr:"Dim 27 · 12h15 · Salon amb", slotEs:"Dom 27 · 12h15 · Salon amb"},
-  {id:"g77", group:"lit", nameFr:"Eduardo Berti", nameEs:"Eduardo Berti", roleFr:"Littérature", roleEs:"Literatura", bioFr:"Invité·e des rencontres littéraires du festival.", bioEs:"Invitado·a a los encuentros literarios del festival.", photo:null, color:"#F6D25B", eventId:"e128", slotFr:"Ven 2 · 20h30 · Gare du Midi", slotEs:"Vie 2 · 20h30 · Gare du Midi"},
-  {id:"g78", group:"jury", nameFr:"Carmen Castillo", nameEs:"Carmen Castillo", roleFr:"Présidente jury doc", roleEs:"Presidenta jurado doc", bioFr:"Cinéaste et écrivaine franco-chilienne, présidente du jury documentaire. Son film Lo que en nosotros calla est présenté.", bioEs:"Cineasta y escritora franco-chilena, presidenta del jurado documental. Se presenta su película Lo que en nosotros calla.", photo:null, color:"#A79CFF", eventId:"e107", slotFr:"Jeu 1 · 15h00 · Salon amb", slotEs:"Jue 1 · 15h00 · Salon amb"},
-  {id:"g79", group:"jury", nameFr:"Edwy Plenel", nameEs:"Edwy Plenel", roleFr:"Jury documentaire", roleEs:"Jurado documental", bioFr:"Membre du jury documentaire de cette 35e édition.", bioEs:"Miembro del jurado documental de esta 35.ª edición.", photo:null, color:"#8E82F0", eventId:null, slotFr:"", slotEs:""},
-  {id:"g80", group:"jury", nameFr:"Francesco Martinotti", nameEs:"Francesco Martinotti", roleFr:"Jury fiction", roleEs:"Jurado ficción", bioFr:"Membre du jury fiction de cette 35e édition.", bioEs:"Miembro del jurado de ficción de esta 35.ª edición.", photo:null, color:"#B9AFFF", eventId:null, slotFr:"", slotEs:""},
-  {id:"g81", group:"jury", nameFr:"Lionel Abelanski", nameEs:"Lionel Abelanski", roleFr:"Jury fiction", roleEs:"Jurado ficción", bioFr:"Membre du jury fiction de cette 35e édition.", bioEs:"Miembro del jurado de ficción de esta 35.ª edición.", photo:null, color:"#9A8DF6", eventId:null, slotFr:"", slotEs:""},
-  {id:"g82", group:"jury", nameFr:"Christophe Barratier", nameEs:"Christophe Barratier", roleFr:"Jury fiction", roleEs:"Jurado ficción", bioFr:"Membre du jury fiction de cette 35e édition.", bioEs:"Miembro del jurado de ficción de esta 35.ª edición.", photo:null, color:"#A79CFF", eventId:null, slotFr:"", slotEs:""},
-  {id:"g83", group:"jury", nameFr:"Isabel Aimé", nameEs:"Isabel Aimé", roleFr:"Jury fiction", roleEs:"Jurado ficción", bioFr:"Membre du jury fiction de cette 35e édition.", bioEs:"Miembro del jurado de ficción de esta 35.ª edición.", photo:null, color:"#8E82F0", eventId:null, slotFr:"", slotEs:""},
-  {id:"g84", group:"jury", nameFr:"Pierre Salvadori", nameEs:"Pierre Salvadori", roleFr:"Jury court-métrage", roleEs:"Jurado cortometraje", bioFr:"Membre du jury court-métrage de cette 35e édition.", bioEs:"Miembro del jurado de cortometraje de esta 35.ª edición.", photo:null, color:"#B9AFFF", eventId:null, slotFr:"", slotEs:""},
-  {id:"g85", group:"inst", nameFr:"Gabriela Ricardes", nameEs:"Gabriela Ricardes", roleFr:"Ministre de la culture de Buenos Aires", roleEs:"Ministra de cultura de Buenos Aires", bioFr:"Ministre de la culture de Buenos Aires.", bioEs:"Ministra de cultura de Buenos Aires.", photo:null, color:"#6FCB6B", eventId:null, slotFr:"", slotEs:""},
-  {id:"g86", group:"inst", nameFr:"Natalia Fuster", nameEs:"Natalia Fuster", roleFr:"Directrice de l'Institut National de l'Audiovisuel du Paraguay", roleEs:"Directora del Instituto Nacional del Audiovisual de Paraguay", bioFr:"Directrice de l'Institut National de l'Audiovisuel du Paraguay.", bioEs:"Directora del Instituto Nacional del Audiovisual de Paraguay.", photo:null, color:"#57B45A", eventId:null, slotFr:"", slotEs:""},
-  {id:"g87", group:"inst", nameFr:"Enrique Loedel", nameEs:"Enrique Loedel", roleFr:"Ambassadeur d'Uruguay en France", roleEs:"Embajador de Uruguay en Francia", bioFr:"Ambassadeur d'Uruguay en France.", bioEs:"Embajador de Uruguay en Francia.", photo:null, color:"#82D67E", eventId:null, slotFr:"", slotEs:""},
-  {id:"g88", group:"inst", nameFr:"Gisella Previtali", nameEs:"Gisella Previtali", roleFr:"Présidente de l'ACAU", roleEs:"Presidenta de la ACAU", bioFr:"Présidente de l'ACAU.", bioEs:"Presidenta de la ACAU.", photo:null, color:"#66C266", eventId:null, slotFr:"", slotEs:""},
-  {id:"g89", group:"inst", nameFr:"Rodrigo Goñi", nameEs:"Rodrigo Goñi", roleFr:"Président de la Chambre des représentants d'Uruguay", roleEs:"Presidente de la Cámara de Representantes de Uruguay", bioFr:"Président de la Chambre des représentants d'Uruguay.", bioEs:"Presidente de la Cámara de Representantes de Uruguay.", photo:null, color:"#6FCB6B", eventId:null, slotFr:"", slotEs:""},
-  {id:"g90", group:"inst", nameFr:"Cynthia Filártiga-Lacroix", nameEs:"Cynthia Filártiga-Lacroix", roleFr:"Ambassadrice du Paraguay en France", roleEs:"Embajadora de Paraguay en Francia", bioFr:"Ambassadrice du Paraguay en France.", bioEs:"Embajadora de Paraguay en Francia.", photo:null, color:"#57B45A", eventId:null, slotFr:"", slotEs:""},
-  {id:"g91", group:"inst", nameFr:"Omar Da Fonseca", nameEs:"Omar Da Fonseca", roleFr:"Invité", roleEs:"Invitado", bioFr:"Invité autour du film EL PARTIDO.", bioEs:"Invitado en torno a la película EL PARTIDO.", photo:null, color:"#82D67E", eventId:"e128", slotFr:"Ven 2 · 20h30 · Gare du Midi", slotEs:"Vie 2 · 20h30 · Gare du Midi"}
+  {id:"i1", nameFr:"Sofia Reyes", nameEs:"Sofia Reyes",
+   roleFr:"Réalisatrice · Mexique", roleEs:"Directora · México",
+   bioFr:"Réalisatrice mexicaine dont le premier long métrage a remporté le prix du jury à Guadalajara. Elle présentera son nouveau film en avant-première au festival.",
+   bioEs:"Directora mexicana cuyo primer largometraje ganó el Premio del Jurado en Guadalajara. Presentará su nueva película en avant-première en el festival.",
+   photo:null, initials:"SR", color:"#E2483D",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
+
+  {id:"i2", nameFr:"Carlos Alvarado", nameEs:"Carlos Alvarado",
+   roleFr:"Écrivain · Colombie", roleEs:"Escritor · Colombia",
+   bioFr:"Auteur colombien lauréat du Prix Alfaguara 2024. Il participera à la table ronde littéraire et dédicacera son dernier roman.",
+   bioEs:"Escritor colombiano ganador del Premio Alfaguara 2024. Participará en la mesa literaria y firmará su última novela.",
+   photo:null, initials:"CA", color:"#F4C430",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le livre", linkTypeEs:"Ver el libro"},
+
+  {id:"i3", nameFr:"Ana Lima", nameEs:"Ana Lima",
+   roleFr:"Actrice · Brésil", roleEs:"Actriz · Brasil",
+   bioFr:"Actrice brésilienne révélée par la série internationale Cidade Invisível. Elle accompagnera la projection de son nouveau film.",
+   bioEs:"Actriz brasileña revelada por la serie internacional Cidade Invisível. Acompañará la proyección de su nueva película.",
+   photo:null, initials:"AL", color:"#6FCB6B",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
+
+  {id:"i4", nameFr:"Miguel Fernández", nameEs:"Miguel Fernández",
+   roleFr:"Musicien · Cuba", roleEs:"Músico · Cuba",
+   bioFr:"Membre fondateur du Septeto Santiaguero, groupe emblématique du son cubain traditionnel depuis 1994.",
+   bioEs:"Miembro fundador del Septeto Santiaguero, grupo emblemático del son cubano tradicional desde 1994.",
+   photo:null, initials:"MF", color:"#5FA8F0",
+   link:"https://www.billetweb.fr/festival-biarritz-amerique-latine-2026", linkTypeFr:"Billetterie", linkTypeEs:"Boletería"},
+
+  {id:"i5", nameFr:"Valentina Cruz", nameEs:"Valentina Cruz",
+   roleFr:"Documentariste · Argentine", roleEs:"Documentalista · Argentina",
+   bioFr:"Sa trilogie documentaire sur les migrations andines a été sélectionnée dans plus de 30 festivals internationaux.",
+   bioEs:"Su trilogía documental sobre las migraciones andinas ha sido seleccionada en más de 30 festivales internacionales.",
+   photo:null, initials:"VC", color:"#A79CFF",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le film", linkTypeEs:"Ver la película"},
+
+  {id:"i6", nameFr:"Juana Moreno", nameEs:"Juana Moreno",
+   roleFr:"Poète · Chili", roleEs:"Poeta · Chile",
+   bioFr:"Poète et essayiste chilienne, elle animera un atelier d'écriture et participera aux rencontres littéraires du festival.",
+   bioEs:"Poeta y ensayista chilena, animará un taller de escritura y participará en los encuentros literarios del festival.",
+   photo:null, initials:"JM", color:"#FF8FAE",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"Voir le livre", linkTypeEs:"Ver el libro"},
+
+  {id:"i7", nameFr:"Pablo Herrera", nameEs:"Pablo Herrera",
+   roleFr:"Directeur de la photographie · Pérou", roleEs:"Director de fotografía · Perú",
+   bioFr:"DOP péruvien dont le travail sur La tierra prometida a été nominé aux Goya. Il donnera une masterclass ouverte au public.",
+   bioEs:"Director de fotografía peruano cuyo trabajo en La tierra prometida fue nominado a los Goya. Dará una masterclass abierta al público.",
+   photo:null, initials:"PH", color:"#F4C430",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"En savoir plus", linkTypeEs:"Más info"},
+
+  {id:"i8", nameFr:"Rosa Méndez", nameEs:"Rosa Méndez",
+   roleFr:"Productrice · Venezuela", roleEs:"Productora · Venezuela",
+   bioFr:"Productrice indépendante vénézuélienne, membre du jury de la compétition officielle de cette 35e édition.",
+   bioEs:"Productora independiente venezolana, miembro del jurado de la competencia oficial de esta 35.ª edición.",
+   photo:null, initials:"RM", color:"#E2483D",
+   link:"https://www.festivaldebiarritz.com/", linkTypeFr:"En savoir plus", linkTypeEs:"Más info"}
 ];
 
-// El layout de las burbujas se calcula en renderBubbles() según el número de invitados.
-
-let curGroup = "all";
-const inviteGroups = ["all","cine","interp","lit","jury","inst"];
-
-function renderInviteGroups(){
-  const el = document.getElementById("inviteGroupRow");
-  if(!el) return;
-  el.innerHTML = inviteGroups.map(g=>`<div class="cat-chip ${g===curGroup?'active':''}" data-g="${g}">${t().inviteGroups[g]}</div>`).join("");
-  el.querySelectorAll(".cat-chip").forEach(n=>n.onclick=()=>{ curGroup=n.dataset.g; renderInviteGroups(); renderBubbles(); });
-}
-
-const inviteSectionAccent = { cine:"#5FA8F0", interp:"#E2483D", lit:"#F4C430", jury:"#A79CFF", inst:"#6FCB6B" };
-
-function inviteRowHtml(inv){
-  const name = lang==="fr" ? inv.nameFr : inv.nameEs;
-  const role = lang==="fr" ? inv.roleFr : inv.roleEs;
-  const slot = lang==="fr" ? inv.slotFr : inv.slotEs;
-  const ini = (name.match(/\b[A-Za-zÀ-ÿ]/g)||[]).slice(0,2).join("").toUpperCase();
-  const av = inv.photo
-    ? `<div class="inv-avatar" style="background-image:url('${inv.photo}');background-size:cover;background-position:center;"></div>`
-    : `<div class="inv-avatar" style="background:${inv.color};">${ini}</div>`;
-  const slotHtml = slot ? `<div class="inv-slot">${slot}</div>` : "";
-  return `<div class="inv-row" onclick="openInviteModal('${inv.id}')">
-    ${av}
-    <div class="inv-info">
-      <div class="inv-name">${name}</div>
-      <div class="inv-sub">${role}</div>
-      ${slotHtml}
-    </div>
-    <svg class="inv-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
-  </div>`;
-}
+// Posiciones pre-calculadas para las burbujas (x%, y%, tamaño px)
+// Layout en cuadrícula equilibrada: 3 columnas que cubren todo el ancho,
+// con tamaños y alturas variados para que se vea orgánico pero repartido.
+const bubbleLayout = [
+  {col:0, y:6,   s:104},
+  {col:1, y:2,   s:112},
+  {col:2, y:10,  s:100},
+  {col:0, y:40,  s:98},
+  {col:1, y:38,  s:108},
+  {col:2, y:44,  s:96},
+  {col:0, y:73,  s:100},
+  {col:2, y:75,  s:102}
+];
 
 function renderBubbles(){
-  renderInviteGroups();
-  const wrap = document.getElementById("invitesList");
-  if(!wrap) return;
-  const sections = ["cine","interp","lit","jury","inst"];
-  let html = "";
-  sections.forEach(g=>{
-    if(curGroup!=="all" && curGroup!==g) return;
-    const rows = invites.filter(inv=>inv.group===g);
-    if(!rows.length) return;
-    html += `<div class="inv-section">
-      <div class="inv-section-head">
-        <span class="inv-section-bar" style="background:${inviteSectionAccent[g]};"></span>
-        <span class="inv-section-title">${t().inviteGroups[g]}</span>
-        <span class="inv-section-count">${rows.length}</span>
-      </div>
-      <div class="inv-card">${rows.map(inviteRowHtml).join("")}</div>
+  const stage = document.getElementById("bubblesStage");
+  const stageW = stage.offsetWidth || 340;
+  const floatClasses = ["f-a","f-b","f-c"];
+  const cols = 3;
+  stage.innerHTML = invites.map((inv, i) => {
+    const lay = bubbleLayout[i % bubbleLayout.length];
+    const s = lay.s;
+    // Centro de cada columna repartido en todo el ancho
+    const colCenter = (lay.col + 0.5) / cols * stageW;
+    let left = Math.round(colCenter - s/2);
+    // Mantener dentro de los bordes
+    left = Math.max(2, Math.min(left, stageW - s - 2));
+    const top = lay.y * 4;
+    const name = lang==="fr" ? inv.nameFr : inv.nameEs;
+    const photoStyle = inv.photo ? `background-image:url('${inv.photo}');background-size:cover;background-position:center;` : `background:${inv.color};`;
+    const inner = inv.photo
+      ? `<img src="${inv.photo}" alt="${name}" loading="lazy">`
+      : `<div class="bubble-initials">${inv.initials}</div>`;
+    const fClass = floatClasses[i % floatClasses.length];
+    const delay = (i * 0.9).toFixed(1);
+    return `<div class="bubble ${fClass}" style="width:${s}px;height:${s}px;left:${left}px;top:${top}px;${photoStyle}animation-delay:-${delay}s;" onclick="openInviteModal('${inv.id}')">
+      ${inner}
+      <div class="bubble-name">${name}</div>
     </div>`;
-  });
-  wrap.innerHTML = html;
+  }).join("");
 }
 
 function openInviteModal(id){
@@ -1491,6 +1409,7 @@ function openInviteModal(id){
   const name = lang==="fr" ? inv.nameFr : inv.nameEs;
   const role = lang==="fr" ? inv.roleFr : inv.roleEs;
   const bio  = lang==="fr" ? inv.bioFr  : inv.bioEs;
+  const linkLabel = lang==="fr" ? inv.linkTypeFr : inv.linkTypeEs;
 
   document.getElementById("inviteModalName").textContent = name;
   document.getElementById("inviteModalRole").textContent = role;
@@ -1504,31 +1423,13 @@ function openInviteModal(id){
     photo.style.background = inv.color;
   }
 
-  // Séance (jour · heure · salle)
-  const slotEl = document.getElementById("inviteModalSlot");
-  const slot = lang==="fr" ? inv.slotFr : inv.slotEs;
-  if(slot){
-    slotEl.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${slot}`;
-    slotEl.style.display = "flex";
-  } else {
-    slotEl.style.display = "none";
-  }
-
-  // Enlace interno hacia el evento en el programa
   const link = document.getElementById("inviteModalLink");
-  if(inv.eventId){
-    const ev = events.find(e=>e.id===inv.eventId);
-    link.textContent = lang==="fr" ? "Voir au programme" : "Ver en el programa";
-    link.href = "#";
+  if(inv.link){
+    link.href = inv.link;
+    link.textContent = linkLabel;
     link.style.display = "block";
-    link.onclick = (e)=>{
-      e.preventDefault();
-      document.getElementById("inviteModalOverlay").classList.remove("open");
-      if(ev){ curDay = ev.day; switchTab("programme"); renderDays(); renderProgramme(); openModal(ev.id); }
-    };
   } else {
     link.style.display = "none";
-    link.onclick = null;
   }
 
   document.getElementById("inviteModalOverlay").classList.add("open");
@@ -1557,14 +1458,14 @@ const YT_CHANNEL_URL = "https://www.youtube.com/@festivalbiarritzameriquelatine"
 // Como sacarlo: entra al canal en YouTube > Personalizar canal > Configuracion avanzada,
 // o mira la URL cuando estas en la pestaña "Acerca de" del canal.
 // Mientras este vacio, se muestra el boton al canal en vez del reproductor embebido.
-const YT_CHANNEL_ID = "UCqoujwcLhtR21CxqC9HBrVw";
+const YT_CHANNEL_ID = "";
 
 function renderFbalTv(){
   const wrap = document.getElementById("fbaltvWrap");
   if(!wrap) return;
   const now = new Date();
   const duringFestival = (now >= FEST_START && now <= FEST_END);
-  const logo = `<img class="fbaltv-logo" src="assets/baltv-logo.png" alt="BAL TV">`;
+  const logo = `<img class="fbaltv-logo" src="assets/fbaltv-logo.png" alt="FBAL TV">`;
 
   // Solo se puede embeber el directo si tenemos el ID del canal
   if(duringFestival && YT_CHANNEL_ID){
@@ -1669,7 +1570,7 @@ function renderEnVivo(){
 
 const catColors = {
   cine:["#122a76","#5FA8F0"], musica:["#122a76","#E2483D"], debate:["#122a76","#A79CFF"],
-  litterature:["#122a76","#F4C430"], taller:["#122a76","#6FCB6B"], baltv:["#122a76","#FF6FB5"]
+  litterature:["#122a76","#F4C430"], taller:["#122a76","#6FCB6B"]
 };
 
 function openModal(id){
@@ -1684,10 +1585,12 @@ function openModal(id){
   document.getElementById("modalMeta").textContent = `${e.place} · ${e.time}–${endTime} · ${e.dur} min`;
   document.getElementById("modalDesc").textContent = desc || "";
 
+  const hasGuest = !!e.descFr && e.descFr.indexOf("En présence") !== -1;
   const tagsEl = document.getElementById("modalTags");
   tagsEl.innerHTML = `
     ${tagLabel ? `<span class="tag ${e.type||''}">${tagLabel}</span>` : ''}
     ${e.payant ? `<span class="tag payant">${t().payant}</span>` : (e.gratuit ? `<span class="tag gratuit">${t().gratuit}</span>` : '')}
+    ${hasGuest ? `<span class="tag invite" title="${t().invite}">${guestIcon()}${t().invite}</span>` : ''}
   `;
 
   const colors = catColors[e.cat] || ["#122a76","#378ADD"];
@@ -1850,10 +1753,7 @@ function renderHeader(){
 
 function renderDays(){
   const el = document.getElementById("datesBar");
-  const dl = lang==="fr"
-    ? ["Sam 26","Dim 27","Lun 28","Mar 29","Mer 30","Jeu 1","Ven 2"]
-    : ["Sáb 26","Dom 27","Lun 28","Mar 29","Mié 30","Jue 1","Vie 2"];
-  el.innerHTML = days.map((d,i)=>`<div class="day-chip ${i===curDay?'active':''}" data-i="${i}">${dl[i]||d.label}</div>`).join("");
+  el.innerHTML = days.map((d,i)=>`<div class="day-chip ${i===curDay?'active':''}" data-i="${i}">${d.label}</div>`).join("");
   el.querySelectorAll(".day-chip").forEach(n=>n.onclick=()=>{ curDay=+n.dataset.i; renderDays(); renderProgramme(); });
 }
 
@@ -1866,8 +1766,7 @@ function renderCats(){
 function renderProgramme(){
   renderCats();
   const list = document.getElementById("programmeList");
-  const filtered = events.filter(e=>e.day===curDay && (curCat==="all"||e.cat===curCat))
-    .sort((a,b)=> a.time.localeCompare(b.time));
+  const filtered = events.filter(e=>e.day===curDay && (curCat==="all"||e.cat===curCat));
   list.innerHTML = filtered.length ? filtered.map((e,i)=>eventCardHtml(e,i)).join("") : `<div class="empty">${t().emptyProg}</div>`;
 }
 
@@ -1930,7 +1829,6 @@ function setLang(l){
   document.getElementById("btnEs").classList.toggle("active", l==="es");
   document.documentElement.lang = l;
   renderHeader();
-  renderDays();
   renderProgramme();
   renderFavoris();
   renderStands();
